@@ -1,0 +1,169 @@
+<div class="row subsystem-header">
+    <div class="pull-left">
+        <span style="font-size: 16px;">批次历史信息</span>
+    </div>
+</div>
+<div class="row subsystem-toolbar">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="pull-left">
+            <!--<button onclick="" class="btn btn-success btn-sm" title="导入机构信息">-->
+                <!--<span class="icon-edit"> 高级查询</span>-->
+            <!--</button>-->
+            <button onclick="CaDispatchHistoryObj.download()" class="btn btn-success btn-sm" title="导出机构信息">
+                <span class="icon-trash"> 下载</span>
+            </button>
+            <button onclick="CaDispatchHistoryObj.delete()" class="btn btn-danger btn-sm" title="导出机构信息">
+                <span class="icon-trash"> 删除</span>
+            </button>
+        </div>
+        <div class="pull-right" style="height: 44px; line-height: 44px; width: 260px;">
+            <span style="text-align:right;width:80px;height: 30px; line-height: 30px; margin-top: 7px;display: inline" class="pull-left">&nbsp;&nbsp;所属域：</span>
+            <select id="h-ca-dispatch-history-domain-list" class="form-control pull-right" style="width: 180px;height: 24px; line-height: 24px; margin-top: 10px;padding: 0px;">
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <div id="h-ca-dispatch-history-content" class="col-sm-12 col-md-12 col-lg-12" style="border: #598f56 solid 1px;">
+            <div id="h-ca-dispatch-history-toolbar-list" class="pull-left">
+                <span>分摊批次详细信息</span>
+            </div>
+
+                <table id="h-ca-dispatch-history-table-details"
+                       data-toggle="table"
+                       data-striped="true"
+                       data-toolbar="#h-ca-dispatch-history-toolbar-list"
+                       data-url="/v1/ca/dispatch/history/get"
+                       data-side-pagination="client"
+                       data-pagination="true"
+                       data-page-list="[20, 50, 100, 200]"
+                       data-search="false">
+                    <thead>
+                    <tr>
+                        <th data-field="state" data-checkbox="true"></th>
+                        <th data-align="center" data-field="dispatch_id" data-formatter="CaDispatchHistoryObj.formater">批次编码</th>
+                        <th data-field="dispatch_desc">批次名称</th>
+                        <th data-align="center" data-field="as_of_date">批次日期</th>
+                        <th data-align="center" data-field="dispatch_status_desc">批次状态</th>
+                        <th data-align="center" data-field="start_date">开始时间</th>
+                        <th data-align="center" data-field="end_date">结束时间</th>
+                        <th data-align="center" data-formatter="CaDispatchHistoryObj.calcCostTime">耗时</th>
+                        <th data-align="center" data-field="cnt_success">成功/条</th>
+                        <th data-align="center" data-field="cnt_error">失败/条</th>
+                        <th data-field="log_path">日志</th>
+                    </tr>
+                    </thead>
+                </table>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var CaDispatchHistoryObj = {
+        download:function () {
+            var domain_id = $("#h-ca-dispatch-history-domain-list").val();
+            $.Hdownload({
+                url:"/v1/ca/dispatch/history/download?domain_id="+domain_id,
+                name:"批次历史信息",
+            })
+        },
+        delete:function () {
+            var rows = $("#h-ca-dispatch-history-table-details").bootstrapTable('getSelections');
+            if (rows.length==0) {
+                $.Notify({
+                    message:"您没有选择需要删除的批次历史记录",
+                    type:"info",
+                });
+                return
+            }
+            $.Hconfirm({
+                body:"点击确定,将会删除批次历史记录信息",
+                callback:function () {
+                    $.HAjaxRequest({
+                        url:"/v1/ca/dispatch/history/delete",
+                        type:"post",
+                        data:{JSON:JSON.stringify(rows)},
+                        success:function () {
+                            $.Notify({
+                                message:"删除批次历史记录信息成功",
+                                type:"success",
+                            });
+                            $("#h-ca-dispatch-history-table-details").bootstrapTable('refresh')
+                        }
+                    })
+                },
+            })
+        },
+        formater:function (value,row,index) {
+            var tmp = value.split("_join_")
+            if (tmp.length == 2) {
+                return tmp[1]
+            } else {
+                return tmp
+            }
+        },
+        calcCostTime:function (value,row,index) {
+            var start_date = new Date(row.start_date);
+            var end_date = new Date(row.end_date);
+            var s = (end_date.getTime() - start_date.getTime())/1000;
+            var h = 0;
+            var m = 0;
+            if (s > 60) {
+                m = (s/60).toFixed(0);
+                s = (s%60).toFixed(0);
+            }
+            if (m > 60) {
+                h = (m/60).toFixed(0);
+                m = (m%60).toFixed(0);
+            }
+            var ret = "";
+            if (h != 0) {
+                ret = h+"时 "
+            }
+            if (m != 0) {
+                ret += m+"分 "
+            }
+            if (s != 0) {
+                ret += s+"秒"
+            }
+            return ret
+        },
+    };
+
+    $(document).ready(function () {
+
+        $("#h-ca-dispatch-history-table-details").bootstrapTable({
+            height:document.documentElement.clientHeight-130,
+            queryParams:function (params) {
+                params.domain_id = $("#h-ca-dispatch-history-domain-list").val();
+                return params;
+            }
+        })
+
+        $("#h-ca-dispatch-history-content").height(document.documentElement.clientHeight-130);
+
+        $.getJSON("/v1/auth/domain/self/owner",function(data){
+            var arr = new Array()
+            $(data.owner_list).each(function(index,element){
+                var ijs = {}
+                ijs.id=element.domain_id
+                ijs.text=element.domain_desc
+                ijs.upId="####hzwy23###"
+                arr.push(ijs)
+            });
+            $("#h-ca-dispatch-history-domain-list").Hselect({
+                data:arr,
+                height:"24px",
+                width:"180px",
+                value:data.domain_id,
+                onclick:function () {
+                    $("#h-ca-dispatch-history-table-details").bootstrapTable('refresh')
+                },
+            });
+        });
+
+    })
+</script>

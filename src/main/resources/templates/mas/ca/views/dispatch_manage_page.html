@@ -1,0 +1,337 @@
+<div class="row subsystem-header">
+    <div class="pull-left">
+        <span style="font-size: 16px;">分摊批次配置管理</span>
+    </div>
+</div>
+<div class="row subsystem-toolbar">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="pull-left">
+            <button onclick="CaDispatchManageObj.add()" class="btn btn-success btn-sm" title="新增机构信息">
+                <i class="icon-plus"> 新增</i>
+            </button>
+            <button onclick="CaDispatchManageObj.edit()" class="btn btn-success btn-sm" title="导入机构信息">
+                <span class="icon-edit"> 编辑</span>
+            </button>
+            <button onclick="CaDispatchManageObj.run()" class="btn btn-success btn-sm" title="导出机构信息">
+                <span class="icon-trash"> 运行</span>
+            </button>
+            <button onclick="CaDispatchManageObj.stop()" class="btn btn-success btn-sm" title="编辑机构信息">
+                <span class="icon-edit"> 停止</span>
+            </button>
+            <button onclick="CaDispatchManageObj.config()" class="btn btn-success btn-sm" title="配置批次">
+                <span class="icon-trash"> 配置</span>
+            </button>
+            <button onclick="CaDispatchManageObj.delete()" class="btn btn-danger btn-sm" title="删除机构信息">
+                <span class="icon-trash"> 删除</span>
+            </button>
+        </div>
+        <div class="pull-right" style="height: 44px; line-height: 44px; width: 260px;">
+            <span style="text-align:right;width:80px;height: 30px; line-height: 30px; margin-top: 7px;display: inline" class="pull-left">&nbsp;&nbsp;所属域：</span>
+            <select id="h-ca-dispatch-manage-domain-list" class="form-control pull-right" style="width: 180px;height: 24px; line-height: 24px; margin-top: 10px;padding: 0px;">
+            </select>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <div id="h-ca-dispatch-manage-content" class="col-sm-12 col-md-12 col-lg-12" style="border: #598f56 solid 1px;">
+            <div id="h-ca-dispatch-manage-toolbar-list" class="pull-left">
+                <span>分摊批次详细信息</span>
+            </div>
+
+            <table id="h-ca-dispatch-manage-table-details"
+                   data-toggle="table"
+                   data-striped="true"
+                   data-unique-id="dispatch_id"
+                   data-toolbar="#h-ca-dispatch-manage-toolbar-list"
+                   data-url="/v1/ca/dispatch/get"
+                   data-side-pagination="client"
+                   data-pagination="true"
+                   data-page-size="30"
+                   data-page-list="[20, 50, 100, 200]"
+                   data-search="false">
+                <thead>
+                <tr>
+                    <th data-field="state" data-checkbox="true"></th>
+                    <th data-field="code_number">批次编码</th>
+                    <th data-field="dispatch_desc">批次名称</th>
+                    <th data-align="center" data-field="as_of_date">批次日期</th>
+                    <th data-align="center" data-field="dispatch_status_desc">批次状态</th>
+                    <th data-align="center" data-field="start_date">开始时间</th>
+                    <th data-align="center" data-field="end_date">结束时间</th>
+                    <th data-align="center" data-field="create_date">创建日期</th>
+                    <th data-align="center" data-field="create_user">创建人</th>
+                    <th data-align="center" data-field="modify_date">修改日期</th>
+                    <th data-align="center" data-field="modify_user">修改人</th>
+                </tr>
+                </thead>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var CaDispatchManageObj = {
+        run:function () {
+            $.Notify({
+                message:"非常抱歉,调度模块正在研发中,敬请期待",
+                type:"info",
+            })
+        },
+        stop:function () {
+            $.Notify({
+                message:"非常抱歉,调度模块正在研发中,敬请期待",
+                type:"info",
+            })
+        },
+        dbClick:function (row,$element) {
+            var dispatch_id = row.dispatch_id;
+            var domain_id = row.domain_id;
+            var name = row.dispatch_desc+" 任务组管理"
+            Hutils.openTab({
+                url:"/v1/ca/dispatch/config/page?dispatch_id="+dispatch_id+"&domain_id="+domain_id,
+                id:"CaDispatchConfig1989",
+                title:name,
+            })
+        },
+        config:function () {
+            var row = $("#h-ca-dispatch-manage-table-details").bootstrapTable('getSelections')
+            if (row.length == 0) {
+                $.Notify({
+                    message:"您没有选择需要配置任务组的批次",
+                    type:"info",
+                })
+                return
+            } else if (row.length > 1) {
+                $.Notify({
+                    message:"您选择了多个批次,请只选择一项进行任务组配置",
+                    type:"info",
+                })
+                return
+            }
+
+            var check = true;
+            $(row).each(function (index, element) {
+                if (element.dispatch_status_cd == "1") {
+                    check = false
+                    return false
+                }
+            });
+
+            var dispatch_id = row[0].dispatch_id;
+            var domain_id = row[0].domain_id;
+            var name = row[0].dispatch_desc+" 任务组管理"
+            Hutils.openTab({
+                url:"/v1/ca/dispatch/config/page?dispatch_id="+dispatch_id+"&domain_id="+domain_id,
+                id:"CaDispatchConfig1989",
+                title:name,
+            })
+        },
+        delete:function () {
+            var row = $("#h-ca-dispatch-manage-table-details").bootstrapTable('getSelections')
+            if (row.length == 0) {
+                $.Notify({
+                    message:"您没有选择需要删除的批次信息",
+                    type:"info",
+                })
+                return
+            }
+            var check = true;
+            $(row).each(function (index, element) {
+                if (element.dispatch_status_cd == "1") {
+                    check = false
+                    return false
+                }
+            });
+            if (!check) {
+                $.Notify({
+                    message:"不能删除运行中的任务",
+                    type:"danger",
+                });
+                return
+            }
+            $.Hconfirm({
+                body:"点击确定,删除批次信息",
+                callback:function () {
+                    $.HAjaxRequest({
+                        url:"/v1/ca/dispatch/delete",
+                        type:"post",
+                        data:{JSON:JSON.stringify(row)},
+                        success:function () {
+                            $.Notify({
+                                message:"删除批次信息成功",
+                                type:"success",
+                            });
+                            $(row).each(function (index, element) {
+                                $("#h-ca-dispatch-manage-table-details").bootstrapTable('removeByUniqueId',element.dispatch_id)
+                            })
+                        }
+                    })
+                }
+            })
+        },
+        add:function () {
+            $.Hmodal({
+                height:"360px",
+                header:"新增批次信息",
+                body:$("#h-ca-dispatch-manage-src").html(),
+                preprocess:function () {
+                    var domain_id = $("#h-ca-dispatch-manage-domain-list").val();
+                    $("#h-ca-dispatch-manage-form").find("input[name='domain_id']").val(domain_id);
+
+                    $("#h-ca-dispatch-manage-form").find("select[name='dispatch_status_cd']").Hselect({
+                        height:"30px",
+                        value:"0",
+                        disabled:true,
+                    })
+                },
+                callback:function (hmode) {
+                    $.HAjaxRequest({
+                        url:"/v1/ca/dispatch/post",
+                        type:"post",
+                        data:$("#h-ca-dispatch-manage-form").serialize(),
+                        success:function () {
+                            $.Notify({
+                                message:"新增批次信息成功",
+                                type:"success",
+                            });
+                            $(hmode).remove();
+                            $("#h-ca-dispatch-manage-table-details").bootstrapTable('refresh')
+                        },
+                    })
+                },
+            })
+        },
+        edit:function () {
+            var row = $("#h-ca-dispatch-manage-table-details").bootstrapTable('getSelections')
+            if (row.length == 0) {
+                $.Notify({
+                    message:"您没有选择需要编辑的批次信息",
+                    type:"info",
+                });
+                return
+            } else if (row.length > 1) {
+                $.Notify({
+                    message:"您选择了多个批次,请只选择一项进行编辑",
+                    type:"info",
+                })
+                return
+            }
+
+            var check = true;
+            $(row).each(function (index, element) {
+                if (element.dispatch_status_cd == "1") {
+                    check = false
+                    return false
+                }
+            });
+            if (!check) {
+                $.Notify({
+                    message:"不能编辑运行中的任务",
+                    type:"danger",
+                });
+                return
+            }
+
+            $.Hmodal({
+                height:"360px",
+                header:"修改批次信息",
+                body:$("#h-ca-dispatch-manage-src").html(),
+                preprocess:function () {
+
+                    $("#h-ca-dispatch-manage-form").find("input[name='domain_id']").val(row[0].domain_id);
+
+                    $("#h-ca-dispatch-manage-form").find("select[name='dispatch_status_cd']").Hselect({
+                        height:"30px",
+                        value:row[0].dispatch_status_cd,
+                    });
+
+                    $("#h-ca-dispatch-manage-form").find("input[name='dispatch_id']").val(row[0].code_number).attr("readonly","readonly");
+                    $("#h-ca-dispatch-manage-form").find("input[name='dispatch_desc']").val(row[0].dispatch_desc);
+                    $("#h-ca-dispatch-manage-form").find("input[name='as_of_date']").val(row[0].as_of_date);
+
+                },
+                callback:function (hmode) {
+                    $.HAjaxRequest({
+                        url:"/v1/ca/dispatch/put",
+                        type:"put",
+                        data:$("#h-ca-dispatch-manage-form").serialize(),
+                        success:function () {
+                            $.Notify({
+                                message:"新增批次信息成功",
+                                type:"success",
+                            });
+                            $(hmode).remove();
+                            $("#h-ca-dispatch-manage-table-details").bootstrapTable('refresh')
+                        },
+                    })
+                },
+            })
+        },
+    };
+    $(document).ready(function () {
+
+        $("#h-ca-dispatch-manage-table-details").bootstrapTable({
+            height:document.documentElement.clientHeight-130,
+            onDblClickRow:CaDispatchManageObj.dbClick,
+            queryParams:function (params) {
+                params.domain_id = $("#h-ca-dispatch-manage-domain-list").val();
+                return params
+            }
+        });
+
+
+        $("#h-ca-dispatch-manage-content").height(document.documentElement.clientHeight-130);
+
+        $.getJSON("/v1/auth/domain/self/owner",function(data){
+            var arr = new Array()
+            $(data.owner_list).each(function(index,element){
+                var ijs = {}
+                ijs.id=element.domain_id
+                ijs.text=element.domain_desc
+                ijs.upId="####hzwy23###"
+                arr.push(ijs)
+            });
+
+            $("#h-ca-dispatch-manage-domain-list").Hselect({
+                data:arr,
+                height:"24px",
+                width:"180px",
+                value:data.domain_id,
+                onclick:function () {
+                    $("#h-ca-dispatch-manage-table-details").bootstrapTable('refresh')
+                },
+            });
+        });
+
+    })
+</script>
+
+<script id="h-ca-dispatch-manage-src" type="text/html">
+    <form id="h-ca-dispatch-manage-form">
+        <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 8px;">
+            <span>批次编码</span>
+            <input placeholder="由1-30位字母,数字组成" name="dispatch_id" type="text" class="form-control" style="height: 30px; line-height: 30px;"/>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 8px;">
+            <span>批次名称</span>
+            <input placeholder="批次详细描述信息" name="dispatch_desc" type="text" class="form-control" style="height: 30px; line-height: 30px;"/>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 15px;">
+            <span>批次状态</span>
+            <select placeholder="批次详细描述信息" name="dispatch_status_cd" type="text" class="form-control" style="height: 30px; line-height: 30px;">
+                <option value="0">未运行</option>
+                <option value="1">运行中</option>
+                <option value="2">错误</option>
+                <option value="3">已完成</option>
+                <option value="4">停止</option>
+            </select>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 15px;">
+            <span>批次日期</span>
+            <input onclick="laydate(this)" placeholder="批次运行日期" name="as_of_date" type="text" class="form-control" style="height: 30px; line-height: 30px;"/>
+        </div>
+        <input name="domain_id" style="display: none;"/>
+    </form>
+</script>

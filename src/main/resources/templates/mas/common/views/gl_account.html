@@ -1,0 +1,419 @@
+<div class="row subsystem-header">
+    <div class="pull-left">
+        <span style="font-size: 16px;">科目配置管理</span>
+    </div>
+</div>
+<div class="row subsystem-toolbar">
+    <div class="col-sm-12 col-md-5 col-lg-3">
+        <div class="pull-left">
+            <button onclick="CaGlAccountObj.add()" class="btn btn-success btn-sm" title="新增机构信息">
+                <i class="icon-plus"> 新增</i>
+            </button>
+            <button onclick="CaGlAccountObj.upload()" class="btn btn-success btn-sm" title="导入机构信息">
+                <span class="icon-edit"> 导入</span>
+            </button>
+            <button onclick="CaGlAccountObj.download()" class="btn btn-success btn-sm" title="导出机构信息">
+                <span class="icon-trash"> 导出</span>
+            </button>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-7 col-lg-9" style="padding-left: 0px;">
+        <div class="pull-left">
+            <button onclick="CaGlAccountObj.edit()" class="btn btn-success btn-sm" title="编辑机构信息">
+                <span class="icon-edit"> 编辑</span>
+            </button>
+            <button onclick="CaGlAccountObj.delete()" class="btn btn-danger btn-sm" title="删除机构信息">
+                <span class="icon-trash"> 删除</span>
+            </button>
+        </div>
+        <div class="pull-right" style="height: 44px; line-height: 44px; width: 260px;">
+            <span style="text-align:right;width:80px;height: 30px; line-height: 30px; margin-top: 7px;display: inline" class="pull-left">&nbsp;&nbsp;所属域：</span>
+            <select id="h-common-account-domain-list" class="form-control pull-right" style="width: 180px;height: 24px; line-height: 24px; margin-top: 10px;padding: 0px;">
+            </select>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-5 col-md-3">
+        <div id="h-common-accounting-tree-info" style="border: #598f56 solid 1px;">
+            <div class="col-ms-12 col-md-12 col-lg-12">
+                <div style="border-bottom: #598f56 solid 1px;height: 44px; line-height: 44px;">
+                    <div class="pull-left">
+                        <span><i class="icon-sitemap"> </i>成本池树形结构</span>
+                    </div>
+                    <div class="pull-right">
+                    <span>
+                        <i class=" icon-search" style="margin-top: 15px;"></i>&nbsp;
+                    </span>
+                    </div>
+                </div>
+            </div>
+            <div id="h-common-accounting-tree-info-list" class="col-sm-12 col-md-12 col-lg-12"
+                 style="padding:15px 5px;overflow: auto">
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-7 col-lg-9" style="padding-left: 0px;">
+        <div id="h-common-accounting-table-info" style="border: #598f56 solid 1px;">
+            <div id="h-common-accounting-table-toolbar" class="pull-left">
+                <span>成本池详细信息</span>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-12">
+                <table id="h-common-accounting-table-id"
+                       data-toggle="table"
+                       data-unique-id="gl_account_id"
+                       data-toolbar="#h-common-accounting-table-toolbar"
+                       data-side-pagination="client"
+                       data-pagination="true"
+                       data-page-size="30"
+                       data-page-list="[10, 20, 30, 50, 100, 200]"
+                       data-search="refresh">
+                    <thead>
+                    <tr>
+                        <th data-field="state" data-checkbox="true"></th>
+                        <th data-field="code_number">科目编码</th>
+                        <th data-field="gl_account_desc">科目名称</th>
+                        <th data-field="gl_account_up_id" data-formatter="CaGlAccountObj.AccountFormatter">上级编码</th>
+                        <th data-field="gl_level">层级</th>
+                        <th data-align="center" data-field="create_date">创建日期</th>
+                        <th data-align="center" data-field="create_user">创建人</th>
+                        <th data-align="center" data-field="modify_date">修改日期</th>
+                        <th data-align="center" data-field="modify_user">修改人</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    var CaGlAccountObj = {
+        $table:$('#h-common-accounting-table-id'),
+        download:function () {
+            var domain_id = $("#h-common-account-domain-list").val();
+            $.Hdownload({
+                url:"/v1/common/glaccount/download?domain_id="+domain_id,
+                name:"科目配置信息",
+            })
+        },
+        upload:function () {
+            $.Hupload({
+                header:"导入科目信息",
+                url:"/v1/common/glaccount/upload",
+                callback:function () {
+                    CaGlAccountObj.tree();
+                },
+            })
+        },
+        add:function(){
+            $.Hmodal({
+                body:$("#h-common-accounting-src").html(),
+                height:"320px",
+                header:"新增机构",
+                callback:function(hmode){
+                    $.HAjaxRequest({
+                        url:"/v1/common/glaccount/post",
+                        type:"post",
+                        data:$("#h-common-accounting-form").serialize(),
+                        success:function () {
+                            $.Notify({
+                                message:"新增成本池信息成功",
+                                type:"success",
+                            });
+                            CaGlAccountObj.tree();
+                            $(hmode).remove();
+                        },
+                    })
+                },
+                preprocess:function(){
+                    $("#h-common-accounting-form").find("select[name='gl_level']").Hselect({
+                        height:"30px",
+                        value:1,
+                    });
+                    var domain_id = $("#h-common-account-domain-list").val();
+                    $("#h-common-accounting-form").find("input[name='domain_id']").val(domain_id);
+
+                    $.getJSON("/v1/common/glaccount/get",{domain_id:domain_id},function (data) {
+                        var arr = new Array()
+                        $(data).each(function (index, element) {
+                            var e = {};
+                            e.id = element.gl_account_id;
+                            e.text = element.gl_account_desc;
+                            e.upId = element.gl_account_up_id;
+                            arr.push(e)
+                        });
+
+                        var e = {};
+                        e.id = "-1";
+                        e.text = "系统默认根节点";
+                        e.upId = "##hzwy23##";
+                        arr.push(e)
+
+                        $("#h-common-accounting-form").find("select[name='gl_account_up_id']").Hselect({
+                            height:"30px",
+                            data:arr,
+                        })
+                    })
+                }
+            })
+        },
+        edit:function(){
+            var row = CaGlAccountObj.$table.bootstrapTable("getSelections")
+            if (row.length == 0){
+                var selected_id = $("#h-common-accounting-tree-info-list").attr("data-selected")
+                if (selected_id == undefined) {
+                    $.Notify({
+                        title:"温馨提示",
+                        message:"请在列表中选择一个需要编辑的机构",
+                        type:"warning",
+                    });
+                    return
+                }
+                row.push($("#h-common-accounting-table-id").bootstrapTable('getRowByUniqueId',selected_id))
+            } else if (row.length > 1){
+                $.Notify({
+                    title:"温馨提示",
+                    message:"您在列表中选中了多个机构，不知道需要编辑哪一个",
+                    type:"warning",
+                });
+                return
+            };
+
+            var domain_id = row[0].domain_id;
+            $.Hmodal({
+                body:$("#h-common-accounting-src").html(),
+                header:"修改成本池信息",
+                height:"320px",
+                preprocess:function () {
+
+                    $("#h-common-accounting-form").find("select[name='gl_level']").Hselect({
+                        height:"30px",
+                        value:row[0].gl_level,
+                    });
+
+                    $("#h-common-accounting-form").find("input[name='domain_id']").val(row[0].domain_id);
+
+                    $.getJSON("/v1/common/glaccount/get",{domain_id:row[0].domain_id},function (data) {
+                        var arr = new Array()
+                        $(data).each(function (index, element) {
+                            var e = {};
+                            e.id = element.gl_account_id;
+                            e.text = element.gl_account_desc;
+                            e.upId = element.gl_account_up_id;
+                            arr.push(e)
+                        });
+
+                        var e = {};
+                        e.id = "-1";
+                        e.text = "系统默认根节点";
+                        e.upId = "##hzwy23##";
+                        arr.push(e)
+
+                        $("#h-common-accounting-form").find("select[name='gl_account_up_id']").Hselect({
+                            height:"30px",
+                            data:arr,
+                            value:row[0].gl_account_up_id,
+                        })
+                    })
+
+                    $("#h-common-accounting-form").find("input[name='gl_account_id']").val(row[0].code_number).attr("readonly","readonly")
+                    $("#h-common-accounting-form").find("input[name='gl_account_desc']").val(row[0].gl_account_desc)
+
+                },
+                callback:function(hmode){
+                    $.HAjaxRequest({
+                        url: "/v1/common/glaccount/put",
+                        type: "put",
+                        data: $("#h-common-accounting-form").serialize(),
+                        success:function (data) {
+                            $.Notify({
+                                title:"温馨提示：",
+                                message:"修改机构信息成功",
+                                type:"success",
+                            });
+                            $(hmode).remove();
+                            CaGlAccountObj.tree(domain_id)
+                        },
+                    })
+                }
+            })
+        },
+        getSubOrg:function(set,all){
+
+            var addArray = new Array();
+
+            var search = function(obj,arr){
+                $(arr).each(function(index,element){
+                    if (obj.org_id == element.up_org_id){
+                        addArray.push(element)
+                        var newArray = all.splice(index,1)
+                        search(element,newArray)
+                    }
+                });
+            };
+
+            $(set).each(function(index,element){
+                search(element,all)
+            });
+
+            return addArray
+        },
+        delete:function(){
+
+            var rows = CaGlAccountObj.$table.bootstrapTable("getSelections");
+
+            if (rows.length == 0){
+                var selected_id = $("#h-common-accounting-tree-info-list").attr("data-selected")
+                if (selected_id == undefined) {
+                    $.Notify({
+                        title:"温馨提示",
+                        message:"您没有在下列机构信息表中，选择需要删除的机构",
+                        type:"info",
+                    })
+                    return
+                }
+                rows.push($("#h-common-accounting-table-id").bootstrapTable('getRowByUniqueId',selected_id))
+            };
+
+            $.Hconfirm({
+                callback:function () {
+                    $.HAjaxRequest({
+                        url:"/v1/common/glaccount/delete",
+                        type:"post",
+                        data:{JSON:JSON.stringify(rows)},
+                        success:function () {
+                            $.Notify({
+                                title:"操作成功",
+                                message:"删除成本池信息成功",
+                                type:"success",
+                            });
+                            CaGlAccountObj.tree()
+                        },
+                    })
+                },
+                body:"点击确认,删除选中的成本池信息"
+            })
+
+        },
+        tree:function(domain_id){
+            if (domain_id == undefined){
+                domain_id = $("#h-common-account-domain-list").val()
+            }
+            $.getJSON("/v1/common/glaccount/get",{domain_id:domain_id},function(data){
+                if (data.length==0){
+                    $.Notify({
+                        title:"温馨提示",
+                        message:"您选择的域中没有配置成本池信息",
+                        type:"info",
+                    });
+                    CaGlAccountObj.$table.bootstrapTable('load',[]);
+                    $("#h-common-accounting-tree-info-list").Htree({
+                        data:[],
+                    });
+                } else {
+                    var arr = new Array();
+                    $(data).each(function(index,element){
+                        var ijs = {}
+                        ijs.id = element.gl_account_id;
+                        ijs.text = element.gl_account_desc;
+                        ijs.upId = element.gl_account_up_id;
+                        arr.push(ijs)
+                    });
+
+                    $("#h-common-accounting-tree-info-list").Htree({
+                        data:arr,
+                        onChange:function(obj){
+                            var id = $(obj).attr("data-id")
+                            var domain_id = $("#h-common-account-domain-list").val()
+                            $.getJSON("/v1/common/glaccount/sub/get",{domain_id:domain_id,gl_account_id:id},function (data) {
+                                CaGlAccountObj.$table.bootstrapTable('load',data)
+                                $("#h-common-accounting-table-id tbody tr").each(function (index, element) {
+                                    if ( $(element).attr("data-uniqueid") == id ) {
+                                        $(element).addClass("info")
+                                    }
+                                })
+                            })
+                        }
+                    });
+                    CaGlAccountObj.$table.bootstrapTable('load',data)
+                }
+            })
+        },
+        AccountFormatter:function(value,row,index){
+            var upcombine = row.gl_account_up_id.split("_join_")
+            if (upcombine.length==2){
+                return upcombine[1]
+            }else{
+                return upcombine
+            }
+        },
+    };
+
+    $(document).ready(function(){
+        var hwindow = document.documentElement.clientHeight;
+        $("#h-common-accounting-tree-info").height(hwindow-130);
+        $("#h-common-accounting-table-info").height(hwindow-130);
+        $("#h-common-accounting-tree-info-list").height(hwindow-204);
+
+        $('#h-common-accounting-table-id').bootstrapTable({
+            height:hwindow-130,
+        });
+        CaGlAccountObj.tree();
+
+        $.getJSON("/v1/auth/domain/self/owner",function(data){
+            var arr = new Array()
+            $(data.owner_list).each(function(index,element){
+                var ijs = {}
+                ijs.id=element.domain_id
+                ijs.text=element.domain_desc
+                ijs.upId="####hzwy23###"
+                arr.push(ijs)
+            });
+            $("#h-common-account-domain-list").Hselect({
+                data:arr,
+                height:"24px",
+                width:"180px",
+                value:data.domain_id,
+                onclick:function () {
+                    var id = $("#h-common-account-domain-list").val();
+                    CaGlAccountObj.tree(id);
+                },
+            });
+        });
+    });
+</script>
+<script id="h-common-accounting-src" type="text/html">
+    <form id="h-common-accounting-form">
+        <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 6px;">
+            <span>科目编码</span>
+            <input name="gl_account_id" placeholder="由1-30位字母,数字组成" style="height: 30px; line-height: 30px;" class="form-control"/>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 6px;">
+            <span>科目名称</span>
+            <input name="gl_account_desc" placeholder="由1-30位字母,数字,汉字组成" style="height: 30px; line-height: 30px;" class="form-control"/>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 20px;">
+            <span>上级成本编码</span>
+            <select name="gl_account_up_id" style="width:100%;height: 30px; line-height: 30px;" class="form-control">
+            </select>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 20px;">
+            <span>科目层级</span>
+            <select name="gl_level" style="width:100%;height: 30px; line-height: 30px;" class="form-control">
+                <option value="1">一级科目</option>
+                <option value="2">二级科目</option>
+                <option value="3">三级科目</option>
+                <option value="4">四级科目</option>
+                <option value="5">五级科目</option>
+                <option value="6">六级科目</option>
+                <option value="7">七级科目</option>
+            </select>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 20px;display: none;">
+            <span>所属域</span>
+            <input name="domain_id"/>
+        </div>
+    </form>
+</script>
