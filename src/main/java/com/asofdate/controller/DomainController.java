@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @Controller
 public class DomainController {
-    @RequestMapping(value = "/v1/auth/domain/page",method = RequestMethod.GET)
-    public String getPage(){
+    @RequestMapping(value = "/v1/auth/domain/page", method = RequestMethod.GET)
+    public String getPage() {
         return "hauth/domain_info";
     }
 }

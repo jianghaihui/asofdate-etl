@@ -19,34 +19,33 @@ import java.util.Map;
  */
 @Controller
 public class SystemPageController {
+    private final static Logger logger = LoggerFactory.getLogger(SystemPageController.class);
     @Autowired
     public JdbcTemplate jdbcTemplate;
 
-    private final static Logger logger = LoggerFactory.getLogger(SystemPageController.class);
-
-    @RequestMapping(value = "/HomePage",method = RequestMethod.GET)
-    public String homePage(HttpServletRequest request,Map<String,Object> map){
+    @RequestMapping(value = "/HomePage", method = RequestMethod.GET)
+    public String homePage(HttpServletRequest request, Map<String, Object> map) {
         Authentication authentication = JwtService
-                .getAuthentication((HttpServletRequest)request);
+                .getAuthentication((HttpServletRequest) request);
         String username = authentication.getName();
         logger.debug("username is :" + username);
-        String url = jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_078,String.class,username);
-        url = url.replaceFirst("^./views/","").replaceFirst(".tpl$","");
+        String url = jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_078, String.class, username);
+        url = url.replaceFirst("^./views/", "").replaceFirst(".tpl$", "");
         logger.debug("url is :" + url);
-        map.put("userId",username);
+        map.put("userId", username);
         return url;
     }
 
     @RequestMapping(value = "/v1/auth/index/entry")
-    public String subSystemPage(HttpServletRequest request){
+    public String subSystemPage(HttpServletRequest request) {
         Authentication authentication = JwtService
-                .getAuthentication((HttpServletRequest)request);
+                .getAuthentication((HttpServletRequest) request);
         String username = authentication.getName();
         logger.debug("username is:" + username);
         String resId = request.getParameter("Id");
         logger.debug("resource id is :" + resId);
-        String url = jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_011,String.class,username,resId);
-        url = url.replaceFirst("^./views/","").replaceFirst(".tpl$","").replaceFirst("^./apps/","");
+        String url = jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_011, String.class, username, resId);
+        url = url.replaceFirst("^./views/", "").replaceFirst(".tpl$", "").replaceFirst("^./apps/", "");
         logger.debug("url is :" + url);
         return url;
     }

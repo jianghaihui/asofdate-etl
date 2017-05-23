@@ -4,6 +4,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.JobLocator;
+import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.NoSuchJobException;
@@ -18,18 +19,18 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @EnableBatchProcessing
-public class EtlQuartzJobLauncher extends QuartzJobBean {
+public class QuartzJobLauncher extends QuartzJobBean {
 
-    private String jobName;
     private JobLauncher jobLauncher;
     private JobLocator jobLocator;
+    private JobRegistry jobRegistry;
 
-    public String getJobName() {
-        return jobName;
+    public JobRegistry getJobRegistry() {
+        return jobRegistry;
     }
 
-    public void setJobName(String jobName) {
-        this.jobName = jobName;
+    public void setJobRegistry(JobRegistry jobRegistry) {
+        this.jobRegistry = jobRegistry;
     }
 
     public JobLauncher getJobLauncher() {
@@ -50,14 +51,14 @@ public class EtlQuartzJobLauncher extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-
-        JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis()).toJobParameters();
-
         try {
-            System.out.println("JobName is :" + jobName);
-            Job job = jobLocator.getJob(jobName);
-            JobExecution jobExecution = jobLauncher.run(job, jobParameters);
-            System.out.println("##########################" + jobExecution.getStatus());
+            for (String jobName : jobRegistry.getJobNames()) {
+                System.out.println("JobName is :" + jobName);
+                Job job = jobLocator.getJob(jobName);
+                JobParameters jobParameters = new JobParametersBuilder().addLong("time", System.currentTimeMillis()).toJobParameters();
+                JobExecution jobExecution = jobLauncher.run(job, jobParameters);
+                System.out.println("jobStatus is " + jobExecution.getStatus());
+            }
         } catch (NoSuchJobException e) {
             e.printStackTrace();
         } catch (JobInstanceAlreadyCompleteException e) {

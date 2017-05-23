@@ -1,11 +1,13 @@
 package com.asofdate.etl;
 
+import com.asofdate.etl.bak.JobCompletionNotificationListener;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
  * Created by hzwy23 on 2017/5/20.
  */
 @Configuration
-public class EtlBatchConfiguration {
+public class BatchConfiguration {
 
     @Autowired
     private JobBuilderFactory jobBuilderFactory;
@@ -22,29 +24,31 @@ public class EtlBatchConfiguration {
     private StepBuilderFactory stepBuilderFactory;
 
     @Bean
-    public CustomItemReader reader() {
-        return new CustomItemReader();
-    }
-
-    @Bean
-    public CustomItemWriter writer() {
-        return new CustomItemWriter();
-    }
-
-    @Bean
-    public Step step1() {
-        return stepBuilderFactory.get("step1")
+    @Qualifier("stepOne")
+    public Step stepOne() {
+        return stepBuilderFactory.get("stepOne")
                 .<Object, Object>chunk(10)
-                .reader(reader())
-                .writer(writer())
+                .reader(new CustomItemReader())
+                .writer(new CustomItemWriter())
                 .build();
     }
 
     @Bean
-    public Job testJob(Step step1) throws Exception {
-        return jobBuilderFactory.get("testJob")
+    @Qualifier("stepTwo")
+    public Step stepTwo() {
+        return stepBuilderFactory.get("stepTwo")
+                .<Object, Object>chunk(10)
+                .reader(new CustomItemReader())
+                .writer(new CustomItemWriter())
+                .build();
+    }
+
+    @Bean
+    public Job job(JobCompletionNotificationListener jobCompletionNotificationListener) throws Exception {
+        return jobBuilderFactory.get("defaultJobAsOfDate")
                 .incrementer(new RunIdIncrementer())
-                .flow(step1())
+                .flow(stepOne())
+                .next(stepTwo())
                 .end()
                 .build();
     }

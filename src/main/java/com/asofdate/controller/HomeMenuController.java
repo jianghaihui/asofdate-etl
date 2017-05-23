@@ -22,16 +22,16 @@ public class HomeMenuController {
 
     @RequestMapping(value = "/v1/auth/main/menu")
     @ResponseBody
-    public List<HomeMenuModel> homeMenu(HttpServletRequest request){
+    public List<HomeMenuModel> homeMenu(HttpServletRequest request) {
         String TypeId = request.getParameter("TypeId");
         String Id = request.getParameter("Id");
 
         // 获取连接用户账号
         Authentication authentication = JwtService
-                .getAuthentication((HttpServletRequest)request);
+                .getAuthentication((HttpServletRequest) request);
         String username = authentication.getName();
 
-        List<HomeMenuModel> homeMenusModel = homeMenuService.findAuthedMenus(username,TypeId,Id);
+        List<HomeMenuModel> homeMenusModel = homeMenuService.findAuthedMenus(username, TypeId, Id);
         return homeMenusModel;
     }
 }
