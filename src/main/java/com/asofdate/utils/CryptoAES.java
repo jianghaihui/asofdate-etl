@@ -12,11 +12,11 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class CryptoAES {
     private static final String PASSWORD_KEY = "hzwy23@hustwb09y";
+
     /**
      * 解密AES加密过的字符串
      *
-     * @param content
-     *            AES加密过过的内容
+     * @param content AES加密过过的内容
      * @return 明文
      */
     public static String aesEncrypt(String content) {
@@ -35,13 +35,13 @@ public class CryptoAES {
                 plaintextLength = plaintextLength + (blockSize - (plaintextLength % blockSize));
             }
 
-            Byte padding = (byte)Integer.parseInt(Integer.toHexString(blockSize - (dataBytes.length)%blockSize),16);
+            Byte padding = (byte) Integer.parseInt(Integer.toHexString(blockSize - (dataBytes.length) % blockSize), 16);
 
             byte[] plaintext = new byte[plaintextLength];
 
             System.arraycopy(dataBytes, 0, plaintext, 0, dataBytes.length);
 
-            for (int i = dataBytes.length; i < plaintextLength; i++){
+            for (int i = dataBytes.length; i < plaintextLength; i++) {
                 plaintext[i] = padding;
             }
 
@@ -63,13 +63,11 @@ public class CryptoAES {
     /**
      * AES加密字符串
      *
-     * @param content
-     *            需要被加密的字符串
+     * @param content 需要被加密的字符串
      * @return 密文
      */
     public static String aesDecrypt(String content) {
-        try
-        {
+        try {
 
             byte[] encrypted1 = new BASE64Decoder().decodeBuffer(content);
 
@@ -81,11 +79,11 @@ public class CryptoAES {
 
             String originalString = new String(cipher.doFinal(encrypted1));
             int length = originalString.length();
-            int ch = originalString.charAt(length-1);
-            return originalString.substring(0,length-ch);
+            int ch = originalString.charAt(length - 1);
+            return originalString.substring(0, length - ch);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        catch (Exception e) {
-            e.printStackTrace();}
         return null;
     }
 
