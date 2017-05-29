@@ -1,23 +1,17 @@
 package com.asofdate.dispatch.support;
 
-import com.asofdate.dispatch.model.BatchArgumentModel;
 import com.asofdate.dispatch.model.BatchGroupModel;
-import com.asofdate.dispatch.model.GroupTaskModel;
-import com.asofdate.dispatch.model.TaskArgumentModel;
-import com.asofdate.dispatch.service.BatchArgumentService;
-import com.asofdate.dispatch.service.BatchGroupService;
-import com.asofdate.dispatch.service.GroupTaskService;
-import com.asofdate.dispatch.service.TaskArgumentService;
-import org.quartz.JobKey;
+import com.asofdate.dispatch.service.GroupStatusService;
+import com.asofdate.dispatch.service.TaskStatusService;
+import com.asofdate.dispatch.support.utils.QuartzConfiguration;
 import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * Created by hzwy23 on 2017/5/25.
@@ -33,79 +27,24 @@ public class JobScheduler extends Thread {
 
     private String domainId;
     private String batchId;
+    private TaskStatusService taskStatus;
+    private GroupStatusService groupStatus;
 
-    /************************************************************************/
-    @Autowired
-    private BatchGroupService batchGroupService;
-    @Autowired
-    private GroupTaskService groupTaskService;
-    @Autowired
-    private TaskArgumentService taskArgumentService;
-    @Autowired
-    private BatchArgumentService batchArgumentService;
-    /*************************************************************************/
-
-    // 批次对应的任务组
-    private List<BatchGroupModel> batchGroupModelList;
-    // 任务组中的任务
-    private List<GroupTaskModel> groupTaskModelList;
-    // 任务参数信息
-    private List<TaskArgumentModel> taskArgumentModelList;
-    // 批次参数信息
-    private List<BatchArgumentModel> batchArgumentModelList;
-
-    /********************************* getter and setter ********************/
-    public String getDomainId() {
-        return domainId;
-    }
-
-    public void setDomainId(String domainId) {
-        this.domainId = domainId;
-    }
-
-    public String getBatchId() {
-        return batchId;
-    }
-
-    public void setBatchId(String batchId) {
-        this.batchId = batchId;
-    }
-
-    /******************************** end setter and setter *****************/
-
-    private void init() {
-        /*
-        * 初始化batchGroupModelList.
-        * 获取这个批次所有的任务组信息
-        * */
-        this.batchGroupModelList = batchGroupService.findByBatchId(domainId, batchId);
-        this.groupTaskModelList = groupTaskService.findByBatchId(domainId, batchId);
-        this.taskArgumentModelList = taskArgumentService.findByBatchId(domainId, batchId);
-        this.batchArgumentModelList = batchArgumentService.findByBatchId(domainId, batchId);
-
-//        System.out.println("***************** init batch group relation ****************");
-//        for (BatchGroupModel m : batchGroupModelList) {
-//            System.out.println("batch id is:" + m.getBatch_id() + ", " + m.getGroup_id());
-//        }
-//        System.out.println("***************** init group task relation ******************");
-//        for (GroupTaskModel m : groupTaskModelList) {
-//            System.out.println("group id is: " + m.getGroup_id() + ", " + m.getTask_id());
-//        }
-//        System.out.println("***************** init task argument relation ***************");
-//        for (TaskArgumentModel m : taskArgumentModelList) {
-//            System.out.println("task id is:" + m.getTask_id() + ", argument id is:" + m.getArg_id());
-//        }
-//        System.out.println("***************** init batch argument relation ***************");
-//        for (BatchArgumentModel m : batchArgumentModelList) {
-//            System.out.println("Batch id is:" + m.getBatch_id() + ", " + m.getArg_id());
-//        }
-    }
-
-    public void initJobSchedulerService(QuartzConfiguration quartzConfiguration) {
+    public void createJobSchedulerService(QuartzConfiguration quartzConfiguration, GroupStatusService groupStatus, TaskStatusService taskStatus) {
         this.batchId = quartzConfiguration.getBatchId();
         this.domainId = quartzConfiguration.getDomainId();
         this.quartzConfiguration = quartzConfiguration;
         this.scheduler = quartzConfiguration.getSchedulerFactoryBean();
+        this.groupStatus = groupStatus;
+        this.taskStatus = taskStatus;
+    }
+
+    private String join(String... str1) {
+        String result = "";
+        for (String s : str1) {
+            result += s + "__join__";
+        }
+        return result;
     }
 
     @Override
@@ -120,15 +59,36 @@ public class JobScheduler extends Thread {
             return;
         }
 
-        // 初始化任务配置信息
-        init();
-
         try {
             while (scheduler.isRunning()) {
-                scheduler.getScheduler().triggerJob(JobKey.jobKey("001"));
-                //scheduler.getScheduler().triggerJob(JobKey.jobKey("002"));
-                Thread.sleep(1000);
-                scheduler.stop();
+                Map<String, BatchGroupModel> map = groupStatus.getRunnableGroups();
+                for (BatchGroupModel m : map.values()) {
+                    groupStatus.setGroupRunning(m.getUuid());
+                    new RunGroupThread(scheduler.getScheduler(),
+                            taskStatus,
+                            groupStatus,
+                            m.getUuid(),
+                            m.getGroup_id()).start();
+                }
+                if (taskStatus.isBatchCompleted()) {
+                    logger.info("batch completed.");
+                    logger.info("stop scheduler.");
+                    scheduler.stop();
+                    return;
+                }
+
+                /*
+                * 检查批次中是否有错误任务
+                * 一旦出现任务执行错误,则停止批次
+                * 并撤销整个批次
+                * */
+                if (taskStatus.isError()){
+                    logger.info("task error, 销毁批次");
+                    scheduler.stop();
+                    scheduler.destroy();
+                }
+                logger.info("batch running. scanning runable group...");
+                Thread.sleep(500);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();

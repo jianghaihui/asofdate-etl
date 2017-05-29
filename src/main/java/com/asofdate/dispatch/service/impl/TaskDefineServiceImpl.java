@@ -1,11 +1,16 @@
 package com.asofdate.dispatch.service.impl;
 
 import com.asofdate.dispatch.dao.TaskDefineDao;
+import com.asofdate.dispatch.model.GroupTaskModel;
+import com.asofdate.dispatch.model.TaskDefineModel;
+import com.asofdate.dispatch.service.GroupTaskService;
 import com.asofdate.dispatch.service.TaskDefineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by hzwy23 on 2017/5/24.
@@ -13,10 +18,30 @@ import java.util.List;
 @Service
 public class TaskDefineServiceImpl implements TaskDefineService {
     @Autowired
-    public TaskDefineDao dispatchTaskDefineDao;
+    private TaskDefineDao dispatchTaskDefineDao;
+
+    @Autowired
+    private GroupTaskService groupTaskService;
 
     @Override
-    public List findAll(String domainId) {
-        return dispatchTaskDefineDao.findAll(domainId);
+    public List<TaskDefineModel> findAll(String domainId, String batchId) {
+        List<TaskDefineModel> list = dispatchTaskDefineDao.findAll(domainId);
+        List<GroupTaskModel> groupTaskModelList = groupTaskService.findByBatchId(domainId, batchId);
+        Map<String, GroupTaskModel> map = new HashMap<String, GroupTaskModel>();
+
+        for (GroupTaskModel m : groupTaskModelList) {
+            if (!map.containsKey(m.getTask_id())) {
+                map.put(m.getTask_id(), m);
+            }
+        }
+
+        for (int i = 0; i < list.size(); i++) {
+            if (!map.containsKey(list.get(i).getTaskId())) {
+                list.remove(i);
+                i--;
+            }
+        }
+
+        return list;
     }
 }

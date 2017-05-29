@@ -1,6 +1,6 @@
-package com.asofdate.dispatch.support;
+package com.asofdate.dispatch.support.utils;
 
-import com.asofdate.dispatch.service.BatchTasksService;
+import com.asofdate.dispatch.service.TaskStatusService;
 import org.quartz.SimpleTrigger;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
@@ -18,7 +18,6 @@ import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Configuration
@@ -27,12 +26,11 @@ import java.util.Map;
 public class QuartzConfiguration extends DefaultBatchConfigurer {
     @Autowired
     private BatchConfiguration batchConfiguration;
-    @Autowired
-    private BatchTasksService batchTasksService;
 
     private String domainId;
     private String batchId;
     private SchedulerFactoryBean schedulerFactoryBean;
+    private TaskStatusService taskStatusService;
 
     public SchedulerFactoryBean getSchedulerFactoryBean() {
         return schedulerFactoryBean;
@@ -58,7 +56,7 @@ public class QuartzConfiguration extends DefaultBatchConfigurer {
         this.batchId = batchId;
     }
 
-    public JobDetailFactoryBean jobDetailFactoryBean(String jobName) {
+    private JobDetailFactoryBean jobDetailFactoryBean(String jobName) {
 
         JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
         jobDetailFactoryBean.setJobClass(QuartzJobLauncher.class);
@@ -77,6 +75,7 @@ public class QuartzConfiguration extends DefaultBatchConfigurer {
         map.put("jobRegistry", jobRegistry);
         map.put("jobExplorer", jobExplorer);
         map.put("jobOperator", jobOperator);
+        map.put("taskStatusService", taskStatusService);
         jobDetailFactoryBean.setJobDataAsMap(map);
 
         jobDetailFactoryBean.afterPropertiesSet();
@@ -84,7 +83,7 @@ public class QuartzConfiguration extends DefaultBatchConfigurer {
     }
 
 
-    public SimpleTrigger createSimpleTrigger(String jobName) {
+    private SimpleTrigger createSimpleTrigger(String jobName) {
         SimpleTriggerFactoryBean simpleTriggerFactoryBean = new SimpleTriggerFactoryBean();
         simpleTriggerFactoryBean.setJobDetail(jobDetailFactoryBean(jobName).getObject());
         simpleTriggerFactoryBean.setRepeatCount(0);
@@ -96,10 +95,10 @@ public class QuartzConfiguration extends DefaultBatchConfigurer {
     }
 
 
-    public SchedulerFactoryBean createSchedulerFactoryBean(String domainId, String batchId) throws Exception {
+    public SchedulerFactoryBean createSchedulerFactoryBean(String domainId, String batchId, TaskStatusService taskStatusService) throws Exception {
         setDomainId(domainId);
         setBatchId(batchId);
-
+        this.taskStatusService = taskStatusService;
         SchedulerFactoryBean schedulerFactoryBean = new SchedulerFactoryBean();
         // 配置DataSource后,将会出现异常
         // JobLauncher实例化对象无法序列化
@@ -109,14 +108,14 @@ public class QuartzConfiguration extends DefaultBatchConfigurer {
         schedulerFactoryBean.setAutoStartup(false);
 
         // 获取指定批次的所有任务Job
-        List<String> list = batchTasksService.findAllTasks(this.domainId, this.batchId);
 
         ArrayList<SimpleTrigger> arrayList = new ArrayList<SimpleTrigger>();
-        for (String jobName : list) {
-            SimpleTrigger simpleTrigger = createSimpleTrigger(jobName);
+        for (String jobId : taskStatusService.getAll().keySet()) {
+            SimpleTrigger simpleTrigger = createSimpleTrigger(jobId);
             schedulerFactoryBean.setTriggers(simpleTrigger);
             arrayList.add(simpleTrigger);
         }
+
         SimpleTrigger[] simpleTriggers = new SimpleTrigger[arrayList.size()];
         for (int i = 0; i < arrayList.size(); i++) {
             simpleTriggers[i] = arrayList.get(i);

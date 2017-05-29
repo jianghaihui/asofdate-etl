@@ -85,10 +85,12 @@ public class SqlDefine {
     public static String sys_rdbms_103 = "select theme_id from sys_user_theme where user_id = ?";
     public static String sys_rdbms_104 = "select t.arg_id, t.arg_type,a.arg_type_desc,t.arg_value,t.code_number,t.create_user,t.create_date,t.modify_user,t.modify_date,t.domain_id from dispatch_argument_define t left join dispatch_argument_type_attr a on t.arg_type = a.arg_type where t.domain_id = ?";
     public static String sys_rdbms_105 = "select t.uuid,t.batch_id,t.arg_id,t.arg_value,t.domain_id from dispatch_batch_argument_relation t where t.domain_id = ?";
-    public static String sys_rdbms_106 = "select t.uuid,t.batch_id,t.group_id,t.group_up_id,t.domain_id from dispatch_batch_group_relation t where t.domain_id = ?";
+    public static String sys_rdbms_106 = "select t.id as uuid,t.batch_id,t.group_id,t.domain_id from dispatch_batch_group_relation t where t.domain_id = ?";
     public static String sys_rdbms_107 = "select t.batch_id,t.code_number,t.batch_desc,t.batch_status,t.as_of_date,t.create_date,t.create_user,t.modify_date,t.modify_user,t.domain_id from dispatch_batch_define t where t.domain_id = ?";
     public static String sys_rdbms_108 = "select t.group_id,t.code_number,t.group_desc,t.create_user,t.create_date,t.modify_user,t.modify_date,t.domain_id from dispatch_group_define t where t.domain_id = ?";
-    public static String sys_rdbms_109 = "select t.uuid,t.group_id,t.task_id,t.task_up_id,t.domain_id from dispatch_group_task_relation t where t.domain_id = ?";
-    public static String sys_rdbms_110 = "select t.uuid,t.task_id,t.arg_id,t.arg_value,t.domain_id,t.sort_id from dispatch_task_argument_relation t where t.domain_id = ?";
+    public static String sys_rdbms_109 = "select t.id as uuid,t.group_id,t.task_id,t.domain_id from dispatch_group_task_relation t where t.domain_id = ?";
+    public static String sys_rdbms_110 = "select t.id as uuid,t.task_id,t.arg_id,t.arg_value,t.domain_id,t.sort_id from dispatch_task_argument_relation t where t.domain_id = ?";
     public static String sys_rdbms_111 = "select t.task_id,t.code_number,t.task_desc,t.task_type,a.task_type_desc,t.create_user,t.create_date,t.modify_date,t.modify_user,t.domain_id from dispatch_task_define t left join dispatch_task_type_attr a on t.task_type = a.task_type where t.domain_id = ?";
+    public static String sys_rdbms_112 = "select uuid,id,up_id,domain_id from dispatch_group_dependency where domain_id = ?";
+    public static String sys_rdbms_113 = "select uuid,id,up_id,domain_id from dispatch_task_dependency where domain_id = ?";
 }

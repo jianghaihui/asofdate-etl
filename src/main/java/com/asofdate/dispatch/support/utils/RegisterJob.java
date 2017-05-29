@@ -1,4 +1,4 @@
-package com.asofdate.dispatch.support;
+package com.asofdate.dispatch.support.utils;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.configuration.JobFactory;

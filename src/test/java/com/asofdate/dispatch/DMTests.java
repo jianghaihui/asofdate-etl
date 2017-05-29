@@ -2,15 +2,12 @@ package com.asofdate.dispatch;
 
 import com.asofdate.dispatch.dao.*;
 import com.asofdate.dispatch.model.*;
-import com.asofdate.dispatch.service.BatchTasksService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.security.acl.Group;
 import java.util.List;
 
 /**
@@ -43,8 +40,6 @@ public class DMTests {
     @Autowired
     public TaskArgumentDao taskArgumentDao;
 
-    @Autowired
-    public BatchTasksService batchTasksService;
 
     @Test
     public void testTaskDefineDao(){
@@ -117,11 +112,4 @@ public class DMTests {
         }
     }
 
-    @Test
-    public void testBatchTasksService(){
-        List<String> list = batchTasksService.findAllTasks("mas","10001");
-        for (String m: list){
-            System.out.println(m);
-        }
-    }
 }

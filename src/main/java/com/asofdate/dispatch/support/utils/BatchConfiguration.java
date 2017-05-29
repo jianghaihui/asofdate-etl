@@ -1,4 +1,4 @@
-package com.asofdate.dispatch.support;
+package com.asofdate.dispatch.support.utils;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -38,9 +38,7 @@ public class BatchConfiguration {
 
     public Step stepOne() {
         return stepBuilderFactory.get("stepOne")
-                .<Object, Object>chunk(10)
-                .reader(new CustomItemReader())
-                .writer(new CustomItemWriter())
+                .tasklet(new CustomTasklet())
                 .build();
     }
 
@@ -60,13 +58,11 @@ public class BatchConfiguration {
     * */
     public JobRegistry createJobRegistry(String jobName) {
         MapJobRegistry jobRegistry = new MapJobRegistry();
-//        for (String m : list) {
         try {
             jobRegistry.register(new RegisterJob(job(jobName)));
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        }
         return jobRegistry;
     }
 

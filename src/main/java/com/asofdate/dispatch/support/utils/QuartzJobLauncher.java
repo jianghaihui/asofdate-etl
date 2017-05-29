@@ -1,7 +1,10 @@
-package com.asofdate.dispatch.support;
+package com.asofdate.dispatch.support.utils;
 
+import com.asofdate.dispatch.service.TaskStatusService;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.explore.JobExplorer;
@@ -18,11 +21,22 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
  */
 public class QuartzJobLauncher extends QuartzJobBean {
 
+    private final Logger logger = LoggerFactory.getLogger(QuartzJobLauncher.class);
+
     private JobLauncher jobLauncher;
     private JobRegistry jobRegistry;
     private JobExplorer jobExplorer;
     private JobOperator jobOperator;
+    private TaskStatusService taskStatusService;
     private String jobName;
+
+    public TaskStatusService getTaskStatusService() {
+        return taskStatusService;
+    }
+
+    public void setTaskStatusService(TaskStatusService taskStatusService) {
+        this.taskStatusService = taskStatusService;
+    }
 
     public String getJobName() {
         return jobName;
@@ -71,8 +85,14 @@ public class QuartzJobLauncher extends QuartzJobBean {
             Job job = jobRegistry.getJob(jobName);
             JobParameters jobParameters = new JobParametersBuilder().addLong("timestamp", System.currentTimeMillis()).addString("as_of_date", "2017-01-01").toJobParameters();
             JobExecution jobExecution = jobLauncher.run(job, jobParameters);
-            if ("COMPLETED".equals(jobExecution.getStatus().toString())) {
+
+            if (ExitStatus.COMPLETED.getExitCode().equals(jobExecution.getExitStatus().getExitCode())) {
+                logger.info(jobName + " 任务已经完成.");
+                taskStatusService.setTaskCompleted(jobName);
                 jobRegistry.unregister(jobName);
+            } else {
+                taskStatusService.setTaskError(jobName);
+                System.out.println("error");
             }
 
         } catch (NoSuchJobException e) {
