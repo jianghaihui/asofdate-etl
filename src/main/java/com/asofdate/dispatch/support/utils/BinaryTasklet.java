@@ -15,17 +15,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * Created by hzwy23 on 2017/5/29.
+ * Created by hzwy23 on 2017/5/31.
  */
-public class CmdTasklet implements Tasklet {
+public class BinaryTasklet implements Tasklet {
     private final String END_FLAG = "HZWY23-ASOFDATE-ETL-CMDSCRIPT-END";
     private final Logger logger = LoggerFactory.getLogger(CmdTasklet.class);
-    private String CMD_PREFIX = "cmd /c ";
     private String ExitCode = "ExitCode=";
     private String ExitMsg = "ExitMsg=";
     private String scritpFile = "script/";
 
-    public CmdTasklet(String scriptFile) {
+    public BinaryTasklet(String scriptFile) {
         this.scritpFile += scriptFile.replaceFirst("/", "");
     }
 
@@ -44,7 +43,7 @@ public class CmdTasklet implements Tasklet {
         BufferedReader input = null;
         try {
 
-            process = Runtime.getRuntime().exec(CMD_PREFIX + " " + cmd + " " + jobParameters);
+            process = Runtime.getRuntime().exec(cmd + " " + jobParameters);
             input = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line = "";
             while ((line = input.readLine()) != null) {

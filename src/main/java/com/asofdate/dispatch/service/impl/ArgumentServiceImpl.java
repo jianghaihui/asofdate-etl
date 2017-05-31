@@ -40,20 +40,20 @@ public class ArgumentServiceImpl implements ArgumentService {
     private String domainId;
     private String batchId;
 
-    private Map<String,GroupTaskModel> groupTaskMap;
+    private Map<String, GroupTaskModel> groupTaskMap;
 
     // 参数定义
     private List<ArgumentDefineModel> argDefineList;
-    private Map<String,ArgumentDefineModel> argDefineMap;
+    private Map<String, ArgumentDefineModel> argDefineMap;
     // 批次参数信息
     private List<BatchArgumentModel> batchList;
 
     // 任务参数信息
     private List<TaskArgumentModel> taskList;
-    private Map<String,List<TaskArgumentModel>> taskMap;
+    private Map<String, List<TaskArgumentModel>> taskMap;
 
     // 任务组参数
-    private Map<String,List<GroupArgumentModel>> groupArgumentMap;
+    private Map<String, List<GroupArgumentModel>> groupArgumentMap;
 
     public void afterPropertySet(String domainId, String batchId) {
         this.groupTaskMap = new HashMap<>();
@@ -62,23 +62,23 @@ public class ArgumentServiceImpl implements ArgumentService {
         this.argDefineList = this.argumentDefineDao.findAll(domainId);
         this.batchList = this.batchArgumentDao.findAll(domainId);
         this.groupArgumentMap = new HashMap<>();
-        for(GroupArgumentModel m: this.groupArgumentDao.findAll(domainId)){
-            if (this.groupArgumentMap.containsKey(m.getId())){
+        for (GroupArgumentModel m : this.groupArgumentDao.findAll(domainId)) {
+            if (this.groupArgumentMap.containsKey(m.getId())) {
                 this.groupArgumentMap.get(m.getId()).add(m);
             } else {
                 List<GroupArgumentModel> l = new ArrayList<>();
                 l.add(m);
-                this.groupArgumentMap.put(m.getId(),l);
+                this.groupArgumentMap.put(m.getId(), l);
             }
         }
 
-        List<GroupTaskModel> list = this.groupTaskService.findByBatchId(domainId,batchId);
-        for (GroupTaskModel m: list){
-            this.groupTaskMap.put(m.getUuid(),m);
+        List<GroupTaskModel> list = this.groupTaskService.findByBatchId(domainId, batchId);
+        for (GroupTaskModel m : list) {
+            this.groupTaskMap.put(m.getUuid(), m);
         }
 
-        for (int i = 0; i< this.batchList.size(); i++){
-            if (!batchId.equals(this.batchList.get(i).getBatch_id())){
+        for (int i = 0; i < this.batchList.size(); i++) {
+            if (!batchId.equals(this.batchList.get(i).getBatch_id())) {
                 this.batchList.remove(i);
                 i--;
             }
@@ -114,35 +114,35 @@ public class ArgumentServiceImpl implements ArgumentService {
 //        }
     }
 
-    private void initArgDefineMap(){
+    private void initArgDefineMap() {
         /*
         * 修改参数定义中的参数类型为批次参数的值
         * */
-        Map<String,BatchArgumentModel> map = new HashMap<>();
-        for (BatchArgumentModel m: batchList){
-            if (this.batchId.equals(m.getBatch_id())){
-                map.put(m.getArg_id(),m);
+        Map<String, BatchArgumentModel> map = new HashMap<>();
+        for (BatchArgumentModel m : batchList) {
+            if (this.batchId.equals(m.getBatch_id())) {
+                map.put(m.getArg_id(), m);
             }
         }
 
         argDefineMap = new HashMap<>();
-        for(ArgumentDefineModel m: argDefineList){
-            if (BATCH_ARGUMENT.equals(m.getArg_type())){
+        for (ArgumentDefineModel m : argDefineList) {
+            if (BATCH_ARGUMENT.equals(m.getArg_type())) {
                 m.setArg_value(map.get(m.getArg_id()).getArg_value());
             }
-            argDefineMap.put(m.getArg_id(),m);
+            argDefineMap.put(m.getArg_id(), m);
         }
     }
 
-    private void initTaskArgMap(){
+    private void initTaskArgMap() {
         taskMap = new HashMap<>();
-        for (TaskArgumentModel m: taskList){
-            if (taskMap.containsKey(m.getTask_id())){
+        for (TaskArgumentModel m : taskList) {
+            if (taskMap.containsKey(m.getTask_id())) {
                 taskMap.get(m.getTask_id()).add(m);
             } else {
                 List<TaskArgumentModel> l = new ArrayList<>();
                 l.add(m);
-                taskMap.put(m.getTask_id(),l);
+                taskMap.put(m.getTask_id(), l);
             }
         }
     }
@@ -157,18 +157,18 @@ public class ArgumentServiceImpl implements ArgumentService {
     @Override
     public List<TaskArgumentModel> getArgument(String id) {
         String taskId = this.groupTaskMap.get(id).getTask_id();
-        if (taskId == null){
+        if (taskId == null) {
             return null;
         }
         List<TaskArgumentModel> list = taskMap.get(taskId);
-        if (list == null){
+        if (list == null) {
             return null;
         }
-        for (TaskArgumentModel m: list){
-            switch (argDefineMap.get(m.getArg_id()).getArg_type()){
+        for (TaskArgumentModel m : list) {
+            switch (argDefineMap.get(m.getArg_id()).getArg_type()) {
                 case GROUP_ARGUMENT:
-                    for (GroupArgumentModel g : this.groupArgumentMap.get(id)){
-                        if (g.getArg_id().equals(m.getArg_id())){
+                    for (GroupArgumentModel g : this.groupArgumentMap.get(id)) {
+                        if (g.getArg_id().equals(m.getArg_id())) {
                             m.setArg_value(g.getArg_value());
                             break;
                         }

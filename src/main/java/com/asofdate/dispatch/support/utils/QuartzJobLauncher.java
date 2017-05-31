@@ -19,6 +19,8 @@ import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteExcep
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -120,18 +122,31 @@ public class QuartzJobLauncher extends QuartzJobBean {
         }
     }
 
-    public JobParameters getJobParameters(){
+    public JobParameters getJobParameters() {
         JobParametersBuilder builder = new JobParametersBuilder();
-        builder.addLong("timestamp",System.currentTimeMillis());
+
 
         String jobId = JoinCode.getTaskCode(jobName);
         List<TaskArgumentModel> list = argumentService.getArgument(jobId);
-        if (list == null){
+        if (list == null) {
+            builder.addLong("timestamp", System.currentTimeMillis());
             return builder.toJobParameters();
         }
-        for(TaskArgumentModel m:list){
-            builder.addString(m.getArg_id(),m.getArg_value());
+
+        Collections.sort(list, new Comparator<TaskArgumentModel>() {
+            @Override
+            public int compare(TaskArgumentModel o1, TaskArgumentModel o2) {
+                return Integer.parseInt(o1.getSort_id()) - Integer.parseInt(o2.getSort_id());
+            }
+        });
+
+        String JobParameters = "";
+        for (TaskArgumentModel m : list) {
+            JobParameters += " " + m.getArg_value();
         }
+        builder.addString("JobParameters", JobParameters.trim());
+        builder.addLong("timestamp", System.currentTimeMillis());
+
         return builder.toJobParameters();
     }
 }

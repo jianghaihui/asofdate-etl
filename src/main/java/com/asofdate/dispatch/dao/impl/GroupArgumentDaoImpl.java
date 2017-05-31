@@ -22,7 +22,7 @@ public class GroupArgumentDaoImpl implements GroupArgumentDao {
     @Override
     public List<GroupArgumentModel> findAll(String domainId) {
         RowMapper<GroupArgumentModel> rowMapper = new BeanPropertyRowMapper<>(GroupArgumentModel.class);
-        List<GroupArgumentModel> list = jdbcTemplate.query(SqlDefine.sys_rdbms_114,rowMapper,domainId);
+        List<GroupArgumentModel> list = jdbcTemplate.query(SqlDefine.sys_rdbms_114, rowMapper, domainId);
         return list;
     }
 }

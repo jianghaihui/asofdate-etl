@@ -36,9 +36,12 @@ public class BatchConfiguration {
     @Autowired
     private StepBuilderFactory stepBuilderFactory;
 
-    public Step stepOne(String typeId,String scriptFile) {
+    @Autowired
+    private TaskletFactory taskletFactory;
+
+    public Step stepOne(String typeId, String scriptFile) {
         return stepBuilderFactory.get("stepOne")
-                .tasklet(new TaskletFactory().getTasklet(typeId,scriptFile))
+                .tasklet(taskletFactory.getTasklet(typeId, scriptFile))
                 .build();
     }
 
@@ -46,20 +49,20 @@ public class BatchConfiguration {
     * @jobName job名称
     * 创建Job名称为jobName的任务
     * */
-    public Job job(String jobName,String typeId,String scriptFile) throws Exception {
+    public Job job(String jobName, String typeId, String scriptFile) throws Exception {
         return jobBuilderFactory.get(jobName)
                 .incrementer(new RunIdIncrementer())
-                .start(stepOne(typeId,scriptFile))
+                .start(stepOne(typeId, scriptFile))
                 .build();
     }
 
     /*
     * 注册任务
     * */
-    public JobRegistry createJobRegistry(String jobName,String typeId,String scriptFile) {
+    public JobRegistry createJobRegistry(String jobName, String typeId, String scriptFile) {
         MapJobRegistry jobRegistry = new MapJobRegistry();
         try {
-            jobRegistry.register(new RegisterJob(job(jobName,typeId,scriptFile)));
+            jobRegistry.register(new RegisterJob(job(jobName, typeId, scriptFile)));
         } catch (Exception e) {
             e.printStackTrace();
         }
