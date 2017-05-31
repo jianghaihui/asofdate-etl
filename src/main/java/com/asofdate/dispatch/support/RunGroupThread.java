@@ -3,6 +3,7 @@ package com.asofdate.dispatch.support;
 import com.asofdate.dispatch.model.GroupTaskModel;
 import com.asofdate.dispatch.service.GroupStatusService;
 import com.asofdate.dispatch.service.TaskStatusService;
+import com.asofdate.utils.JoinCode;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -43,8 +44,8 @@ public class RunGroupThread extends Thread {
 
             for (GroupTaskModel mt : taskMap.values()) {
                 try {
-                    taskStatus.setTaskRunning(join(gid, mt.getUuid()));
-                    scheduler.triggerJob(JobKey.jobKey(join(gid, mt.getUuid())));
+                    taskStatus.setTaskRunning(JoinCode.join(gid, mt.getUuid()));
+                    scheduler.triggerJob(JobKey.jobKey(JoinCode.join(gid, mt.getUuid())));
                 } catch (SchedulerException e) {
                     e.printStackTrace();
                 }
@@ -55,7 +56,7 @@ public class RunGroupThread extends Thread {
                 break;
             }
 
-            if (taskStatus.isError()){
+            if (taskStatus.isError()) {
                 groupStatus.setGroupError(gid);
                 break;
             }
@@ -66,13 +67,5 @@ public class RunGroupThread extends Thread {
                 e.printStackTrace();
             }
         }
-    }
-
-    private String join(String... str1) {
-        String result = "";
-        for (String s : str1) {
-            result += s + "__join__";
-        }
-        return result;
     }
 }

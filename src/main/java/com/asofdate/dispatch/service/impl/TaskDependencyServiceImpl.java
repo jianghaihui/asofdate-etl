@@ -5,7 +5,9 @@ import com.asofdate.dispatch.model.BatchGroupModel;
 import com.asofdate.dispatch.model.TaskDependencyModel;
 import com.asofdate.dispatch.service.BatchGroupService;
 import com.asofdate.dispatch.service.TaskDependencyService;
+import com.asofdate.utils.JoinCode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -14,6 +16,7 @@ import java.util.*;
  * Created by hzwy23 on 2017/5/27.
  */
 @Service
+@Scope("prototype")
 public class TaskDependencyServiceImpl implements TaskDependencyService {
     @Autowired
     private TaskDependencyDao taskDependencyDao;
@@ -39,24 +42,16 @@ public class TaskDependencyServiceImpl implements TaskDependencyService {
         * */
         for (BatchGroupModel gt : groupList) {
             for (TaskDependencyModel m : taskList) {
-                String id = join(gt.getUuid(), m.getId());
+                String id = JoinCode.join(gt.getUuid(), m.getId());
                 if (this.taskMap.containsKey(id)) {
-                    this.taskMap.get(id).add(join(gt.getUuid(), m.getUp_id()));
+                    this.taskMap.get(id).add(JoinCode.join(gt.getUuid(), m.getUp_id()));
                 } else {
                     Set<String> set = new HashSet<>();
-                    set.add(join(gt.getUuid(), m.getUp_id()));
+                    set.add(JoinCode.join(gt.getUuid(), m.getUp_id()));
                     this.taskMap.put(id, set);
                 }
             }
         }
-    }
-
-    private String join(String... str1) {
-        String result = "";
-        for (String s : str1) {
-            result += s + "__join__";
-        }
-        return result;
     }
 
 
@@ -66,7 +61,7 @@ public class TaskDependencyServiceImpl implements TaskDependencyService {
     * @param String id  表示任务id
     * */
     public Set<String> getTaskDependency(String gid, String id) {
-        return this.taskMap.get(join(gid, id));
+        return this.taskMap.get(JoinCode.join(gid, id));
     }
 
 }

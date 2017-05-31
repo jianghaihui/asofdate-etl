@@ -6,6 +6,7 @@ import com.asofdate.dispatch.service.BatchGroupService;
 import com.asofdate.dispatch.service.GroupDependencyService;
 import com.asofdate.dispatch.service.GroupStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import java.util.Set;
  * Created by hzwy23 on 2017/5/28.
  */
 @Service
+@Scope("prototype")
 public class GroupStatusServiceImpl implements GroupStatusService {
     @Autowired
     private BatchGroupService groupService;
@@ -103,7 +105,7 @@ public class GroupStatusServiceImpl implements GroupStatusService {
 
     @Override
     public void setGroupError(String gid) {
-        groupMap.put(gid,3);
+        groupMap.put(gid, 3);
     }
 
 
@@ -145,13 +147,4 @@ public class GroupStatusServiceImpl implements GroupStatusService {
         }
         return true;
     }
-
-    private String join(String... str1) {
-        String result = "";
-        for (String s : str1) {
-            result += s + "__join__";
-        }
-        return result;
-    }
-
 }

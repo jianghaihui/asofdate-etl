@@ -6,7 +6,9 @@ import com.asofdate.dispatch.service.BatchGroupService;
 import com.asofdate.dispatch.service.GroupTaskService;
 import com.asofdate.dispatch.service.TaskDependencyService;
 import com.asofdate.dispatch.service.TaskStatusService;
+import com.asofdate.utils.JoinCode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -18,6 +20,7 @@ import java.util.Set;
  * Created by hzwy23 on 2017/5/28.
  */
 @Service
+@Scope("prototype")
 public class TaskStatusServiceImpl implements TaskStatusService {
     @Autowired
     private BatchGroupService groupService;
@@ -64,7 +67,7 @@ public class TaskStatusServiceImpl implements TaskStatusService {
             for (GroupTaskModel tl : this.taskList) {
                 if (gl.getGroup_id().equals(tl.getGroup_id())) {
                     // 0 表示初始化
-                    this.taskMap.put(join(gl.getUuid(), tl.getUuid()), 0);
+                    this.taskMap.put(JoinCode.join(gl.getUuid(), tl.getUuid()), 0);
                 }
             }
         }
@@ -104,8 +107,8 @@ public class TaskStatusServiceImpl implements TaskStatusService {
     * @param String id  表示任务id;
     * */
     public int getTaskStatus(String gid, String id) {
-        if (this.taskMap.containsKey(join(gid, id))) {
-            return this.taskMap.get(join(gid, id));
+        if (this.taskMap.containsKey(JoinCode.join(gid, id))) {
+            return this.taskMap.get(JoinCode.join(gid, id));
         }
         return 3;
     }
@@ -168,7 +171,7 @@ public class TaskStatusServiceImpl implements TaskStatusService {
 
     @Override
     public void setTaskError(String uid) {
-        this.taskMap.put(uid,3);
+        this.taskMap.put(uid, 3);
     }
 
 
@@ -208,14 +211,6 @@ public class TaskStatusServiceImpl implements TaskStatusService {
     @Override
     public boolean isError() {
         return this.taskMap.containsValue(3);
-    }
-
-    private String join(String... str1) {
-        String result = "";
-        for (String s : str1) {
-            result += s + "__join__";
-        }
-        return result;
     }
 
 }

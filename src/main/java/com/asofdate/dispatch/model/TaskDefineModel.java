@@ -15,6 +15,15 @@ public class TaskDefineModel {
     public String modifyDate;
     public String modifyUser;
     public String domainId;
+    public String scriptFile;
+
+    public String getScriptFile() {
+        return scriptFile;
+    }
+
+    public void setScriptFile(String scriptFile) {
+        this.scriptFile = scriptFile;
+    }
 
     public String getTaskId() {
         return taskId;

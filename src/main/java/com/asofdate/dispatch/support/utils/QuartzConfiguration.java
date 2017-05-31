@@ -1,6 +1,13 @@
 package com.asofdate.dispatch.support.utils;
 
+import com.asofdate.dispatch.model.GroupTaskModel;
+import com.asofdate.dispatch.model.TaskDefineModel;
+import com.asofdate.dispatch.service.ArgumentService;
+import com.asofdate.dispatch.service.GroupTaskService;
+import com.asofdate.dispatch.service.TaskDefineService;
 import com.asofdate.dispatch.service.TaskStatusService;
+import com.asofdate.utils.JoinCode;
+import org.hibernate.mapping.Join;
 import org.quartz.SimpleTrigger;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.DefaultBatchConfigurer;
@@ -18,6 +25,7 @@ import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Configuration
@@ -26,18 +34,21 @@ import java.util.Map;
 public class QuartzConfiguration extends DefaultBatchConfigurer {
     @Autowired
     private BatchConfiguration batchConfiguration;
+    @Autowired
+    private TaskDefineService taskDefineService;
+    @Autowired
+    private GroupTaskService groupTaskService;
 
     private String domainId;
     private String batchId;
     private SchedulerFactoryBean schedulerFactoryBean;
     private TaskStatusService taskStatusService;
+    private ArgumentService argumentService;
+    private Map<String,TaskDefineModel> taskDefineMap;
+    private Map<String,GroupTaskModel> groupTaskMap;
 
     public SchedulerFactoryBean getSchedulerFactoryBean() {
         return schedulerFactoryBean;
-    }
-
-    public void setSchedulerFactoryBean(SchedulerFactoryBean schedulerFactoryBean) {
-        this.schedulerFactoryBean = schedulerFactoryBean;
     }
 
     public String getDomainId() {
@@ -65,7 +76,13 @@ public class QuartzConfiguration extends DefaultBatchConfigurer {
         jobDetailFactoryBean.setName(jobName);
         JobRepository jobRepository = batchConfiguration.createJobRepository();
         JobLauncher jobLauncher = batchConfiguration.createJobLauncher(jobRepository);
-        JobRegistry jobRegistry = batchConfiguration.createJobRegistry(jobName);
+        String taskId =  this.groupTaskMap.get(JoinCode.getTaskCode(jobName)).getTask_id();
+
+        TaskDefineModel tm = this.taskDefineMap.get(taskId);
+        String typeId = tm.getTaskType();
+        String scriptFile = tm.getScriptFile();
+
+        JobRegistry jobRegistry = batchConfiguration.createJobRegistry(jobName,typeId,scriptFile);
         JobExplorer jobExplorer = batchConfiguration.createJobExplorer();
         JobOperator jobOperator = batchConfiguration.createJobOperator(jobLauncher, jobExplorer, jobRegistry, jobRepository);
 
@@ -76,6 +93,7 @@ public class QuartzConfiguration extends DefaultBatchConfigurer {
         map.put("jobExplorer", jobExplorer);
         map.put("jobOperator", jobOperator);
         map.put("taskStatusService", taskStatusService);
+        map.put("argumentService",argumentService);
         jobDetailFactoryBean.setJobDataAsMap(map);
 
         jobDetailFactoryBean.afterPropertiesSet();
@@ -95,10 +113,23 @@ public class QuartzConfiguration extends DefaultBatchConfigurer {
     }
 
 
-    public SchedulerFactoryBean createSchedulerFactoryBean(String domainId, String batchId, TaskStatusService taskStatusService) throws Exception {
+    public SchedulerFactoryBean createSchedulerFactoryBean(String domainId, String batchId, TaskStatusService taskStatusService,ArgumentService argumentService) throws Exception {
         setDomainId(domainId);
         setBatchId(batchId);
         this.taskStatusService = taskStatusService;
+        this.argumentService = argumentService;
+        this.taskDefineMap = new HashMap<>();
+        List<TaskDefineModel> list = taskDefineService.findAll(domainId,batchId);
+        for (TaskDefineModel m :list){
+            this.taskDefineMap.put(m.getTaskId(),m);
+        }
+
+        this.groupTaskMap = new HashMap<>();
+        List<GroupTaskModel> gtlist = groupTaskService.findByBatchId(domainId,batchId);
+        for(GroupTaskModel m:gtlist){
+            this.groupTaskMap.put(m.getUuid(),m);
+        }
+
         SchedulerFactoryBean schedulerFactoryBean = new SchedulerFactoryBean();
         // 配置DataSource后,将会出现异常
         // JobLauncher实例化对象无法序列化

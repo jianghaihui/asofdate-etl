@@ -1,5 +1,6 @@
 package com.asofdate.dispatch.controller;
 
+import com.asofdate.dispatch.service.ArgumentService;
 import com.asofdate.dispatch.service.GroupStatusService;
 import com.asofdate.dispatch.service.TaskStatusService;
 import com.asofdate.dispatch.support.JobScheduler;
@@ -31,6 +32,8 @@ public class DispatchController {
     private TaskStatusService taskStatus;
     @Autowired
     private GroupStatusService groupStatus;
+    @Autowired
+    private ArgumentService argumentService;
 
     @RequestMapping(value = "/v1/dispatch/start")
     @ResponseBody
@@ -54,9 +57,11 @@ public class DispatchController {
         * */
         groupStatus.afterPropertiesSet(domainId, batchId);
         taskStatus.afterPropertiesSet(domainId, batchId);
+        argumentService.afterPropertySet(domainId,batchId);
+
         // 由于初始化时关闭了所有的触发器
         // 所以,调度开启后,并不会有任务执行
-        quartzConfiguration.createSchedulerFactoryBean(domainId, batchId, taskStatus);
+        quartzConfiguration.createSchedulerFactoryBean(domainId, batchId, taskStatus,argumentService);
 
         // 进度调度依赖关系管理
         // 根据依赖关系,开启任务触发器

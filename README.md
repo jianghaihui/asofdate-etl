@@ -1,3 +1,8 @@
+## 项目状态
+开发中...
+
+有愿意加入项目的，请加QQ：309810957
+
 ## asofdate-etl项目简介
 这是一个企业级ETL调度系统, 在成熟的spring框架基础上,实现ETL调度服务. 权限管理部分,采用[asofdate项目](https://github.com/hzwy23/asofdate),asofdate项目采用golang开发,asofdate-etl采用java重写了asofdate后台api,由于两个项目都是采用jwt加密用户连接信息,加密方式相同,所有,两个项目可以共同使用同一套数据模型.
 

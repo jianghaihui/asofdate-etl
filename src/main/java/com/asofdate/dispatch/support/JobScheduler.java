@@ -39,14 +39,6 @@ public class JobScheduler extends Thread {
         this.taskStatus = taskStatus;
     }
 
-    private String join(String... str1) {
-        String result = "";
-        for (String s : str1) {
-            result += s + "__join__";
-        }
-        return result;
-    }
-
     @Override
     public void run() {
         if (domainId == null) {
@@ -82,7 +74,7 @@ public class JobScheduler extends Thread {
                 * 一旦出现任务执行错误,则停止批次
                 * 并撤销整个批次
                 * */
-                if (taskStatus.isError()){
+                if (taskStatus.isError()) {
                     logger.info("task error, 销毁批次");
                     scheduler.stop();
                     scheduler.destroy();

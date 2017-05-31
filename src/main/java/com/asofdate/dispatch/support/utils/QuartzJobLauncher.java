@@ -1,6 +1,9 @@
 package com.asofdate.dispatch.support.utils;
 
+import com.asofdate.dispatch.model.TaskArgumentModel;
+import com.asofdate.dispatch.service.ArgumentService;
 import com.asofdate.dispatch.service.TaskStatusService;
+import com.asofdate.utils.JoinCode;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
@@ -16,6 +19,8 @@ import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteExcep
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
+import java.util.List;
+
 /**
  * Created by hzwy23 on 2017/5/21.
  */
@@ -28,7 +33,16 @@ public class QuartzJobLauncher extends QuartzJobBean {
     private JobExplorer jobExplorer;
     private JobOperator jobOperator;
     private TaskStatusService taskStatusService;
+    private ArgumentService argumentService;
     private String jobName;
+
+    public ArgumentService getArgumentService() {
+        return argumentService;
+    }
+
+    public void setArgumentService(ArgumentService argumentService) {
+        this.argumentService = argumentService;
+    }
 
     public TaskStatusService getTaskStatusService() {
         return taskStatusService;
@@ -83,9 +97,7 @@ public class QuartzJobLauncher extends QuartzJobBean {
 
         try {
             Job job = jobRegistry.getJob(jobName);
-            JobParameters jobParameters = new JobParametersBuilder().addLong("timestamp", System.currentTimeMillis()).addString("as_of_date", "2017-01-01").toJobParameters();
-            JobExecution jobExecution = jobLauncher.run(job, jobParameters);
-
+            JobExecution jobExecution = jobLauncher.run(job, getJobParameters());
             if (ExitStatus.COMPLETED.getExitCode().equals(jobExecution.getExitStatus().getExitCode())) {
                 logger.info(jobName + " 任务已经完成.");
                 taskStatusService.setTaskCompleted(jobName);
@@ -106,5 +118,20 @@ public class QuartzJobLauncher extends QuartzJobBean {
         } catch (JobRestartException e) {
             e.printStackTrace();
         }
+    }
+
+    public JobParameters getJobParameters(){
+        JobParametersBuilder builder = new JobParametersBuilder();
+        builder.addLong("timestamp",System.currentTimeMillis());
+
+        String jobId = JoinCode.getTaskCode(jobName);
+        List<TaskArgumentModel> list = argumentService.getArgument(jobId);
+        if (list == null){
+            return builder.toJobParameters();
+        }
+        for(TaskArgumentModel m:list){
+            builder.addString(m.getArg_id(),m.getArg_value());
+        }
+        return builder.toJobParameters();
     }
 }

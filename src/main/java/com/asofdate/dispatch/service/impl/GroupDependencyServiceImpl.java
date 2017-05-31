@@ -4,6 +4,7 @@ import com.asofdate.dispatch.dao.GroupDependencyDao;
 import com.asofdate.dispatch.model.GroupDependencyModel;
 import com.asofdate.dispatch.service.GroupDependencyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -12,6 +13,7 @@ import java.util.*;
  * Created by hzwy23 on 2017/5/27.
  */
 @Service
+@Scope("prototype")
 public class GroupDependencyServiceImpl implements GroupDependencyService {
     @Autowired
     private GroupDependencyDao groupDependencyDao;
