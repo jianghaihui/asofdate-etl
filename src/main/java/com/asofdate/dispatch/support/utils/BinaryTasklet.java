@@ -25,7 +25,7 @@ public class BinaryTasklet implements Tasklet {
     private String scritpFile = "script/";
 
     public BinaryTasklet(String scriptFile) {
-        this.scritpFile += scriptFile.replaceFirst("/", "");
+        this.scritpFile += scriptFile.replaceFirst("^(/|./)", "");
     }
 
     @Override

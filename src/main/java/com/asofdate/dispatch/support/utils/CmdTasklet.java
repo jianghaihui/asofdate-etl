@@ -26,7 +26,7 @@ public class CmdTasklet implements Tasklet {
     private String scritpFile = "script/";
 
     public CmdTasklet(String scriptFile) {
-        this.scritpFile += scriptFile.replaceFirst("/", "");
+        this.scritpFile += scriptFile.replaceFirst("^(/|./)", "");
     }
 
     @Override

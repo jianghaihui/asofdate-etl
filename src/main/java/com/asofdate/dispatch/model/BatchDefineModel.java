@@ -14,6 +14,15 @@ public class BatchDefineModel {
     public String modify_date;
     public String modify_user;
     public String domain_id;
+    public String batch_status_desc;
+
+    public String getBatch_status_desc() {
+        return batch_status_desc;
+    }
+
+    public void setBatch_status_desc(String batch_status_desc) {
+        this.batch_status_desc = batch_status_desc;
+    }
 
     public String getBatch_id() {
         return batch_id;

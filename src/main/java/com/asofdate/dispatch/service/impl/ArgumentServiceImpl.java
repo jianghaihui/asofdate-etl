@@ -114,6 +114,26 @@ public class ArgumentServiceImpl implements ArgumentService {
 //        }
     }
 
+    @Override
+    public List<ArgumentDefineModel> findAll(String domainID) {
+        return argumentDefineDao.findAll(domainID);
+    }
+
+    @Override
+    public int add(ArgumentDefineModel m) {
+        return argumentDefineDao.add(m);
+    }
+
+    @Override
+    public String delete(List<ArgumentDefineModel> m) {
+        return argumentDefineDao.delete(m);
+    }
+
+    @Override
+    public int update(ArgumentDefineModel m) {
+        return argumentDefineDao.update(m);
+    }
+
     private void initArgDefineMap() {
         /*
         * 修改参数定义中的参数类型为批次参数的值

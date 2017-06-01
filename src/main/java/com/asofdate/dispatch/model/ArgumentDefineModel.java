@@ -14,6 +14,15 @@ public class ArgumentDefineModel {
     public String modify_user;
     public String modify_date;
     public String domain_id;
+    public String arg_desc;
+
+    public String getArg_desc() {
+        return arg_desc;
+    }
+
+    public void setArg_desc(String arg_desc) {
+        this.arg_desc = arg_desc;
+    }
 
     public String getArg_id() {
         return arg_id;

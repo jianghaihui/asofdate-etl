@@ -83,10 +83,10 @@ public class SqlDefine {
     public static String sys_rdbms_101 = "select t.theme_id,i.theme_desc,res_id,res_url,res_type,res_bg_color,res_class,group_id,res_img,sort_id from sys_theme_value t inner join sys_theme_info i on t.theme_id = i.theme_id where t.theme_id = ? order by group_id,sort_id asc";
     public static String sys_rdbms_102 = "select t.user_id,t.theme_id,i.theme_desc from sys_user_theme t inner join sys_theme_info i on t.theme_id = i.theme_id where t.user_id = ?";
     public static String sys_rdbms_103 = "select theme_id from sys_user_theme where user_id = ?";
-    public static String sys_rdbms_104 = "select t.arg_id, t.arg_type,a.arg_type_desc,t.arg_value,t.code_number,t.create_user,t.create_date,t.modify_user,t.modify_date,t.domain_id from dispatch_argument_define t left join dispatch_argument_type_attr a on t.arg_type = a.arg_type where t.domain_id = ?";
+    public static String sys_rdbms_104 = "select t.arg_id, t.arg_type,a.arg_type_desc,t.arg_value,t.code_number,t.create_user,t.create_date,t.modify_user,t.modify_date,t.domain_id,t.arg_desc from dispatch_argument_define t left join dispatch_argument_type_attr a on t.arg_type = a.arg_type where t.domain_id = ?";
     public static String sys_rdbms_105 = "select t.uuid,t.batch_id,t.arg_id,t.arg_value,t.domain_id from dispatch_batch_argument_relation t where t.domain_id = ?";
     public static String sys_rdbms_106 = "select t.id as uuid,t.batch_id,t.group_id,t.domain_id from dispatch_batch_group_relation t where t.domain_id = ?";
-    public static String sys_rdbms_107 = "select t.batch_id,t.code_number,t.batch_desc,t.batch_status,t.as_of_date,t.create_date,t.create_user,t.modify_date,t.modify_user,t.domain_id from dispatch_batch_define t where t.domain_id = ?";
+    public static String sys_rdbms_107 = "select t.batch_id,t.code_number,t.batch_desc,t.batch_status,t.as_of_date,t.create_date,t.create_user,t.modify_date,t.modify_user,t.domain_id,a.batch_status_desc from dispatch_batch_define t left join dispatch_batch_status_attr a on t.batch_status = a.batch_status where t.domain_id = ?";
     public static String sys_rdbms_108 = "select t.group_id,t.code_number,t.group_desc,t.create_user,t.create_date,t.modify_user,t.modify_date,t.domain_id from dispatch_group_define t where t.domain_id = ?";
     public static String sys_rdbms_109 = "select t.id as uuid,t.group_id,t.task_id,t.domain_id from dispatch_group_task_relation t where t.domain_id = ?";
     public static String sys_rdbms_110 = "select t.uuid,t.task_id,t.arg_id,t.arg_value,t.domain_id,t.sort_id from dispatch_task_argument_relation t where t.domain_id = ?";
@@ -94,4 +94,11 @@ public class SqlDefine {
     public static String sys_rdbms_112 = "select uuid,id,up_id,domain_id from dispatch_group_dependency where domain_id = ?";
     public static String sys_rdbms_113 = "select uuid,id,up_id,domain_id from dispatch_task_dependency where domain_id = ?";
     public static String sys_rdbms_114 = "select uuid,id,arg_id,arg_value,domain_id from dispatch_group_argument_relation where domain_id = ?";
+    public static String sys_rdbms_115 = "select distinct r.res_id from sys_role_user_relation t left join sys_role_resource_relat r on t.role_id = r.role_id where t.user_id = ?";
+    public static String sys_rdbms_116 = "select uuid,domain_id,target_domain_id,authorization_level from sys_domain_share_info where target_domain_id = ?";
+    public static String sys_rdbms_117 = "select uuid,domain_id,target_domain_id,authorization_level from sys_domain_share_info where domain_id = ?";
+    public static String sys_rdbms_118 = "select t.domain_id,t.domain_name as domain_desc,t.domain_status_id,a.domain_status_name as domain_status_desc from sys_domain_info t left join sys_domain_status_attr a on t.domain_status_id = a.domain_status_id";
+    public static String sys_rdbms_119 = "insert into dispatch_argument_define(arg_id,arg_type,arg_value,code_number,create_user,create_date,modify_user,modify_date,domain_id,arg_desc) values(?,?,?,?,?,now(),?,now(),?,?)";
+    public static String sys_rdbms_120 = "delete from dispatch_argument_define where arg_id = ? and domain_id = ?";
+    public static String sys_rdbms_121 = "update dispatch_argument_define set arg_desc = ?, arg_type = ?,arg_value = ? where arg_id = ? and domain_id = ?";
 }

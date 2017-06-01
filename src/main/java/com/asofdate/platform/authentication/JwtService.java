@@ -77,6 +77,7 @@ public class JwtService {
     }
 
     public static Authentication getAuthentication(HttpServletRequest request) {
+
         // 从Header中拿到token
         String token = request.getHeader(HEADER_STRING);
         if (token == null) {

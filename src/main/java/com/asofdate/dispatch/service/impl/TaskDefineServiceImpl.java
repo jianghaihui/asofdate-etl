@@ -44,4 +44,9 @@ public class TaskDefineServiceImpl implements TaskDefineService {
 
         return list;
     }
+
+    @Override
+    public List<TaskDefineModel> getAll(String domainId) {
+        return dispatchTaskDefineDao.findAll(domainId);
+    }
 }

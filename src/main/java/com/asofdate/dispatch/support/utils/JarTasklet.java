@@ -26,7 +26,7 @@ public class JarTasklet implements Tasklet {
     private String scritpFile = "script/";
 
     public JarTasklet(String scriptFile) {
-        this.scritpFile += scriptFile.replaceFirst("/", "");
+        this.scritpFile += scriptFile.replaceFirst("^(/|./)", "");
     }
 
     @Override

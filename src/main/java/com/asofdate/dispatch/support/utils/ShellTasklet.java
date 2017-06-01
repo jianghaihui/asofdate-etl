@@ -26,7 +26,7 @@ public class ShellTasklet implements Tasklet {
     private String scritpFile = "script/";
 
     public ShellTasklet(String scriptFile) {
-        this.scritpFile += scriptFile.replaceFirst("/", "");
+        this.scritpFile += scriptFile.replaceFirst("^(/|./)", "");
     }
 
     @Override

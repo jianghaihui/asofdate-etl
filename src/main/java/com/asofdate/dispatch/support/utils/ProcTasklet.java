@@ -7,13 +7,7 @@ import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
 /**
  * Created by hzwy23 on 2017/5/31.
@@ -27,7 +21,7 @@ public class ProcTasklet implements Tasklet {
     private String scriptFile = null;
 
 
-    public ProcTasklet(String scriptFile,JdbcTemplate jdbcTemplate) {
+    public ProcTasklet(String scriptFile, JdbcTemplate jdbcTemplate) {
         this.scriptFile = scriptFile;
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -40,18 +34,18 @@ public class ProcTasklet implements Tasklet {
         if (parametersObj != null) {
             jobParameters = parametersObj.toString();
             String[] p = jobParameters.split(" ");
-            for (int i = 0; i < p.length; i++){
-                if (i == 0){
-                    params += "'"+p[i]+"'";
+            for (int i = 0; i < p.length; i++) {
+                if (i == 0) {
+                    params += "'" + p[i] + "'";
                 } else {
-                    params += ",'"+p[i]+"'";
+                    params += ",'" + p[i] + "'";
                 }
             }
         }
-        params +=")";
+        params += ")";
         try {
-            jdbcTemplate.execute("call " +scriptFile+params);
-        }catch (Exception e){
+            jdbcTemplate.execute("call " + scriptFile + params);
+        } catch (Exception e) {
             chunkContext.getStepContext().getStepExecution().setExitStatus(ExitStatus.FAILED);
         }
         return RepeatStatus.FINISHED;

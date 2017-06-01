@@ -41,12 +41,12 @@ public class SystemPageController {
         Authentication authentication = JwtService
                 .getAuthentication((HttpServletRequest) request);
         String username = authentication.getName();
-        logger.debug("username is:" + username);
+        logger.info("username is:" + username);
         String resId = request.getParameter("Id");
-        logger.debug("resource id is :" + resId);
+        logger.info("resource id is :" + resId);
         String url = jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_011, String.class, username, resId);
         url = url.replaceFirst("^./views/", "").replaceFirst(".tpl$", "").replaceFirst("^./apps/", "");
-        logger.debug("url is :" + url);
+        logger.info("url is :" + url);
         return url;
     }
 }

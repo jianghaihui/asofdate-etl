@@ -1,9 +1,6 @@
 package com.asofdate.platform.dao.impl;
 
-import com.asofdate.platform.dao.HomeMenuDao;
-import com.asofdate.platform.dao.ResourceDao;
-import com.asofdate.platform.dao.ThemeResourceDao;
-import com.asofdate.platform.dao.UserThemeDao;
+import com.asofdate.platform.dao.*;
 import com.asofdate.platform.model.HomeMenuModel;
 import com.asofdate.platform.model.ResourceModel;
 import com.asofdate.platform.model.ThemeResourceModel;
@@ -11,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by hzwy23 on 2017/5/17.
@@ -32,6 +26,9 @@ public class HomeMenuDaoImpl implements HomeMenuDao {
 
     @Autowired
     public ResourceDao resourceDao;
+
+    @Autowired
+    private UserResourceDao userResourceDao;
 
     private String getThemeId(String userId) {
         return userThemeDao.findById(userId);
@@ -65,10 +62,11 @@ public class HomeMenuDaoImpl implements HomeMenuDao {
     @Override
     public List findById(String userId, String typeId, String resId) {
 
+        Set<String> set = userResourceDao.findAll(userId);
         // 获取用户配置的主题信息
         String themeId = getThemeId(userId);
 
-        //后期主题对应的资源信息
+        //获取主题对应的资源信息
         List<ThemeResourceModel> list = getThemeResource(themeId);
 
         // 获取指定菜单的所以下级菜单信息
@@ -80,6 +78,9 @@ public class HomeMenuDaoImpl implements HomeMenuDao {
 
         List<HomeMenuModel> rst = new ArrayList<HomeMenuModel>();
         for (ThemeResourceModel m : list) {
+            if (!set.contains(m.getRes_id())){
+                continue;
+            }
             if (resourceMap.containsKey(m.getRes_id())) {
                 HomeMenuModel homeMenuModel = new HomeMenuModel();
                 homeMenuModel.setGroup_id(m.getGroup_id());

@@ -2,7 +2,6 @@ package com.asofdate.dispatch.support.utils;
 
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -38,7 +37,7 @@ public class TaskletFactory {
             case BINARY_TYPE:
                 return new BinaryTasklet(scritpFile);
             case PROC_TYPE:
-                return new ProcTasklet(scritpFile,jdbcTemplate);
+                return new ProcTasklet(scritpFile, jdbcTemplate);
         }
         return null;
     }
