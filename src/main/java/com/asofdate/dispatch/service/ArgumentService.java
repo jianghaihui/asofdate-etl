@@ -16,10 +16,12 @@ public interface ArgumentService {
     List<ArgumentDefineModel> findAll(String domainID);
 
     int add(ArgumentDefineModel m);
+
     /*
     * 删除任务
     * */
     String delete(List<ArgumentDefineModel> m);
+
     /*
     * 更新任务
     * */

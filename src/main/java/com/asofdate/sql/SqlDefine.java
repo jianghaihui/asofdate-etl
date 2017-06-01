@@ -101,4 +101,13 @@ public class SqlDefine {
     public static String sys_rdbms_119 = "insert into dispatch_argument_define(arg_id,arg_type,arg_value,code_number,create_user,create_date,modify_user,modify_date,domain_id,arg_desc) values(?,?,?,?,?,now(),?,now(),?,?)";
     public static String sys_rdbms_120 = "delete from dispatch_argument_define where arg_id = ? and domain_id = ?";
     public static String sys_rdbms_121 = "update dispatch_argument_define set arg_desc = ?, arg_type = ?,arg_value = ? where arg_id = ? and domain_id = ?";
+    public static String sys_rdbms_122 = "delete from dispatch_group_define where group_id = ? and domain_id = ?";
+    public static String sys_rdbms_123 = "update dispatch_group_define set group_desc = ? where group_id = ? and domain_id = ?";
+    public static String sys_rdbms_124 = "insert into dispatch_group_define(group_id,code_number,group_desc,create_user,create_date,modify_user,modify_date,domain_id) values(?,?,?,?,now(),?,now(),?)";
+    public static String sys_rdbms_125 = "insert into dispatch_task_define(task_id,code_number,task_desc,task_type,create_user,create_date,modify_date,modify_user,domain_id,script_file) values(?,?,?,?,?,now(),now(),?,?,?)";
+    public static String sys_rdbms_126 = "update dispatch_task_define set task_desc = ?, task_type = ?,script_file = ? where task_id = ? and domain_id = ?";
+    public static String sys_rdbms_127 = "delete from dispatch_task_define where task_id = ? and domain_id = ?";
+    public static String sys_rdbms_128 = "insert into dispatch_batch_define(batch_id,code_number,batch_desc,batch_status,as_of_date,create_date,create_user,modify_user,modify_date,domain_id) values(?,?,?,?,?,now(),?,now(),?,?)";
+    public static String sys_rdbms_129 = "delete from dispatch_batch_define where batch_id = ? and domain_id = ?";
+    public static String sys_rdbms_130 = "update from dispatch_batch_define set batch_desc = ?, batch_status = ?,as_of_date = str_to_date(?,'%Y-%m-%d') where batch_id = ? and domain_id = ?";
 }

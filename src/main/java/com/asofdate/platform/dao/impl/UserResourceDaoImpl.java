@@ -9,7 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by hzwy23 on 2017/6/1.
@@ -27,7 +28,7 @@ public class UserResourceDaoImpl implements UserResourceDao {
             public void processRow(ResultSet resultSet) throws SQLException {
                 set.add(resultSet.getString("res_id"));
             }
-        },userId);
+        }, userId);
         return set;
     }
 }

@@ -1,6 +1,5 @@
 package com.asofdate.platform.dao;
 
-import java.util.List;
 import java.util.Set;
 
 /**

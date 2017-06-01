@@ -1,5 +1,6 @@
 package com.asofdate.dispatch.service;
 
+import com.asofdate.dispatch.dao.GroupDefineDao;
 import com.asofdate.dispatch.model.GroupDefineModel;
 
 import java.util.List;
@@ -9,4 +10,7 @@ import java.util.List;
  */
 public interface GroupDefineService {
     List<GroupDefineModel> findAll(String domainId);
+    int update(GroupDefineModel m);
+    String delete(List<GroupDefineModel> m);
+    int add(GroupDefineModel m);
 }

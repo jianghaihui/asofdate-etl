@@ -20,4 +20,19 @@ public class GroupDefineServiceImpl implements GroupDefineService {
     public List<GroupDefineModel> findAll(String domainId) {
         return groupDefineDao.findAll(domainId);
     }
+
+    @Override
+    public int update(GroupDefineModel m) {
+        return groupDefineDao.update(m);
+    }
+
+    @Override
+    public String delete(List<GroupDefineModel> m) {
+        return groupDefineDao.delete(m);
+    }
+
+    @Override
+    public int add(GroupDefineModel m) {
+        return groupDefineDao.add(m);
+    }
 }

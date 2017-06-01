@@ -11,7 +11,7 @@
             <button onclick="DomainObj.domainEditRow()" class="btn btn btn-success btn-sm">
                 <i class="icon-edit"> 编辑</i>
             </button>
-            <button  onclick="DomainObj.domainDeleteRow()" class="btn btn btn-danger btn-sm">
+            <button onclick="DomainObj.domainDeleteRow()" class="btn btn btn-danger btn-sm">
                 <i class="icon-trash"> 删除</i>
             </button>
         </div>
@@ -22,38 +22,38 @@
 <script type="text/javascript">
     /*<![CDATA[*/
     var DomainObj = {
-        getSharePage:function(id,name){
-            var name = name+"共享配置"
+        getSharePage: function (id, name) {
+            var name = name + "共享配置"
             Hutils.openTab({
-                url:"/v1/auth/domain/share/page?domain_id="+id,
-                id:"sharedomain9999888",
-                title:name,
-                error:function (m) {
+                url: "/v1/auth/domain/share/page?domain_id=" + id,
+                id: "sharedomain9999888",
+                title: name,
+                error: function (m) {
                     $.Notify({
-                        title:"温馨提示：",
-                        message:"您没有被授权访问这个域。",
-                        type:"info",
+                        title: "温馨提示：",
+                        message: "您没有被授权访问这个域。",
+                        type: "info",
                     })
                 }
             })
         },
-        getDomainInfo:function(){
+        getDomainInfo: function () {
             $("#HdomainInfoTable").bootstrapTable({
-                url:'/v1/auth/domain/get',
-                height:document.documentElement.clientHeight-76,
-                uniqueId:'domain_id',
-                toolbar:"#h-domain-toolbar-list",
+                url: '/v1/auth/domain/get',
+                height: document.documentElement.clientHeight - 76,
+                uniqueId: 'domain_id',
+                toolbar: "#h-domain-toolbar-list",
                 striped: true,
                 pagination: true,
-                pageList:[80,160,400,800,3000,"All"],
-                showRefresh:true,
+                pageList: [80, 160, 400, 800, 3000, "All"],
+                showRefresh: true,
                 pageSize: 40,
-                showExport:false,
-                search:true,
+                showExport: false,
+                search: true,
                 sidePagination: "client",
                 showColumns: true,
-                columns:[{
-                    checkbox:true,
+                columns: [{
+                    checkbox: true,
                 }, {
 
                     field: 'domain_id',
@@ -90,7 +90,7 @@
 
                     sortable: false,
 
-                },{
+                }, {
 
                     field: 'maintance_date',
 
@@ -147,29 +147,29 @@
 
                     sortable: false,
 
-                    formatter:function(value,rows,index){
+                    formatter: function (value, rows, index) {
 
-                        return '<span class="h-td-btn btn-primary btn-xs" onclick="DomainObj.getSharePage(\''+rows.domain_id+'\',\''+ rows.domain_desc+'\')">共享管理</span>'
+                        return '<span class="h-td-btn btn-primary btn-xs" onclick="DomainObj.getSharePage(\'' + rows.domain_id + '\',\'' + rows.domain_desc + '\')">共享管理</span>'
 
                     }
                 }]
             }).closest(".bootstrap-table").find(".columns-right").hide();
         },
 
-        domainInsertRow:function(e){
-            var submitMenu = function(hmode){
+        domainInsertRow: function (e) {
+            var submitMenu = function (hmode) {
                 $.HAjaxRequest({
-                    type:"Post",
-                    url:"/v1/auth/domain/post",
-                    cache:false,
-                    data:$("#h-domain-add-tpl").serialize(),
-                    async:true,
-                    dataType:"text",
-                    success: function(data){
+                    type: "Post",
+                    url: "/v1/auth/domain/post",
+                    cache: false,
+                    data: $("#h-domain-add-tpl").serialize(),
+                    async: true,
+                    dataType: "text",
+                    success: function (data) {
                         $.Notify({
-                            title:"操作成功",
-                            message:"创建域信息成功",
-                            type:"success",
+                            title: "操作成功",
+                            message: "创建域信息成功",
+                            type: "success",
                         });
                         $(hmode).remove();
                         $("#HdomainInfoTable").bootstrapTable('refresh');
@@ -178,89 +178,89 @@
             };
 
             $.Hmodal({
-                callback:submitMenu,
-                header:"新增域信息",
-                body:$("#domain_input_form").html(),
-                height:"360px",
-                preprocess:function () {
+                callback: submitMenu,
+                header: "新增域信息",
+                body: $("#domain_input_form").html(),
+                height: "360px",
+                preprocess: function () {
                     $("#h-domain-add-status").Hselect({
-                        height:"30px",
+                        height: "30px",
                     })
                 },
             })
         },
 
-        domainDeleteRow:function(){
+        domainDeleteRow: function () {
             var rst = $("#HdomainInfoTable").bootstrapTable("getAllSelections")
-            if (rst.length > 0){
+            if (rst.length > 0) {
                 $.Hconfirm({
-                    callback:function () {
+                    callback: function () {
                         $.HAjaxRequest({
-                            type:'post',
-                            url:"/v1/auth/domain/delete",
-                            data:{JSON:JSON.stringify(rst)},
-                            success: function(data){
+                            type: 'post',
+                            url: "/v1/auth/domain/delete",
+                            data: {JSON: JSON.stringify(rst)},
+                            success: function (data) {
                                 $.Notify({
-                                    title:"操作成功",
-                                    message:"删除域信息成功",
-                                    type:"success",
+                                    title: "操作成功",
+                                    message: "删除域信息成功",
+                                    type: "success",
                                 });
-                                $(rst).each(function(index,element){
+                                $(rst).each(function (index, element) {
                                     $("#HdomainInfoTable").bootstrapTable('removeByUniqueId', element.domain_id);
                                 })
                             }
                         });
                     },
-                    body:"确定删除这个域，删除后将无法恢复",
+                    body: "确定删除这个域，删除后将无法恢复",
                 });
-            }else{
+            } else {
                 $.Notify({
-                    title:"温馨提示",
-                    message:"您没有勾选任何需要删除的域",
-                    type:"info",
+                    title: "温馨提示",
+                    message: "您没有勾选任何需要删除的域",
+                    type: "info",
                 });
             }
         },
-        domainEditRow:function(){
+        domainEditRow: function () {
 
             var rst = $("#HdomainInfoTable").bootstrapTable('getSelections');
-            if (rst.length == 0){
+            if (rst.length == 0) {
                 $.Notify({
-                    title:"温馨提示",
-                    message:"请在下方表格中选中需要修改的行",
-                    type:"info",
+                    title: "温馨提示",
+                    message: "请在下方表格中选中需要修改的行",
+                    type: "info",
                 })
                 return
-            }else if (rst.length > 1){
+            } else if (rst.length > 1) {
                 $.Notify({
-                    title:"温馨提示",
-                    message:"您选中了多行，不知道您具体需要编辑哪一行",
-                    type:"warning",
+                    title: "温馨提示",
+                    message: "您选中了多行，不知道您具体需要编辑哪一行",
+                    type: "warning",
                 })
                 return
-            }else if (rst.length == 1){
+            } else if (rst.length == 1) {
                 var tr = rst[0];
-                var editMenu = function(hmode){
+                var editMenu = function (hmode) {
                     var domainid = tr.domain_id;
                     var domainDesc = $("#h-domain-add-tpl").find("input[name='domainDesc']").val();
                     var domainStatus = $("#h-domain-add-tpl").find("select[name='domainStatus'] option:selected").val();
 
                     $.HAjaxRequest({
-                        type:"Put",
-                        url:"/v1/auth/domain/update",
-                        cache:false,
-                        data:{
+                        type: "Put",
+                        url: "/v1/auth/domain/update",
+                        cache: false,
+                        data: {
                             domainId: domainid,
                             domainDesc: domainDesc,
                             domainStatus: domainStatus,
                         },
-                        async:false,
-                        dataType:"text",
-                        success: function(data){
+                        async: false,
+                        dataType: "text",
+                        success: function (data) {
                             $.Notify({
-                                title:"温馨提示:",
-                                message:"更新域信息成功",
-                                type:"success",
+                                title: "温馨提示:",
+                                message: "更新域信息成功",
+                                type: "success",
                             });
 
                             $(hmode).remove();
@@ -269,30 +269,30 @@
                     });
                 };
 
-                var preHand = function(){
+                var preHand = function () {
                     var domainid = tr.domain_id;
                     var domainDesc = tr.domain_desc;
-                    var domainStatus = tr.domain_status=="正常"?0:1;
-                    $("#h-domain-add-tpl").find("input[name='domainId']").val(domainid).attr("readonly","readonly");
+                    var domainStatus = tr.domain_status == "正常" ? 0 : 1;
+                    $("#h-domain-add-tpl").find("input[name='domainId']").val(domainid).attr("readonly", "readonly");
                     $("#h-domain-add-tpl").find("input[name='domainDesc']").val(domainDesc);
 
                     $("#h-domain-add-status").Hselect({
-                        height:"30px",
+                        height: "30px",
                     });
                     $("#h-domain-add-status").val(domainStatus).trigger("change");
 
                 };
                 $.Hmodal({
-                    callback:editMenu,
-                    preprocess:preHand,
-                    header:"修改域信息",
-                    body:$("#domain_input_form").html(),
-                    height:"360px",
+                    callback: editMenu,
+                    preprocess: preHand,
+                    header: "修改域信息",
+                    body: $("#domain_input_form").html(),
+                    height: "360px",
                 })
             }
         },
     };
-    $(document).ready(function(){
+    $(document).ready(function () {
         DomainObj.getDomainInfo()
     });
     /*]]>*/
@@ -305,15 +305,18 @@
             <div class="col-sm-12 col-md-12 col-lg-12">
                 <div class="form-group-sm col-sm-12 col-md-12 col-lg-12">
                     <label class="h-label" style="width:100%;">域编码：</label>
-                    <input placeholder="1至30个字母，数字组成" name="domainId" type="text" class="form-control" style="width: 100%;height: 30px;line-height: 30px;"/>
+                    <input placeholder="1至30个字母，数字组成" name="domainId" type="text" class="form-control"
+                           style="width: 100%;height: 30px;line-height: 30px;"/>
                 </div>
                 <div class="form-group-sm col-sm-12 col-md-12 col-lg-12" style="margin-top: 15px;">
                     <label class="h-label" style="width: 100%;">域描述：</label>
-                    <input placeholder="1至30个汉字、字母、数字组成" type="text" class="form-control" name="domainDesc" style="width: 100%;height: 30px;line-height: 30px;"/>
+                    <input placeholder="1至30个汉字、字母、数字组成" type="text" class="form-control" name="domainDesc"
+                           style="width: 100%;height: 30px;line-height: 30px;"/>
                 </div>
                 <div class="form-group-sm col-sm-12 col-md-12 col-lg-12" style="margin-top: 15px;">
                     <label class="h-label" style="width: 100%;">状　态：</label>
-                    <select id="h-domain-add-status" name="domainStatus"  class="form-control" style="width: 100%;height: 30px;line-height: 30px;">
+                    <select id="h-domain-add-status" name="domainStatus" class="form-control"
+                            style="width: 100%;height: 30px;line-height: 30px;">
                         <option value="0">正常</option>
                         <option value="1">失效</option>
                     </select>

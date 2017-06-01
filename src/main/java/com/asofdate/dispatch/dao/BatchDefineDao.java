@@ -1,5 +1,7 @@
 package com.asofdate.dispatch.dao;
 
+import com.asofdate.dispatch.model.GroupDefineModel;
+
 import java.util.List;
 
 /**

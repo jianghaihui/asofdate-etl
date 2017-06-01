@@ -29,7 +29,7 @@ public class ArgumentDefineDaoImpl implements ArgumentDefineDao {
 
     @Override
     public int add(ArgumentDefineModel m) {
-        String id = JoinCode.join(m.getDomain_id(),m.getArg_id());
+        String id = JoinCode.join(m.getDomain_id(), m.getArg_id());
         return jdbcTemplate.update(SqlDefine.sys_rdbms_119,
                 id,
                 m.getArg_type(),
@@ -44,10 +44,10 @@ public class ArgumentDefineDaoImpl implements ArgumentDefineDao {
     @Override
     public String delete(List<ArgumentDefineModel> m) {
         int row = 0;
-        for(ArgumentDefineModel l :m){
-            row = jdbcTemplate.update(SqlDefine.sys_rdbms_120,l.getArg_id(),l.getDomain_id());
-            if (row == 0){
-                return "删除["+l.getCode_number()+"]参数失败";
+        for (ArgumentDefineModel l : m) {
+            row = jdbcTemplate.update(SqlDefine.sys_rdbms_120, l.getArg_id(), l.getDomain_id());
+            if (row == 0) {
+                return "删除[" + l.getCode_number() + "]参数失败";
             }
         }
         return "success";
@@ -55,7 +55,7 @@ public class ArgumentDefineDaoImpl implements ArgumentDefineDao {
 
     @Override
     public int update(ArgumentDefineModel m) {
-        String id = JoinCode.join(m.getDomain_id(),m.getArg_id());
+        String id = JoinCode.join(m.getDomain_id(), m.getArg_id());
         return jdbcTemplate.update(SqlDefine.sys_rdbms_121,
                 m.getArg_desc(),
                 m.getArg_type(),

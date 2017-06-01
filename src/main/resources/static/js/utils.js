@@ -4,70 +4,73 @@
 
 // tab 管理模块
 var Hutils = {
-    rowStyle:function(row,index) {
-        return {css:{
-            "white-space":"nowrap",
-            "text-overflow":"ellipsis"
-        }}
+    rowStyle: function (row, index) {
+        return {
+            css: {
+                "white-space": "nowrap",
+                "text-overflow": "ellipsis"
+            }
+        }
     },
     // 隐藏子菜单系统，切换具体页面内容
-    hideWrapper:function(){
+    hideWrapper: function () {
         $("#wrapper").removeClass("animated slideInUp slideOutDown");
         $("#wrapper").addClass("animated slideOutDown");
         $("#h-main-content").removeClass("animated slideInDown slideOutUp");
         $("#h-main-content").addClass("animated slideInDown");
     },
     // 隐藏内容显示部分，切换到子菜单系统
-    showWrapper:function() {
+    showWrapper: function () {
         $("#h-main-content").removeClass("animated slideInDown slideOutUp");
         $("#h-main-content").addClass("animated slideOutUp");
         $("#wrapper").removeClass("animated slideInUp slideOutDown");
         $("#wrapper").addClass("animated slideInUp")
     },
     // 判断子菜单系统显示状态，如果是隐藏，则切换到显示，如果是显示，则隐藏。
-    HchangeWrapper:function(){
-        if (window.event != undefined){
+    HchangeWrapper: function () {
+        if (window.event != undefined) {
             window.event.cancelBubble = true;
         } else {
             // firefox
             var event = Hutils.getEvent()
             event.stopPropagation()
         }
-        if ($(".H-tabs-index").html()==""){
+        if ($(".H-tabs-index").html() == "") {
             $.Notify({
-                title:"温馨提示：",
-                message:"目前没有已经打开的页面",
-                type:"info",
+                title: "温馨提示：",
+                message: "目前没有已经打开的页面",
+                type: "info",
             });
             return
-        };
+        }
+        ;
 
         // 判断子系统菜单也距离底部的位置，如果距离底部的位置是0，则隐藏子菜单系统，否则显示子菜单系统
-        if ($("#wrapper").hasClass("slideInUp")){
+        if ($("#wrapper").hasClass("slideInUp")) {
             Hutils.hideWrapper()
-        }else{
+        } else {
             Hutils.showWrapper()
         }
     },
-    ShowCannotEditTips:function(obj){
+    ShowCannotEditTips: function (obj) {
         $(obj).tooltip({
-            title:"亲,此处无法编辑哟"
+            title: "亲,此处无法编辑哟"
         }).tooltip("show")
     },
     // 跳转到首页系统菜单。
-    H_HomePage:function(){
-        if (window.event != undefined){
+    H_HomePage: function () {
+        if (window.event != undefined) {
             window.event.cancelBubble = true;
         } else {
             // firefox
             var event = Hutils.getEvent()
             event.stopPropagation()
         }
-        window.location.href="/HomePage"
+        window.location.href = "/HomePage"
     },
     // 退出登录
-    HLogOut:function(){
-        if (window.event != undefined){
+    HLogOut: function () {
+        if (window.event != undefined) {
             window.event.cancelBubble = true;
         } else {
             // firefox
@@ -75,19 +78,23 @@ var Hutils = {
             event.stopPropagation()
         }
         $.Hconfirm({
-            callback:function(){
-                $.ajax({type:"Get",url:"/logout",cache:!1,async:!1,dataType:"text",
-                    error:function(){window.location.href="/"},
-                    success:function(a){
-                        window.location.href="/"}
+            callback: function () {
+                $.ajax({
+                    type: "Get", url: "/logout", cache: !1, async: !1, dataType: "text",
+                    error: function () {
+                        window.location.href = "/"
+                    },
+                    success: function (a) {
+                        window.location.href = "/"
+                    }
                 })
             },
-            body:"点击确定退出系统"
+            body: "点击确定退出系统"
         })
     },
     // 用户信息管理
-    UserMgrInfo:function(){
-        if (window.event != undefined){
+    UserMgrInfo: function () {
+        if (window.event != undefined) {
             window.event.cancelBubble = true;
         } else {
             // firefox
@@ -96,13 +103,13 @@ var Hutils = {
         }
 
         $.Hmodal({
-            body:$("#mas-passwd-prop").html(),
-            footerBtnStatus:false,
-            height:"420px",
-            width:"720px",
-            header:"用户信息",
-            preprocess:function () {
-                $.getJSON("/v1/auth/user/query",function (data) {
+            body: $("#mas-passwd-prop").html(),
+            footerBtnStatus: false,
+            height: "420px",
+            width: "720px",
+            header: "用户信息",
+            preprocess: function () {
+                $.getJSON("/v1/auth/user/query", function (data) {
                     $(data).each(function (index, element) {
                         $("#h-user-details-user-id").html(element.user_id)
                         $("#h-user-details-user-name").html(element.user_name)
@@ -118,9 +125,9 @@ var Hutils = {
                         $("#h-user-details-user-modify-date").html(element.modify_date)
                         // 机构编码处理
                         var upcombine = element.org_unit_id.split("_join_")
-                        if (upcombine.length==2){
+                        if (upcombine.length == 2) {
                             $("#h-user-details-user-org").html(upcombine[1])
-                        }else{
+                        } else {
                             $("#h-user-details-user-org").html(upcombine)
                         }
                     })
@@ -129,7 +136,7 @@ var Hutils = {
         });
     },
     // 子系统中，打开具体页面按钮
-    goEntrySubSystem:function(e){
+    goEntrySubSystem: function (e) {
         var flag = false;
 
         // 资源的url地址
@@ -139,7 +146,7 @@ var Hutils = {
         var data_id = $(e).attr("data-id");
 
         if ($(e).attr("data-openType") == "1") {
-            window.open(url,"API文档")
+            window.open(url, "API文档")
             return
         }
         NProgress.start();
@@ -150,9 +157,9 @@ var Hutils = {
         // 遍历整个tab栏目，查找指定id的资源是否打开，
         // 如果该资源已经打开，则直接切换到该资源，无需从后台获取内容
         // 如果该资源没有打开，则将flag为false，从后台获取资源内容
-        $(".H-tabs-index").find("span").each(function(index,element){
+        $(".H-tabs-index").find("span").each(function (index, element) {
             // 如果资源存在，直接切换到这个资源的tab中。
-            if (data_id == $(element).attr("data-id")){
+            if (data_id == $(element).attr("data-id")) {
                 Hutils.__changetab(element)
                 flag = true;
                 return false;
@@ -160,24 +167,24 @@ var Hutils = {
         });
 
         // 资源未打开，从后台请求资源信息
-        if (flag == false){
+        if (flag == false) {
             $.HAjaxRequest({
-                type:"get",
-                url:url,
-                cache:false,
-                async:true,
-                dataType:"text",
-                error:function (msg) {
+                type: "get",
+                url: url,
+                cache: false,
+                async: true,
+                dataType: "text",
+                error: function (msg) {
                     NProgress.done();
                     var m = JSON.parse(msg);
                     $.Notify({
-                        title:"温馨提示:",
-                        message:m.error_msg,
-                        type:"danger",
+                        title: "温馨提示:",
+                        message: m.error_msg,
+                        type: "danger",
                     });
                     return
                 },
-                success: function(data){
+                success: function (data) {
 
                     // 隐藏内容显示区域
                     $("#h-main-content").find("div.active")
@@ -185,11 +192,11 @@ var Hutils = {
 
                     var newContent = document.createElement("div")
                     $(newContent).attr({
-                        "data-type":"frame",
-                        "data-id":data_id,
+                        "data-type": "frame",
+                        "data-id": data_id,
                     }).css({
-                        "padding":"0px",
-                        "margin":"0px",
+                        "padding": "0px",
+                        "margin": "0px",
                     }).addClass("active").html(data);
 
                     $("#h-main-content").append(newContent);
@@ -203,7 +210,7 @@ var Hutils = {
                         $(".active-tab").removeClass("active-tab");
 
                         // 获取新tab模板内容
-                        var optHtml = Hutils.__genTabUI(data_id,name)
+                        var optHtml = Hutils.__genTabUI(data_id, name)
 
                         // 在tab栏目列表中添加新的tab
                         $(".H-tabs-index").append(optHtml);
@@ -212,12 +219,12 @@ var Hutils = {
                     NProgress.done();
                 }
             });
-        }else {
+        } else {
             NProgress.done();
         }
     },
     // 打开指定资源按钮
-    openTab:function(param){
+    openTab: function (param) {
 
         NProgress.start();
 
@@ -233,21 +240,21 @@ var Hutils = {
         // 资源名称
         var name = param.title;
 
-        $(".H-tabs-index").find("span").each(function(index,element){
-            if (data_id == $(element).attr("data-id")){
+        $(".H-tabs-index").find("span").each(function (index, element) {
+            if (data_id == $(element).attr("data-id")) {
                 flag = true;
                 $.HAjaxRequest({
-                    type:"get",
-                    url:url,
-                    cache:false,
-                    async:true,
-                    dataType:"text",
-                    success: function(data){
+                    type: "get",
+                    url: url,
+                    cache: false,
+                    async: true,
+                    dataType: "text",
+                    success: function (data) {
                         Hutils.__changetab(element);
                         $(element).find("hzw").html(name);
 
-                        $("#h-main-content").find("div.active").each(function(index,element){
-                            if (data_id == $(element).attr("data-id")){
+                        $("#h-main-content").find("div.active").each(function (index, element) {
+                            if (data_id == $(element).attr("data-id")) {
                                 $(element).html(data);
                                 return false;
                             }
@@ -258,23 +265,23 @@ var Hutils = {
             }
         });
 
-        if (flag == false){
+        if (flag == false) {
             $.HAjaxRequest({
-                type:"get",
-                url:url,
-                cache:false,
-                async:true,
-                dataType:"text",
-                error:function (msg) {
+                type: "get",
+                url: url,
+                cache: false,
+                async: true,
+                dataType: "text",
+                error: function (msg) {
                     var m = JSON.parse(msg.responseText);
                     $.Notify({
-                        title:"温馨提示:",
-                        message:m.error_msg,
-                        type:"danger",
+                        title: "温馨提示:",
+                        message: m.error_msg,
+                        type: "danger",
                     });
                     NProgress.done();
                 },
-                success: function(data){
+                success: function (data) {
 
                     // 隐藏内容显示区域
                     $("#h-main-content").find("div.active")
@@ -282,11 +289,11 @@ var Hutils = {
 
                     var newContent = document.createElement("div")
                     $(newContent).attr({
-                        "data-type":"frame",
-                        "data-id":data_id,
+                        "data-type": "frame",
+                        "data-id": data_id,
                     }).css({
-                        "padding":"0px",
-                        "margin":"0px",
+                        "padding": "0px",
+                        "margin": "0px",
                     }).addClass("active").html(data);
 
                     $("#h-main-content").append(newContent).hide().fadeIn();
@@ -297,7 +304,7 @@ var Hutils = {
                         $(".active-tab").removeClass("active-tab");
 
                         // 获取新tab模板内容
-                        var optHtml = Hutils.__genTabUI(data_id,name)
+                        var optHtml = Hutils.__genTabUI(data_id, name)
 
                         // 在tab栏目列表中添加新的tab
                         $(".H-tabs-index").append(optHtml);
@@ -312,13 +319,13 @@ var Hutils = {
     },
 
     // 切换tab页面
-    __changetab : function(e){
+    __changetab: function (e) {
 
         // 获取新tab的id
         var id = $(e).attr("data-id");
         var flag = true;
 
-        if (window.event != undefined){
+        if (window.event != undefined) {
             window.event.cancelBubble = true;
         } else {
             // firefox
@@ -356,50 +363,50 @@ var Hutils = {
             .removeClass("active")
             .addClass("none");
 
-        $("#h-main-content").find("div[data-id='"+id+"']")
+        $("#h-main-content").find("div[data-id='" + id + "']")
             .removeClass("none")
             .addClass("active")
             .hide()
             .fadeIn(300);
     },
-    __genTabUI:function (data_id,name) {
+    __genTabUI: function (data_id, name) {
         var mspan = document.createElement("span")
         $(mspan).css({
-            "min-width":"120px",
-            "border-left":"#6f5499 solid 1px"
+            "min-width": "120px",
+            "border-left": "#6f5499 solid 1px"
         }).attr({
-            "data-id":data_id,
-            "onclick":"Hutils.__changetab(this)",
+            "data-id": data_id,
+            "onclick": "Hutils.__changetab(this)",
         }).addClass("H-left-tab active-tab");
 
         var hzw = document.createElement("hzw");
         $(hzw).html(name);
         $(hzw).css({
-            "font-weight":"600",
-            "color":"white",
+            "font-weight": "600",
+            "color": "white",
         });
 
         var mi = document.createElement("i")
-        $(mi).css("font-size","14px")
+        $(mi).css("font-size", "14px")
             .addClass("icon-remove-sign H-gray-close pull-right")
-            .attr("onclick","Hutils.__closetab(this)")
+            .attr("onclick", "Hutils.__closetab(this)")
 
         $(mspan).append(hzw);
         $(mspan).append(mi);
         return mspan
     },
-    getEvent:function(){
-        if(window.event)    {
+    getEvent: function () {
+        if (window.event) {
             return window.event;
         }
         var func = Hutils.getEvent.caller;
-        while( func != null ){
+        while (func != null) {
             var arg0 = func.arguments[0];
-            if(arg0){
-                if((arg0.constructor==Event || arg0.constructor ==MouseEvent
-                    || arg0.constructor==KeyboardEvent)
-                    ||(typeof(arg0)=="object" && arg0.preventDefault
-                    && arg0.stopPropagation)){
+            if (arg0) {
+                if ((arg0.constructor == Event || arg0.constructor == MouseEvent
+                    || arg0.constructor == KeyboardEvent)
+                    || (typeof(arg0) == "object" && arg0.preventDefault
+                    && arg0.stopPropagation)) {
                     return arg0;
                 }
             }
@@ -408,9 +415,9 @@ var Hutils = {
         return null;
     },
     // 关闭tab标签，以及tab标签关联的内容,在__genTabUI中引用了__closetab
-    __closetab:function(e){
+    __closetab: function (e) {
         // 取消后续事件
-        if (window.event != undefined){
+        if (window.event != undefined) {
             window.event.cancelBubble = true;
         } else {
             var event = Hutils.getEvent()
@@ -423,7 +430,7 @@ var Hutils = {
         // 首先判断，这个tab是否被激活，如果是激活状态，则在关闭tab后，
         // 还需要切换到新的tab页面中，切换顺序是，先寻找左侧隐藏的tab，如果没有再寻找右侧
         // 如果两侧都没有，则直接返回子菜单系统。
-        if ($(e).parent().hasClass("active-tab")){
+        if ($(e).parent().hasClass("active-tab")) {
             // 获取左侧tab
             var pobj = $(e).parent().prev("span");
             var pid = $(pobj).attr("data-id");
@@ -434,12 +441,12 @@ var Hutils = {
 
             // 关闭选中的tab,以及这个tab所关联的内容
             $(e).parent().remove();
-            $("#h-main-content").find("div[data-id='"+id+"']").remove();
+            $("#h-main-content").find("div[data-id='" + id + "']").remove();
 
             // 如果pid与nid都为undefined，则直接切换到子菜单系统
             // 如果左侧tab存在，则切换到左侧tab，否则切换到右侧tab
-            if (pid == undefined){
-                if (nid == undefined){
+            if (pid == undefined) {
+                if (nid == undefined) {
                     Hutils.showWrapper()
                     return
                 } else {
@@ -450,15 +457,15 @@ var Hutils = {
             }
 
             // 清除左侧tab的隐藏状态，使其显示。
-            $("#h-main-content").find("div[data-id='"+id+"']")
+            $("#h-main-content").find("div[data-id='" + id + "']")
                 .removeClass("none")
                 .addClass("active")
                 .hide()
                 .fadeIn(500);
 
             // 遍历整个tab栏，找到匹敌的tab id，
-            $(".H-left-tab").each(function(index,element){
-                if (id == $(element).attr("data-id")){
+            $(".H-left-tab").each(function (index, element) {
+                if (id == $(element).attr("data-id")) {
                     $(element).addClass("active-tab")
                 }
             });
@@ -466,49 +473,49 @@ var Hutils = {
         } else {
             // 当被删除的这个tab没有被激活时，直接将这个tab也从tab栏目中删除，并连同删除这个tab关联的内容即可。
             $(e).parent().remove();
-            $("#h-main-content").find("div[data-id='"+id+"']").remove();
+            $("#h-main-content").find("div[data-id='" + id + "']").remove();
         }
     },
-    go_entry :function (e){
+    go_entry: function (e) {
         var id = $(e).attr("data-id");
         $.HAjaxRequest({
-            url:'/v1/auth/index/entry',
-            data:{Id:id},
-            dataType:'text',
-            success:function(d){
+            url: '/v1/auth/index/entry',
+            data: {Id: id},
+            dataType: 'text',
+            success: function (d) {
                 $("#bigdata-platform-subsystem").html(d)
             },
-            error:function () {
+            error: function () {
                 $.Notify({
-                    title:"温馨提示：",
-                    message:"登录连接已经断开，请重新登录系统",
-                    type:"info",
+                    title: "温馨提示：",
+                    message: "登录连接已经断开，请重新登录系统",
+                    type: "info",
                 });
-                window.location.href="/"
+                window.location.href = "/"
             },
         });
     },
-    initMenu:function(TypeId,Id,Group1,Group2,Group3){
+    initMenu: function (TypeId, Id, Group1, Group2, Group3) {
 
         var __genUI = function (name) {
             var mdiv = document.createElement("div")
             $(mdiv).addClass("tile-group")
             var mspan = document.createElement("span")
-            $(mspan).addClass("tile-group-title").css("font-size","12px").html(name)
+            $(mspan).addClass("tile-group-title").css("font-size", "12px").html(name)
             $(mdiv).append(mspan)
 
             return mdiv
         };
 
-        var __genDiv = function (res_id,res_class,res_bg_color,res_img,res_name,res_url,open_type) {
+        var __genDiv = function (res_id, res_class, res_bg_color, res_img, res_name, res_url, open_type) {
             var mdiv = document.createElement("div")
             $(mdiv).attr({
-                "data-id":res_id,
-                "data-role":"tile",
-                "data-url":res_url,
-                "data-openType":open_type,
+                "data-id": res_id,
+                "data-role": "tile",
+                "data-url": res_url,
+                "data-openType": open_type,
             }).addClass(res_class).addClass("fg-white hzwy23div")
-                .css("background-color",res_bg_color);
+                .css("background-color", res_bg_color);
 
             var cdiv = document.createElement("div")
             $(cdiv).addClass("tile-content iconic")
@@ -517,7 +524,7 @@ var Hutils = {
             $(mspan).addClass("icon")
 
             var mimg = document.createElement("img")
-            $(mimg).attr("src",res_img)
+            $(mimg).attr("src", res_img)
 
             var ccdiv = document.createElement("div");
             $(ccdiv).addClass("tile-label").html(res_name);
@@ -530,9 +537,9 @@ var Hutils = {
         };
 
         $.HAjaxRequest({
-            url:'/v1/auth/main/menu',
-            data:{TypeId:TypeId,Id:Id},
-            success: function(data){
+            url: '/v1/auth/main/menu',
+            data: {TypeId: TypeId, Id: Id},
+            success: function (data) {
 
                 var cdiv1 = document.createElement("div");
                 $(cdiv1).addClass("tile-container");
@@ -549,53 +556,53 @@ var Hutils = {
                 divlist.push(cdiv2);
                 divlist.push(cdiv3);
 
-                $(data).each(function(index,element){
-                    var gid = parseInt(element.Group_id)-1;
+                $(data).each(function (index, element) {
+                    var gid = parseInt(element.Group_id) - 1;
                     var mdiv = divlist[gid];
-                    $(mdiv).append(__genDiv(element.Res_id,element.Res_class,element.Res_bg_color,element.Res_img,element.Res_name,element.Res_url,element.Res_open_type));
+                    $(mdiv).append(__genDiv(element.Res_id, element.Res_class, element.Res_bg_color, element.Res_img, element.Res_name, element.Res_url, element.Res_open_type));
                 });
 
                 if ($(cdiv1).html() != "") {
                     var mdiv1 = __genUI(Group1)
                     $(mdiv1).append(cdiv1)
                     $("#h-system-service").html(mdiv1)
-                }else{
+                } else {
                     $("#h-system-service").remove()
                 }
 
-                if ($(cdiv2).html() !=""){
+                if ($(cdiv2).html() != "") {
                     var mdiv2 = __genUI(Group2)
                     $(mdiv2).append(cdiv2)
                     $("#h-mas-service").html(mdiv2)
-                }else{
+                } else {
                     $("#h-mas-service").remove()
                 }
 
-                if ($(cdiv3).html() !=""){
+                if ($(cdiv3).html() != "") {
                     var mdiv3 = __genUI(Group3)
                     $(mdiv3).append(cdiv3);
                     $("#h-other-service").html(mdiv3)
-                }else{
+                } else {
                     $("#h-other-service").remove();
                 }
 
-                if (TypeId == 1){
+                if (TypeId == 1) {
                     $(".hzwy23div").click(function () {
                         Hutils.goEntrySubSystem(this)
                     })
                 } else if (TypeId == 0) {
-                    $(".hzwy23div").click(function(){
+                    $(".hzwy23div").click(function () {
                         Hutils.go_entry(this)
                     })
                 }
 
-                $(function() {
+                $(function () {
                     //取消水平滑动的插件
                     //$.StartScreen();
                     var tiles = $(".tile, .tile-small, .tile-sqaure, .tile-wide, .tile-large, .tile-big, .tile-super");
-                    $.each(tiles, function() {
+                    $.each(tiles, function () {
                         var tile = $(this);
-                        setTimeout(function() {
+                        setTimeout(function () {
                             tile.css({
                                 opacity: 1,
                                 "-webkit-transform": "scale(1)",
@@ -615,8 +622,8 @@ var Hutils = {
 };
 
 // 树形插件
-(function($){
-    $.fn.Htree = function(param){
+(function ($) {
+    $.fn.Htree = function (param) {
         // 1. 获取top节点
         // 2. 获取id，text，upId，将其他属性设置成data-属性
         // 3. 生成tree。
@@ -636,37 +643,37 @@ var Hutils = {
          * */
         var __DEFAULT = {
             data: "",
-            fontSize:"13px",
-            showLiHeight:"30px",
-            showFontSize:"14px",
-            iconColor:"#030202",
+            fontSize: "13px",
+            showLiHeight: "30px",
+            showFontSize: "14px",
+            iconColor: "#030202",
 
-            attr:false,
+            attr: false,
 
-            showLevel:3,
+            showLevel: 3,
 
-            onChange:function (obj) {
+            onChange: function (obj) {
                 console.log("没有注册点击函数")
             },
         };
 
-        $.extend(true,__DEFAULT,param);
+        $.extend(true, __DEFAULT, param);
 
 
-        var getEvent = function(){
+        var getEvent = function () {
 
-            if(window.event)    {
+            if (window.event) {
                 return window.event;
             }
             var func = getEvent.caller;
 
-            while( func != null ){
+            while (func != null) {
                 var arg0 = func.arguments[0];
-                if(arg0){
-                    if((arg0.constructor==Event || arg0.constructor ==MouseEvent
-                        || arg0.constructor==KeyboardEvent)
-                        ||(typeof(arg0)=="object" && arg0.preventDefault
-                        && arg0.stopPropagation)){
+                if (arg0) {
+                    if ((arg0.constructor == Event || arg0.constructor == MouseEvent
+                        || arg0.constructor == KeyboardEvent)
+                        || (typeof(arg0) == "object" && arg0.preventDefault
+                        && arg0.stopPropagation)) {
                         return arg0;
                     }
                 }
@@ -676,14 +683,14 @@ var Hutils = {
         };
 
         // 1.get top node, and sort array
-        function sortTree(a){
+        function sortTree(a) {
 
             // load result sorted
             var list = [];
 
             // get select's options
             // append it to new select which simulate by ul li
-            if (Object.prototype.toString.call(a) == '[object Array]'){
+            if (Object.prototype.toString.call(a) == '[object Array]') {
 
             } else {
                 return [];
@@ -694,130 +701,131 @@ var Hutils = {
 
             var INDEX = 1;
 
-            function getRoots(arr){
+            function getRoots(arr) {
                 var Roots = [];
-                for(var i = 0; i < arr.length;i++){
+                for (var i = 0; i < arr.length; i++) {
                     var rootFlag = true
-                    for ( var j = 0; j < arr.length;j++){
-                        if (arr[i].upId == arr[j].id){
+                    for (var j = 0; j < arr.length; j++) {
+                        if (arr[i].upId == arr[j].id) {
                             rootFlag = false
                             break
                         }
                     }
-                    if (rootFlag == true){
+                    if (rootFlag == true) {
                         Roots.push(arr[i])
                     }
                 }
                 return Roots
             }
 
-            function traversed(node,arr){
-                if (++INDEX > MAXDEPT){
+            function traversed(node, arr) {
+                if (++INDEX > MAXDEPT) {
                     console.log("递归超过8层,为保护计算机,退出递归");
                     return
                 }
-                for (var i = 0; i < arr.length; i++){
+                for (var i = 0; i < arr.length; i++) {
 
-                    if (node == arr[i].upId){
+                    if (node == arr[i].upId) {
                         arr[i].dept = INDEX
                         list.push(arr[i])
-                        traversed(arr[i].id,arr)
+                        traversed(arr[i].id, arr)
                     }
                 }
                 INDEX--;
             }
 
-            function listElem(roots,arr){
-                for (var i = 0; i < roots.length; i++){
+            function listElem(roots, arr) {
+                for (var i = 0; i < roots.length; i++) {
                     roots[i].dept = INDEX
                     list.push(roots[i])
-                    traversed(roots[i].id,arr)
+                    traversed(roots[i].id, arr)
                 }
             }
 
-            listElem(getRoots(a),a)
+            listElem(getRoots(a), a)
 
             return list
         }
+
         // 2. set data-*
         // 3. genUI
-        function genTreeUI(a){
+        function genTreeUI(a) {
             var opt = "<ul class='col-sm-12 col-md-12 col-lg-12'>"
-            for(var i = 0; i < a.length; i++){
-                var pd = parseInt(a[i].dept)*20 - 10
-                if (isNaN(pd)){
+            for (var i = 0; i < a.length; i++) {
+                var pd = parseInt(a[i].dept) * 20 - 10
+                if (isNaN(pd)) {
                     pd = 10
                 }
 
                 if (a[i].attr == "0") {
-                    if  ( parseInt(a[i].dept) <= __DEFAULT.showLevel) {
+                    if (parseInt(a[i].dept) <= __DEFAULT.showLevel) {
                         // 叶子信息
-                        opt += '<li data-id="'+a[i].id+'" data-dept="'+a[i].dept+'" style="margin:0px; text-align: left;font-weight:500;padding-left:'+pd+'px; height:'+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; font-size: '+__DEFAULT.showFontSize+'; cursor: pointer;position: relative;">' +
-                            '<hzw style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; width: 20px;cursor: pointer ;display: inline-block">' +
+                        opt += '<li data-id="' + a[i].id + '" data-dept="' + a[i].dept + '" style="margin:0px; text-align: left;font-weight:500;padding-left:' + pd + 'px; height:' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; font-size: ' + __DEFAULT.showFontSize + '; cursor: pointer;position: relative;">' +
+                            '<hzw style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; width: 20px;cursor: pointer ;display: inline-block">' +
                             '<i class="icon-leaf" style="color: green;"></i>' +
                             '</hzw>' +
-                            '<span class="HTreeLi" style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; position: absolute;">'+a[i].text+'</span></li>'
+                            '<span class="HTreeLi" style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; position: absolute;">' + a[i].text + '</span></li>'
 
                     } else {
                         // 叶子信息
-                        opt += '<li data-id="'+a[i].id+'" data-dept="'+a[i].dept+'" style="margin:0px; text-align: left;font-weight:500;padding-left:'+pd+'px; height:'+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; font-size: '+__DEFAULT.showFontSize+'; cursor: pointer;position: relative; display: none">' +
-                            '<hzw style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; width: 20px;cursor: pointer ;display: inline-block">' +
+                        opt += '<li data-id="' + a[i].id + '" data-dept="' + a[i].dept + '" style="margin:0px; text-align: left;font-weight:500;padding-left:' + pd + 'px; height:' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; font-size: ' + __DEFAULT.showFontSize + '; cursor: pointer;position: relative; display: none">' +
+                            '<hzw style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; width: 20px;cursor: pointer ;display: inline-block">' +
                             '<i class="icon-leaf" style="color: green;"></i>' +
                             '</hzw>' +
-                            '<span class="HTreeLi" style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; position: absolute;">'+a[i].text+'</span></li>'
+                            '<span class="HTreeLi" style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; position: absolute;">' + a[i].text + '</span></li>'
 
                     }
 
                 } else {
-                    if (parseInt(a[i].dept) < __DEFAULT.showLevel){
+                    if (parseInt(a[i].dept) < __DEFAULT.showLevel) {
                         // 节点信息
-                        opt += '<li data-id="'+a[i].id+'" data-dept="'+a[i].dept+'" style="margin:0px; text-align: left;font-weight:500;padding-left:'+pd+'px; height:'+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; font-size: '+__DEFAULT.showFontSize+'; cursor: pointer;position: relative;">' +
-                            '<hzw class="HTreeshowOrHideIconHzw" style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; width: 20px;cursor: cell ;display: inline-block">' +
+                        opt += '<li data-id="' + a[i].id + '" data-dept="' + a[i].dept + '" style="margin:0px; text-align: left;font-weight:500;padding-left:' + pd + 'px; height:' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; font-size: ' + __DEFAULT.showFontSize + '; cursor: pointer;position: relative;">' +
+                            '<hzw class="HTreeshowOrHideIconHzw" style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; width: 20px;cursor: cell ;display: inline-block">' +
                             '<i style="color: #ccb008;" class="icon-folder-open"> </i>' +
                             '</hzw>' +
-                            '<span class="HTreeLi" style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; position: absolute;">'+a[i].text+'</span></li>'
-                    } else  if (parseInt(a[i].dept) == __DEFAULT.showLevel) {
+                            '<span class="HTreeLi" style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; position: absolute;">' + a[i].text + '</span></li>'
+                    } else if (parseInt(a[i].dept) == __DEFAULT.showLevel) {
                         // 节点信息
-                        opt += '<li data-id="'+a[i].id+'" data-dept="'+a[i].dept+'" style="margin:0px; text-align: left;font-weight:500;padding-left:'+pd+'px; height:'+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; font-size: '+__DEFAULT.showFontSize+'; cursor: pointer;position: relative;">' +
-                            '<hzw class="HTreeshowOrHideIconHzw" style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; width: 20px;cursor: cell ;display: inline-block">' +
+                        opt += '<li data-id="' + a[i].id + '" data-dept="' + a[i].dept + '" style="margin:0px; text-align: left;font-weight:500;padding-left:' + pd + 'px; height:' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; font-size: ' + __DEFAULT.showFontSize + '; cursor: pointer;position: relative;">' +
+                            '<hzw class="HTreeshowOrHideIconHzw" style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; width: 20px;cursor: cell ;display: inline-block">' +
                             '<i style="color: #ccb008;" class="icon-folder-close"> </i>' +
                             '</hzw>' +
-                            '<span class="HTreeLi" style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; position: absolute;">'+a[i].text+'</span></li>'
+                            '<span class="HTreeLi" style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; position: absolute;">' + a[i].text + '</span></li>'
                     } else {
                         // 节点信息
-                        opt += '<li data-id="'+a[i].id+'" data-dept="'+a[i].dept+'" style="margin:0px; text-align: left;font-weight:500;padding-left:'+pd+'px; height:'+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; font-size: '+__DEFAULT.showFontSize+'; cursor: pointer;position: relative;display: none;">' +
-                            '<hzw class="HTreeshowOrHideIconHzw" style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; width: 20px;cursor: cell ;display: inline-block">' +
+                        opt += '<li data-id="' + a[i].id + '" data-dept="' + a[i].dept + '" style="margin:0px; text-align: left;font-weight:500;padding-left:' + pd + 'px; height:' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; font-size: ' + __DEFAULT.showFontSize + '; cursor: pointer;position: relative;display: none;">' +
+                            '<hzw class="HTreeshowOrHideIconHzw" style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; width: 20px;cursor: cell ;display: inline-block">' +
                             '<i style="color: #ccb008;" class="icon-folder-open"> </i>' +
                             '</hzw>' +
-                            '<span class="HTreeLi" style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; position: absolute;">'+a[i].text+'</span></li>'
+                            '<span class="HTreeLi" style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; position: absolute;">' + a[i].text + '</span></li>'
                     }
 
                 }
             }
-            opt +='</ul>'
+            opt += '</ul>'
             return opt;
         }
 
         // 绑定伸缩按钮
-        function showOrHide(e){
+        function showOrHide(e) {
             $.notifyClose()
             var dept = $(e).attr("data-dept")
             var nextObj = $(e).next()
             var nextDept = $(nextObj).attr("data-dept")
             var nextDisplay = $(nextObj).css("display")
 
-            if (nextDisplay == "none" && parseInt(nextDept)>parseInt(dept)){
+            if (nextDisplay == "none" && parseInt(nextDept) > parseInt(dept)) {
 
                 $(e).find("i").removeClass("icon-folder-close").addClass("icon-folder-open")
 
-                $(e).nextAll().each(function(index,element){
-                    if (parseInt(dept)+1==parseInt($(element).attr("data-dept"))){
+                $(e).nextAll().each(function (index, element) {
+                    if (parseInt(dept) + 1 == parseInt($(element).attr("data-dept"))) {
                         // 显示
                         if ($(element).find("i").hasClass("icon-folder-open")) {
                             $(element).find("i").addClass("icon-folder-close").removeClass("icon-folder-open")
                         }
                         $(element).fadeIn(400);
-                    }else if (parseInt(dept)+1 < parseInt($(element).attr("data-dept"))){
+                    } else if (parseInt(dept) + 1 < parseInt($(element).attr("data-dept"))) {
                         // 隐藏
                         if ($(element).find("i").hasClass("icon-folder-open")) {
                             $(element).find("i").addClass("icon-folder-close").removeClass("icon-folder-open")
@@ -827,27 +835,27 @@ var Hutils = {
                         return false
                     }
                 })
-            }else if (nextDisplay == "none" && parseInt(nextDept)<=parseInt(dept)){
+            } else if (nextDisplay == "none" && parseInt(nextDept) <= parseInt(dept)) {
                 return
-            }else if (nextDisplay != "none" && parseInt(nextDept)>parseInt(dept)){
+            } else if (nextDisplay != "none" && parseInt(nextDept) > parseInt(dept)) {
 
                 $(e).find("i").removeClass("icon-folder-open").addClass("icon-folder-close")
 
-                $(e).nextAll().each(function(index,element){
-                    if (parseInt(dept)<parseInt($(element).attr("data-dept"))){
+                $(e).nextAll().each(function (index, element) {
+                    if (parseInt(dept) < parseInt($(element).attr("data-dept"))) {
                         if ($(element).find("i").hasClass("icon-folder-open")) {
                             $(element).find("i").addClass("icon-folder-open").removeClass("icon-folder-close")
                         }
                         $(element).fadeOut(200);
-                    }else if (parseInt(dept)>=parseInt($(element).attr("data-dept"))){
+                    } else if (parseInt(dept) >= parseInt($(element).attr("data-dept"))) {
                         return false
                     }
                 })
             } else {
                 $.Notify({
-                    title:"温馨提示:",
-                    message:"这个节点下边没有叶子信息",
-                    type:"info",
+                    title: "温馨提示:",
+                    message: "这个节点下边没有叶子信息",
+                    type: "info",
                 });
 
                 if ($(e).find("i").hasClass("icon-folder-open")) {
@@ -867,12 +875,12 @@ var Hutils = {
         /*
          * 如果这个节点没有下层信息，则将这个层级的伸缩按钮去掉。
          * */
-        if (__DEFAULT.attr == false){
-            $this.find("ul li").each(function(index,element){
+        if (__DEFAULT.attr == false) {
+            $this.find("ul li").each(function (index, element) {
                 var curDept = parseInt($(element).attr("data-dept"));
                 var nextDept = parseInt($(element).next().attr("data-dept"));
-                if (curDept>=nextDept || isNaN(nextDept)){
-                    $(element).find("hzw").html("<i class='icon-leaf' style='color: green;'></i>").removeClass("HTreeshowOrHideIconHzw").css("cursor","pointer");
+                if (curDept >= nextDept || isNaN(nextDept)) {
+                    $(element).find("hzw").html("<i class='icon-leaf' style='color: green;'></i>").removeClass("HTreeshowOrHideIconHzw").css("cursor", "pointer");
                 }
             });
         }
@@ -880,32 +888,32 @@ var Hutils = {
         /*
          * 给ul中每一行li绑定点击事件
          * */
-        $this.find("ul li").on("click",function(){
+        $this.find("ul li").on("click", function () {
             $.notifyClose()
-            $this.find(".HTreeLi").css("color","")
-            $(this).find("span").css("color","red")
-            $this.attr("data-selected",$(this).attr("data-id"))
+            $this.find(".HTreeLi").css("color", "")
+            $(this).find("span").css("color", "red")
+            $this.attr("data-selected", $(this).attr("data-id"))
             __DEFAULT.onChange(this)
         });
 
-        $this.find("ul li").on("mouseover",function () {
+        $this.find("ul li").on("mouseover", function () {
             $(this).css({
-                "background-color":"#cccccc",
+                "background-color": "#cccccc",
             })
         });
 
-        $this.find("ul li").on("mouseout",function () {
+        $this.find("ul li").on("mouseout", function () {
             $(this).css({
-                "background-color":"",
+                "background-color": "",
             })
         });
 
         /*
          * 给伸缩按钮绑定单击事件
          * */
-        $this.find(".HTreeshowOrHideIconHzw").on("click",function () {
+        $this.find(".HTreeshowOrHideIconHzw").on("click", function () {
             // 取消后续事件
-            if (window.event != undefined){
+            if (window.event != undefined) {
                 window.event.cancelBubble = true;
             } else {
                 var event = getEvent()
@@ -916,79 +924,79 @@ var Hutils = {
 
     };
 
-    $.fn.Hselect = function(param){
+    $.fn.Hselect = function (param) {
         var sel = this
         var obj = document.createElement("div")
 
-        if ( $(sel).attr("hselect") == "true"){
+        if ($(sel).attr("hselect") == "true") {
             // 重复初始化Hselect
             var hselect = $(sel).next()
             var displaycss = $(hselect).css("display")
-            $(obj).attr("style",$(sel).attr("style"));
-            $(obj).css("display",displaycss)
+            $(obj).attr("style", $(sel).attr("style"));
+            $(obj).css("display", displaycss)
 
             $(hselect).remove()
             $(sel).html("");
         } else {
             // 第一次初始化Hselect
-            $(obj).attr("style",$(sel).attr("style"));
+            $(obj).attr("style", $(sel).attr("style"));
         }
         //init div css
         //get parent class to it
         //get parent css to it
         $(obj).addClass($(sel).attr("class"));
-        $(obj).css({"padding":"0px","border":"none"});
+        $(obj).css({"padding": "0px", "border": "none"});
 
-        $(sel).attr("hselect","true");
+        $(sel).attr("hselect", "true");
         // default parameters
         var __DEFAULT = {
             data: "",
-            height:"26px",
-            width:"100%",
-            border:"#ccc solid 1px",
-            fontSize:"13px",
-            borderRadius:"5px",
-            bgColor:"white",
-            placeholder:"<i style='color: #959595;font-size: 12px;'>--请选择--</i>",
+            height: "26px",
+            width: "100%",
+            border: "#ccc solid 1px",
+            fontSize: "13px",
+            borderRadius: "5px",
+            bgColor: "white",
+            placeholder: "<i style='color: #959595;font-size: 12px;'>--请选择--</i>",
 
-            showLiHeight:"30px",
-            showHeight:"230px",
-            showBorder:"",
-            showFontSize:"14px",
-            iconColor:"#ff5763",
+            showLiHeight: "30px",
+            showHeight: "230px",
+            showBorder: "",
+            showFontSize: "14px",
+            iconColor: "#ff5763",
 
             // 值改变触发事件
-            onChange:"",
+            onChange: "",
 
             // select中默认值
-            value:"",
+            value: "",
 
             // 是否禁止选择
-            disabled:"",
+            disabled: "",
         };
 
-        $.extend(true,__DEFAULT,param);
+        $.extend(true, __DEFAULT, param);
 
 
         // set showBorder to border style
-        if (__DEFAULT.showBorder==""){
+        if (__DEFAULT.showBorder == "") {
             __DEFAULT.showBorder = __DEFAULT.border
         }
 
-        var getEvent = function(){
+        var getEvent = function () {
 
-            if(window.event)    {
+            if (window.event) {
                 return window.event;
             }
             var func = getEvent.caller;
 
-            while( func != null ){
+            while (func != null) {
                 var arg0 = func.arguments[0];
-                if(arg0){
-                    if((arg0.constructor==Event || arg0.constructor ==MouseEvent
-                        || arg0.constructor==KeyboardEvent)
-                        ||(typeof(arg0)=="object" && arg0.preventDefault
-                        && arg0.stopPropagation)){
+                if (arg0) {
+                    if ((arg0.constructor == Event || arg0.constructor == MouseEvent
+                        || arg0.constructor == KeyboardEvent)
+                        || (typeof(arg0) == "object" && arg0.preventDefault
+                        && arg0.stopPropagation)) {
                         return arg0;
                     }
                 }
@@ -1000,22 +1008,22 @@ var Hutils = {
          * This function sort array.
          * Accept One Array Variable.
          * */
-        function sortTree(a){
+        function sortTree(a) {
 
             // load result sorted
             var list = [];
 
             // get select's options
             // append it to new select which simulate by ul li
-            if (Object.prototype.toString.call(a) == '[object Array]'){
-                $(sel).find("option").each(function(index,element){
+            if (Object.prototype.toString.call(a) == '[object Array]') {
+                $(sel).find("option").each(function (index, element) {
                     var ijs = {}
                     ijs.id = $(element).val();
                     ijs.text = $(element).text()
                     a.push(ijs)
                 })
             } else {
-                $(sel).find("option").each(function(index,element){
+                $(sel).find("option").each(function (index, element) {
                     var ijs = {}
                     ijs.id = $(element).val();
                     ijs.text = $(element).text()
@@ -1029,168 +1037,168 @@ var Hutils = {
 
             var INDEX = 1;
 
-            function getRoots(arr){
+            function getRoots(arr) {
                 var Roots = [];
-                for(var i = 0; i < arr.length;i++){
+                for (var i = 0; i < arr.length; i++) {
                     var rootFlag = true
-                    for ( var j = 0; j < arr.length;j++){
-                        if (arr[i].upId == arr[j].id){
+                    for (var j = 0; j < arr.length; j++) {
+                        if (arr[i].upId == arr[j].id) {
                             rootFlag = false
                             break
                         }
                     }
-                    if (rootFlag == true){
+                    if (rootFlag == true) {
                         Roots.push(arr[i])
                     }
                 }
                 return Roots
             }
 
-            function traversed(node,arr){
-                if (++INDEX > MAXDEPT){
+            function traversed(node, arr) {
+                if (++INDEX > MAXDEPT) {
                     console.log("递归超过8层,为保护计算机,退出递归");
                     return
                 }
-                for (var i = 0; i < arr.length; i++){
+                for (var i = 0; i < arr.length; i++) {
 
-                    if (node == arr[i].upId){
+                    if (node == arr[i].upId) {
                         arr[i].dept = INDEX
                         list.push(arr[i])
-                        traversed(arr[i].id,arr)
+                        traversed(arr[i].id, arr)
                     }
                 }
                 INDEX--;
             }
 
-            function listElem(roots,arr){
-                for (var i = 0; i < roots.length; i++){
+            function listElem(roots, arr) {
+                for (var i = 0; i < roots.length; i++) {
                     roots[i].dept = INDEX
                     list.push(roots[i])
-                    traversed(roots[i].id,arr)
+                    traversed(roots[i].id, arr)
                 }
             }
 
-            listElem(getRoots(a),a)
+            listElem(getRoots(a), a)
 
             return list
         }
 
-        function genTreeUI(a){
-            var odivStyle='cursor:pointer;background-color: '+__DEFAULT.bgColor+';padding:0px;text-align: left !important;width: '+__DEFAULT.width+'; border:'+__DEFAULT.border+'; height: '+__DEFAULT.height+'; line-height: '+__DEFAULT.height+';padding-left:10px; display:inline-block; border-radius:'+__DEFAULT.borderRadius+''
-            var odiv = '<div class="HshowSelectValue" style="'+odivStyle+'">' +
-                '<span style="height: '+__DEFAULT.height+'; font-size: '+__DEFAULT.fontSize+'">'+__DEFAULT.placeholder+'</span>' +
-                '<hzw style="position: relative;width: 20px; float: right;height: '+__DEFAULT.height+'; line-height: '+__DEFAULT.height+';">' +
+        function genTreeUI(a) {
+            var odivStyle = 'cursor:pointer;background-color: ' + __DEFAULT.bgColor + ';padding:0px;text-align: left !important;width: ' + __DEFAULT.width + '; border:' + __DEFAULT.border + '; height: ' + __DEFAULT.height + '; line-height: ' + __DEFAULT.height + ';padding-left:10px; display:inline-block; border-radius:' + __DEFAULT.borderRadius + ''
+            var odiv = '<div class="HshowSelectValue" style="' + odivStyle + '">' +
+                '<span style="height: ' + __DEFAULT.height + '; font-size: ' + __DEFAULT.fontSize + '">' + __DEFAULT.placeholder + '</span>' +
+                '<hzw style="position: relative;width: 20px; float: right;height: ' + __DEFAULT.height + '; line-height: ' + __DEFAULT.height + ';">' +
                 '<i style="border-color:#888 transparent transparent transparent;border-style: solid;border-width: 5px 4px 0px 4px;height: 0;left: 50%;margin-left: -4px;margin-top:-3px ;position: absolute;top: 50%;width: 0;"></i>' +
                 '</hzw></div>'
-            odiv+='<div class="HselectShowAreaHuangZhanWei" style="white-space:nowrap;background-color: #fefefe;border: '+__DEFAULT.showBorder+';display: none; border-radius: 3px ;position: fixed;z-index:9999">' +
-                '<input style="border:#6699CC solid 1px; padding-left:5px;margin:5px 5px;height:'+__DEFAULT.showLiHeight+';"/>'
-            var opt = odiv+'<ul style="z-index: 9999;padding: 0px;list-style: none;margin:0px;' +
-                'max-height:'+__DEFAULT.showHeight+';' +
+            odiv += '<div class="HselectShowAreaHuangZhanWei" style="white-space:nowrap;background-color: #fefefe;border: ' + __DEFAULT.showBorder + ';display: none; border-radius: 3px ;position: fixed;z-index:9999">' +
+                '<input style="border:#6699CC solid 1px; padding-left:5px;margin:5px 5px;height:' + __DEFAULT.showLiHeight + ';"/>'
+            var opt = odiv + '<ul style="z-index: 9999;padding: 0px;list-style: none;margin:0px;' +
+                'max-height:' + __DEFAULT.showHeight + ';' +
                 'overflow: auto;' +
                 '">'
-            for(var i = 0; i < a.length; i++){
-                var pd = parseInt(a[i].dept)*20 - 10
-                if (isNaN(pd)){
+            for (var i = 0; i < a.length; i++) {
+                var pd = parseInt(a[i].dept) * 20 - 10
+                if (isNaN(pd)) {
                     pd = 10
                 }
-                var li = '<li data-id="'+a[i].id+'" data-dept="'+a[i].dept+'" style="margin:0px; text-align: left;font-weight:500;padding-left:'+pd+'px; height:'+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; font-size: '+__DEFAULT.showFontSize+'; cursor: pointer;position: relative;">' +
-                    '<hzw class="HshowOrHideIconHzw" style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; width: 20px;cursor: cell;display: inline-block">' +
-                    '<i style="border-color:'+__DEFAULT.iconColor+' transparent transparent transparent;border-style: solid;border-width: 6px 5px 0px 5px;height: 0;margin-left: 1px;margin-top: -5px;position: absolute;top: 50%;width: 0;"></i>' +
+                var li = '<li data-id="' + a[i].id + '" data-dept="' + a[i].dept + '" style="margin:0px; text-align: left;font-weight:500;padding-left:' + pd + 'px; height:' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; font-size: ' + __DEFAULT.showFontSize + '; cursor: pointer;position: relative;">' +
+                    '<hzw class="HshowOrHideIconHzw" style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; width: 20px;cursor: cell;display: inline-block">' +
+                    '<i style="border-color:' + __DEFAULT.iconColor + ' transparent transparent transparent;border-style: solid;border-width: 6px 5px 0px 5px;height: 0;margin-left: 1px;margin-top: -5px;position: absolute;top: 50%;width: 0;"></i>' +
                     '</hzw>' +
-                    '<span style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; position: absolute;">'+a[i].text+'</span></li>'
-                opt+=li;
+                    '<span style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; position: absolute;">' + a[i].text + '</span></li>'
+                opt += li;
             }
-            opt +='</ul></div>'
+            opt += '</ul></div>'
             return opt;
         }
 
-        function showUp(e){
+        function showUp(e) {
             var dept = $(e).attr("data-dept")
-            $(e).prevAll().each(function(index,element){
-                if (parseInt(dept)>parseInt($(element).attr("data-dept"))){
+            $(e).prevAll().each(function (index, element) {
+                if (parseInt(dept) > parseInt($(element).attr("data-dept"))) {
                     $(element).show();
                     dept = $(element).attr("data-dept")
                 }
             })
         }
 
-        function initSelect(selObj,arr){
+        function initSelect(selObj, arr) {
             var optHtml = ""
-            for (var i = 0; i < arr.length; i++){
-                optHtml+='<option value="'+arr[i].id+'">'+arr[i].text+'</option>'
+            for (var i = 0; i < arr.length; i++) {
+                optHtml += '<option value="' + arr[i].id + '">' + arr[i].text + '</option>'
             }
             $(selObj).append(optHtml)
             $(selObj).hide()
         }
 
-        function showOrHide(e){
-            var topBorderColor = __DEFAULT.iconColor+' transparent transparent transparent'
-            var leftBorderColor = 'transparent transparent transparent '+__DEFAULT.iconColor
+        function showOrHide(e) {
+            var topBorderColor = __DEFAULT.iconColor + ' transparent transparent transparent'
+            var leftBorderColor = 'transparent transparent transparent ' + __DEFAULT.iconColor
             var dept = $(e).attr("data-dept")
             var nextObj = $(e).next()
             var nextDept = $(nextObj).attr("data-dept")
             var nextDisplay = $(nextObj).css("display")
-            if (nextDisplay == "none" && parseInt(nextDept)>parseInt(dept)){
+            if (nextDisplay == "none" && parseInt(nextDept) > parseInt(dept)) {
                 $(e).find("i").css({
-                    "border-color":topBorderColor,
-                    "border-width":"6px 5px 0px 5px"
+                    "border-color": topBorderColor,
+                    "border-width": "6px 5px 0px 5px"
                 })
 
-                $(e).nextAll().each(function(index,element){
-                    if (parseInt(dept)+1==parseInt($(element).attr("data-dept"))){
+                $(e).nextAll().each(function (index, element) {
+                    if (parseInt(dept) + 1 == parseInt($(element).attr("data-dept"))) {
                         $(element).find("i").css({
-                            "border-color":leftBorderColor,
-                            "border-width":"5px 0px 5px 6px",
+                            "border-color": leftBorderColor,
+                            "border-width": "5px 0px 5px 6px",
                         });
 
                         $(element).show();
-                    }else if (parseInt(dept)+1 < parseInt($(element).attr("data-dept"))){
+                    } else if (parseInt(dept) + 1 < parseInt($(element).attr("data-dept"))) {
                         $(element).find("i").css({
-                            "border-color":leftBorderColor,
-                            "border-width":"5px 0px 5px 6px",
+                            "border-color": leftBorderColor,
+                            "border-width": "5px 0px 5px 6px",
                         })
 
                         $(element).hide();
-                    }else{
+                    } else {
                         return false
                     }
                 })
-            }else if (nextDisplay == "none" && parseInt(nextDept)<=parseInt(dept)){
+            } else if (nextDisplay == "none" && parseInt(nextDept) <= parseInt(dept)) {
                 return
-            }else if (nextDisplay != "none" && parseInt(nextDept)>parseInt(dept)){
+            } else if (nextDisplay != "none" && parseInt(nextDept) > parseInt(dept)) {
 
                 $(e).find("i").css({
-                    "border-color":leftBorderColor,
-                    "border-width":"5px 0px 5px 6px",
+                    "border-color": leftBorderColor,
+                    "border-width": "5px 0px 5px 6px",
                 })
 
-                $(e).nextAll().each(function(index,element){
-                    if (parseInt(dept)<parseInt($(element).attr("data-dept"))){
+                $(e).nextAll().each(function (index, element) {
+                    if (parseInt(dept) < parseInt($(element).attr("data-dept"))) {
                         $(element).find("i").css({
-                            "border-color":leftBorderColor,
-                            "border-width":"5px 0px 5px 6px",
+                            "border-color": leftBorderColor,
+                            "border-width": "5px 0px 5px 6px",
                         })
 
                         $(element).hide();
-                    }else if (parseInt(dept)>=parseInt($(element).attr("data-dept"))){
+                    } else if (parseInt(dept) >= parseInt($(element).attr("data-dept"))) {
                         return false
                     }
                 })
-            }else {
+            } else {
                 return
             }
         }
 
         function initDefaultValue() {
             $(sel).val(__DEFAULT.value);
-            if (__DEFAULT.value != ""){
+            if (__DEFAULT.value != "") {
                 var text = $(sel).find("option:selected").text()
                 $(obj).find(".HshowSelectValue span").html(text)
             }
         }
 
         var ui = genTreeUI(sortTree(__DEFAULT.data))
-        initSelect(sel,__DEFAULT.data)
+        initSelect(sel, __DEFAULT.data)
 
         $(obj).html(ui)
         $(sel).after(obj)
@@ -1199,24 +1207,24 @@ var Hutils = {
         // 如果在初始化Hselect时，指定了初始值，则使用初始值
         initDefaultValue()
 
-        $(obj).find("ul li").each(function(index,element){
+        $(obj).find("ul li").each(function (index, element) {
             var curDept = parseInt($(element).attr("data-dept"))
             var nextDept = parseInt($(element).next().attr("data-dept"))
-            if (curDept>=nextDept || isNaN(nextDept)){
+            if (curDept >= nextDept || isNaN(nextDept)) {
                 $(element).find("hzw").remove()
             }
         });
 
-        if (__DEFAULT.disabled=="disabled"){
+        if (__DEFAULT.disabled == "disabled") {
             // 如果select禁止选择,
             // 不需要绑定触发事件
             return
         }
 
         // input 框中输入事件，当用户在Hselect的下拉框中搜索时，触发这个事件
-        $(obj).find("input").on('input',function(){
+        $(obj).find("input").on('input', function () {
             // 取消后续事件
-            if (window.event != undefined){
+            if (window.event != undefined) {
                 window.event.cancelBubble = true;
             } else {
                 var event = getEvent()
@@ -1224,24 +1232,24 @@ var Hutils = {
             }
 
             var inpText = $(this).val();
-            if (inpText == ""){
+            if (inpText == "") {
                 $(obj).find("ul li").show();
                 return
             }
-            $(obj).find("ul li").each(function(index,element){
-                if ($(element).find("span").html().indexOf(inpText)>=0){
+            $(obj).find("ul li").each(function (index, element) {
+                if ($(element).find("span").html().indexOf(inpText) >= 0) {
                     $(element).show()
                     showUp(element)
-                }else{
+                } else {
                     $(element).hide()
                 }
             })
         })
 
         // 当用户在搜索框中点击鼠标左键时，触发这个事件。
-        $(obj).find("input").on('click',function(){
+        $(obj).find("input").on('click', function () {
             // 取消后续事件
-            if (window.event != undefined){
+            if (window.event != undefined) {
                 window.event.cancelBubble = true;
             } else {
                 var event = getEvent()
@@ -1250,9 +1258,9 @@ var Hutils = {
             $(this).focus();
         })
 
-        $(obj).find(".HshowOrHideIconHzw").on("click",function(){
+        $(obj).find(".HshowOrHideIconHzw").on("click", function () {
             // 取消后续事件
-            if (window.event != undefined){
+            if (window.event != undefined) {
                 window.event.cancelBubble = true;
             } else {
                 var event = getEvent()
@@ -1261,9 +1269,9 @@ var Hutils = {
             showOrHide($(this).parent())
         })
 
-        $(obj).find("li").on('mouseover',function(){
+        $(obj).find("li").on('mouseover', function () {
             // 取消后续事件
-            if (window.event != undefined){
+            if (window.event != undefined) {
                 window.event.cancelBubble = true;
             } else {
                 var event = getEvent()
@@ -1273,19 +1281,19 @@ var Hutils = {
             var ul = $(this).closest("ul")
 
             $(ul).find("li").css({
-                "background-color":"",
-                "color":""
+                "background-color": "",
+                "color": ""
             })
 
             $(this).css({
-                "background-color":"#6699CC",
-                "color":"white"
+                "background-color": "#6699CC",
+                "color": "white"
             })
         })
 
-        $(obj).find("li").on('click',function(){
+        $(obj).find("li").on('click', function () {
             // 取消后续事件
-            if (window.event != undefined){
+            if (window.event != undefined) {
                 window.event.cancelBubble = true;
             } else {
                 var event = getEvent()
@@ -1297,23 +1305,24 @@ var Hutils = {
             $(sel).val(id);
             $(this).closest("div").prev().find("span").html(text);
             $(this).closest("div").hide();
-            $("body").find(".Hzwy23FillBodyForSelectItems").animate({height:'0px'},500,function(){
+            $("body").find(".Hzwy23FillBodyForSelectItems").animate({height: '0px'}, 500, function () {
                 $(this).remove()
             });
 
             $(obj).find(".HshowSelectValue i").css({
-                "border-color":"#888 transparent transparent transparent",
-                "border-width":"5px 4px 0px 4px"
+                "border-color": "#888 transparent transparent transparent",
+                "border-width": "5px 4px 0px 4px"
             });
 
-            if (typeof __DEFAULT.onChange == "function"){
+            if (typeof __DEFAULT.onChange == "function") {
                 __DEFAULT.onChange();
-            };
+            }
+            ;
         })
 
-        $(obj).find("ul").on('mousewheel',function(){
+        $(obj).find("ul").on('mousewheel', function () {
             // 取消后续事件
-            if (window.event != undefined){
+            if (window.event != undefined) {
                 window.event.cancelBubble = true;
             } else {
                 var event = getEvent()
@@ -1321,25 +1330,25 @@ var Hutils = {
             }
         });
 
-        $(obj).find(".HshowSelectValue").on('click',function(){
+        $(obj).find(".HshowSelectValue").on('click', function () {
             var showUiStatus = $(obj).find(".HselectShowAreaHuangZhanWei").css("display")
             // 取消后续事件
-            if (window.event != undefined){
+            if (window.event != undefined) {
                 window.event.cancelBubble = true;
             } else {
                 var event = getEvent()
                 event.stopPropagation()
             }
-            if (showUiStatus == "none"){
+            if (showUiStatus == "none") {
                 $(".HselectShowAreaHuangZhanWei").hide()
                 $(".HshowSelectValue i").css({
-                    "border-color":"#888 transparent transparent transparent",
-                    "border-width":"5px 4px 0px 4px",
+                    "border-color": "#888 transparent transparent transparent",
+                    "border-width": "5px 4px 0px 4px",
                 })
                 $(obj).find("ul li").show();
                 var w = $(obj).width()
-                $(obj).find(".HselectShowAreaHuangZhanWei").css("min-width",w)
-                $(obj).find(".HselectShowAreaHuangZhanWei input").css("min-width",w-12)
+                $(obj).find(".HselectShowAreaHuangZhanWei").css("min-width", w)
+                $(obj).find(".HselectShowAreaHuangZhanWei input").css("min-width", w - 12)
 
                 var nextObj = $(this).next()
                 $(nextObj).find("input").val("")
@@ -1348,8 +1357,8 @@ var Hutils = {
                 $(nextObj).find("ul").scrollTop(0);
                 $(nextObj).find("ul").scrollLeft(0);
                 $(obj).find(".HshowSelectValue i").css({
-                    "border-color":"transparent transparent #888 transparent",
-                    "border-width":"0px 4px 5px 4px"
+                    "border-color": "transparent transparent #888 transparent",
+                    "border-width": "0px 4px 5px 4px"
                 })
 
                 // var ptop = $(obj).offset().top
@@ -1369,26 +1378,26 @@ var Hutils = {
                 //     left:pleft
                 // })
 
-            }else{
+            } else {
                 $(obj).find("ul").closest("div").hide();
                 $(obj).find(".HshowSelectValue i").css({
-                    "border-color":"#888 transparent transparent transparent",
-                    "border-width":"5px 4px 0px 4px"
+                    "border-color": "#888 transparent transparent transparent",
+                    "border-width": "5px 4px 0px 4px"
                 })
 
-                $("body").find(".Hzwy23FillBodyForSelectItems").animate({height:'0px'},500,function(){
+                $("body").find(".Hzwy23FillBodyForSelectItems").animate({height: '0px'}, 500, function () {
                     $(this).remove()
                 })
             }
         })
 
-        $(document).on('click',function(){
+        $(document).on('click', function () {
             $(obj).find("ul").closest("div").hide();
             $(obj).find(".HshowSelectValue i").css({
-                "border-color":"#888 transparent transparent transparent",
-                "border-width":"5px 4px 0px 4px"
+                "border-color": "#888 transparent transparent transparent",
+                "border-width": "5px 4px 0px 4px"
             })
-            $("body").find(".Hzwy23FillBodyForSelectItems").animate({height:'0px'},500,function(){
+            $("body").find(".Hzwy23FillBodyForSelectItems").animate({height: '0px'}, 500, function () {
                 $(this).remove()
             })
         });
@@ -1396,64 +1405,64 @@ var Hutils = {
 
         //when select was change
         //change show values
-        $(sel).on('change',function(){
+        $(sel).on('change', function () {
             var text = $(this).find("option:selected").text()
             $(obj).find(".HshowSelectValue span").html(text)
-            if (typeof __DEFAULT.onChange == "function"){
+            if (typeof __DEFAULT.onChange == "function") {
                 __DEFAULT.onChange();
             }
         });
     };
 
-    $.fn.HtreeSelect = function(param){
+    $.fn.HtreeSelect = function (param) {
         var sel = this
         var obj = document.createElement("div")
 
-        if ( $(sel).attr("hselect") == "true"){
+        if ($(sel).attr("hselect") == "true") {
             // 重复初始化Hselect
             var hselect = $(sel).next()
             var displaycss = $(hselect).css("display")
-            $(obj).attr("style",$(sel).attr("style"));
-            $(obj).css("display",displaycss)
+            $(obj).attr("style", $(sel).attr("style"));
+            $(obj).css("display", displaycss)
 
             $(hselect).remove()
             $(sel).html("");
         } else {
             // 第一次初始化Hselect
-            $(obj).attr("style",$(sel).attr("style"));
+            $(obj).attr("style", $(sel).attr("style"));
         }
         //init div css
         //get parent class to it
         //get parent css to it
         $(obj).addClass($(sel).attr("class"));
-        $(obj).css({"padding":"0px","border":"none"});
+        $(obj).css({"padding": "0px", "border": "none"});
 
-        $(sel).attr("hselect","true");
+        $(sel).attr("hselect", "true");
         // default parameters
         var __DEFAULT = {
             data: "",
-            height:"26px",
-            width:"100%",
-            border:"#ccc solid 1px",
-            fontSize:"13px",
-            borderRadius:"5px",
-            bgColor:"white",
-            placeholder:"<i style='color: #959595;font-size: 12px;'>--点击树形多选框,设置选项--</i>",
+            height: "26px",
+            width: "100%",
+            border: "#ccc solid 1px",
+            fontSize: "13px",
+            borderRadius: "5px",
+            bgColor: "white",
+            placeholder: "<i style='color: #959595;font-size: 12px;'>--点击树形多选框,设置选项--</i>",
 
-            showLiHeight:"30px",
-            showHeight:"230px",
-            showBorder:"",
-            showFontSize:"14px",
-            iconColor:"#ff5763",
+            showLiHeight: "30px",
+            showHeight: "230px",
+            showBorder: "",
+            showFontSize: "14px",
+            iconColor: "#ff5763",
 
             // 值改变触发事件
-            onChange:"",
+            onChange: "",
 
             // select中默认值
-            value:"hselectdefault",
+            value: "hselectdefault",
 
             // 是否禁止选择
-            disabled:"",
+            disabled: "",
 
             selectBox: false,
 
@@ -1463,28 +1472,29 @@ var Hutils = {
 
         };
 
-        $.extend(true,__DEFAULT,param);
+        $.extend(true, __DEFAULT, param);
 
 
         // set showBorder to border style
-        if (__DEFAULT.showBorder==""){
+        if (__DEFAULT.showBorder == "") {
             __DEFAULT.showBorder = __DEFAULT.border
-        };
+        }
+        ;
 
-        var getEvent = function(){
+        var getEvent = function () {
 
-            if(window.event)    {
+            if (window.event) {
                 return window.event;
             }
             var func = getEvent.caller;
 
-            while( func != null ){
+            while (func != null) {
                 var arg0 = func.arguments[0];
-                if(arg0){
-                    if((arg0.constructor==Event || arg0.constructor ==MouseEvent
-                        || arg0.constructor==KeyboardEvent)
-                        ||(typeof(arg0)=="object" && arg0.preventDefault
-                        && arg0.stopPropagation)){
+                if (arg0) {
+                    if ((arg0.constructor == Event || arg0.constructor == MouseEvent
+                        || arg0.constructor == KeyboardEvent)
+                        || (typeof(arg0) == "object" && arg0.preventDefault
+                        && arg0.stopPropagation)) {
                         return arg0;
                     }
                 }
@@ -1496,22 +1506,22 @@ var Hutils = {
          * This function sort array.
          * Accept One Array Variable.
          * */
-        function sortTree(a){
+        function sortTree(a) {
 
             // load result sorted
             var list = [];
 
             // get select's options
             // append it to new select which simulate by ul li
-            if (Object.prototype.toString.call(a) == '[object Array]'){
-                $(sel).find("option").each(function(index,element){
+            if (Object.prototype.toString.call(a) == '[object Array]') {
+                $(sel).find("option").each(function (index, element) {
                     var ijs = {}
                     ijs.id = $(element).val();
                     ijs.text = $(element).text()
                     a.push(ijs)
                 })
             } else {
-                $(sel).find("option").each(function(index,element){
+                $(sel).find("option").each(function (index, element) {
                     var ijs = {}
                     ijs.id = $(element).val();
                     ijs.text = $(element).text()
@@ -1525,156 +1535,156 @@ var Hutils = {
 
             var INDEX = 1;
 
-            function getRoots(arr){
+            function getRoots(arr) {
                 var Roots = [];
-                for(var i = 0; i < arr.length;i++){
+                for (var i = 0; i < arr.length; i++) {
                     var rootFlag = true
-                    for ( var j = 0; j < arr.length;j++){
-                        if (arr[i].upId == arr[j].id){
+                    for (var j = 0; j < arr.length; j++) {
+                        if (arr[i].upId == arr[j].id) {
                             rootFlag = false
                             break
                         }
                     }
-                    if (rootFlag == true){
+                    if (rootFlag == true) {
                         Roots.push(arr[i])
                     }
                 }
                 return Roots
             }
 
-            function traversed(node,arr){
-                if (++INDEX > MAXDEPT){
+            function traversed(node, arr) {
+                if (++INDEX > MAXDEPT) {
                     console.log("递归超过8层,为保护计算机,退出递归");
                     return
                 }
-                for (var i = 0; i < arr.length; i++){
+                for (var i = 0; i < arr.length; i++) {
 
-                    if (node == arr[i].upId){
+                    if (node == arr[i].upId) {
                         arr[i].dept = INDEX
                         list.push(arr[i])
-                        traversed(arr[i].id,arr)
+                        traversed(arr[i].id, arr)
                     }
                 }
                 INDEX--;
             }
 
-            function listElem(roots,arr){
-                for (var i = 0; i < roots.length; i++){
+            function listElem(roots, arr) {
+                for (var i = 0; i < roots.length; i++) {
                     roots[i].dept = INDEX
                     list.push(roots[i])
-                    traversed(roots[i].id,arr)
+                    traversed(roots[i].id, arr)
                 }
             }
 
-            listElem(getRoots(a),a)
+            listElem(getRoots(a), a)
 
             return list
         };
 
-        function genTreeUI(a){
-            var odivStyle='cursor:pointer;background-color: '+__DEFAULT.bgColor+';padding:0px;text-align: left !important;width: '+__DEFAULT.width+'; border:'+__DEFAULT.border+'; height: '+__DEFAULT.height+'; line-height: '+__DEFAULT.height+';padding-left:10px; display:inline-block; border-radius:'+__DEFAULT.borderRadius+''
-            var odiv = '<div class="HshowSelectValue" style="'+odivStyle+'">' +
-                '<span style="height: '+__DEFAULT.height+'; font-size: '+__DEFAULT.fontSize+'">'+__DEFAULT.placeholder+'</span>' +
-                '<hzw style="position: relative;width: 20px; float: right;height: '+__DEFAULT.height+'; line-height: '+__DEFAULT.height+';">' +
+        function genTreeUI(a) {
+            var odivStyle = 'cursor:pointer;background-color: ' + __DEFAULT.bgColor + ';padding:0px;text-align: left !important;width: ' + __DEFAULT.width + '; border:' + __DEFAULT.border + '; height: ' + __DEFAULT.height + '; line-height: ' + __DEFAULT.height + ';padding-left:10px; display:inline-block; border-radius:' + __DEFAULT.borderRadius + ''
+            var odiv = '<div class="HshowSelectValue" style="' + odivStyle + '">' +
+                '<span style="height: ' + __DEFAULT.height + '; font-size: ' + __DEFAULT.fontSize + '">' + __DEFAULT.placeholder + '</span>' +
+                '<hzw style="position: relative;width: 20px; float: right;height: ' + __DEFAULT.height + '; line-height: ' + __DEFAULT.height + ';">' +
                 '<i style="border-color:#888 transparent transparent transparent;border-style: solid;border-width: 5px 4px 0px 4px;height: 0;left: 50%;margin-left: -4px;margin-top:-3px ;position: absolute;top: 50%;width: 0;"></i>' +
                 '</hzw></div>'
-            odiv+='<div class="HselectShowAreaHuangZhanWei" style="white-space:nowrap;background-color: #fefefe;border: '+__DEFAULT.showBorder+';display: none; border-radius: 3px ;position: fixed;z-index:9999">' +
-                '<input style="border:#6699CC solid 1px; padding-left:5px;margin:5px 5px;height:'+__DEFAULT.showLiHeight+';"/>'
-            var opt = odiv+'<ul style="z-index: 9999;padding: 0px;list-style: none;margin:0px;' +
-                'max-height:'+__DEFAULT.showHeight+';' +
+            odiv += '<div class="HselectShowAreaHuangZhanWei" style="white-space:nowrap;background-color: #fefefe;border: ' + __DEFAULT.showBorder + ';display: none; border-radius: 3px ;position: fixed;z-index:9999">' +
+                '<input style="border:#6699CC solid 1px; padding-left:5px;margin:5px 5px;height:' + __DEFAULT.showLiHeight + ';"/>'
+            var opt = odiv + '<ul style="z-index: 9999;padding: 0px;list-style: none;margin:0px;' +
+                'max-height:' + __DEFAULT.showHeight + ';' +
                 'overflow: auto;">'
-            for(var i = 0; i < a.length; i++){
-                var pd = parseInt(a[i].dept)*20 - 10
-                if (isNaN(pd)){
+            for (var i = 0; i < a.length; i++) {
+                var pd = parseInt(a[i].dept) * 20 - 10
+                if (isNaN(pd)) {
                     pd = 10
                 }
                 if (__DEFAULT.selectBox == true) {
                     if (__DEFAULT.attr == true && a[i].attr == "0") {
                         // 叶子
-                        opt+='<li data-attr="'+a[i].attr+'" data-id="'+a[i].id+'" data-dept="'+a[i].dept+'" style="margin:0px; text-align: left;font-weight:500;padding-left:'+pd+'px; height:'+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; font-size: '+__DEFAULT.showFontSize+'; cursor: pointer;position: relative;">' +
-                            '<hzw class="HshowOrHideIconHzw" style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; width: 20px; display: inline-block">' +
+                        opt += '<li data-attr="' + a[i].attr + '" data-id="' + a[i].id + '" data-dept="' + a[i].dept + '" style="margin:0px; text-align: left;font-weight:500;padding-left:' + pd + 'px; height:' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; font-size: ' + __DEFAULT.showFontSize + '; cursor: pointer;position: relative;">' +
+                            '<hzw class="HshowOrHideIconHzw" style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; width: 20px; display: inline-block">' +
                             '<i class="icon-leaf" style="color: green;"></i>' +
                             '</hzw><input name="select_check" type="checkbox" style="width:20px; margin-top: 0px;">' +
-                            '<span style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; position: absolute;">'+a[i].text+'</span></li>'
+                            '<span style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; position: absolute;">' + a[i].text + '</span></li>'
                     } else {
                         // 节点
-                        if ( __DEFAULT.attr==true ) {
-                            opt+='<li data-attr="'+a[i].attr+'" data-id="'+a[i].id+'" data-dept="'+a[i].dept+'" style="margin:0px; text-align: left;font-weight:500;padding-left:'+pd+'px; height:'+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; font-size: '+__DEFAULT.showFontSize+'; cursor: pointer;position: relative;">' +
-                                '<hzw class="HshowOrHideIconHzw" style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; width: 20px;cursor: cell;display: inline-block">' +
+                        if (__DEFAULT.attr == true) {
+                            opt += '<li data-attr="' + a[i].attr + '" data-id="' + a[i].id + '" data-dept="' + a[i].dept + '" style="margin:0px; text-align: left;font-weight:500;padding-left:' + pd + 'px; height:' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; font-size: ' + __DEFAULT.showFontSize + '; cursor: pointer;position: relative;">' +
+                                '<hzw class="HshowOrHideIconHzw" style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; width: 20px;cursor: cell;display: inline-block">' +
                                 '<i class="icon-folder-open" style="color: #ccb008;"></i>' +
                                 '</hzw><input name="select_check" type="checkbox" style="width:20px; margin-top: 0px;">' +
-                                '<span style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; position: absolute;">'+a[i].text+'</span></li>'
+                                '<span style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; position: absolute;">' + a[i].text + '</span></li>'
                         } else {
-                            opt+='<li data-attr="'+a[i].attr+'" data-id="'+a[i].id+'" data-dept="'+a[i].dept+'" style="margin:0px; text-align: left;font-weight:500;padding-left:'+pd+'px; height:'+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; font-size: '+__DEFAULT.showFontSize+'; cursor: pointer;position: relative;">' +
-                                '<hzw class="HshowOrHideIconHzw" style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; width: 20px;cursor: cell;display: inline-block">' +
+                            opt += '<li data-attr="' + a[i].attr + '" data-id="' + a[i].id + '" data-dept="' + a[i].dept + '" style="margin:0px; text-align: left;font-weight:500;padding-left:' + pd + 'px; height:' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; font-size: ' + __DEFAULT.showFontSize + '; cursor: pointer;position: relative;">' +
+                                '<hzw class="HshowOrHideIconHzw" style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; width: 20px;cursor: cell;display: inline-block">' +
                                 '<i class="icon-folder-open" style="color: #ccb008;"></i>' +
                                 '</hzw><input name="select_check" type="checkbox" style="width:20px; margin-top: 0px;">' +
-                                '<span style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; position: absolute;">'+a[i].text+'</span></li>'
+                                '<span style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; position: absolute;">' + a[i].text + '</span></li>'
                         }
                     }
                 } else {
                     if (__DEFAULT.attr == true && a[i].attr == "0") {
                         //叶子
-                        opt+='<li data-attr="'+a[i].attr+'" data-id="'+a[i].id+'" data-dept="'+a[i].dept+'" style="margin:0px; text-align: left;font-weight:500;padding-left:'+pd+'px; height:'+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; font-size: '+__DEFAULT.showFontSize+'; cursor: pointer;position: relative;">' +
-                            '<hzw class="HshowOrHideIconHzw" style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; width: 20px; display: inline-block">' +
+                        opt += '<li data-attr="' + a[i].attr + '" data-id="' + a[i].id + '" data-dept="' + a[i].dept + '" style="margin:0px; text-align: left;font-weight:500;padding-left:' + pd + 'px; height:' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; font-size: ' + __DEFAULT.showFontSize + '; cursor: pointer;position: relative;">' +
+                            '<hzw class="HshowOrHideIconHzw" style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; width: 20px; display: inline-block">' +
                             '<i class="icon-leaf" style="color: green;"></i>' +
                             '</hzw>' +
-                            '<span style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; position: absolute;">'+a[i].text+'</span></li>'
+                            '<span style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; position: absolute;">' + a[i].text + '</span></li>'
                     } else {
                         //节点
                         if (__DEFAULT.attr == true) {
-                            opt+='<li data-attr="'+a[i].attr+'" data-id="'+a[i].id+'" data-dept="'+a[i].dept+'" style="margin:0px; text-align: left;font-weight:500;padding-left:'+pd+'px; height:'+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; font-size: '+__DEFAULT.showFontSize+'; cursor: pointer;position: relative;">' +
-                                '<hzw class="HshowOrHideIconHzw" style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; width: 20px;cursor: cell;display: inline-block">' +
+                            opt += '<li data-attr="' + a[i].attr + '" data-id="' + a[i].id + '" data-dept="' + a[i].dept + '" style="margin:0px; text-align: left;font-weight:500;padding-left:' + pd + 'px; height:' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; font-size: ' + __DEFAULT.showFontSize + '; cursor: pointer;position: relative;">' +
+                                '<hzw class="HshowOrHideIconHzw" style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; width: 20px;cursor: cell;display: inline-block">' +
                                 '<i class="icon-folder-open" style="color: #ccb008;"></i>' +
                                 '</hzw>' +
-                                '<span style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; position: absolute;">'+a[i].text+'</span></li>'
+                                '<span style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; position: absolute;">' + a[i].text + '</span></li>'
                         } else {
-                            opt+='<li data-attr="'+a[i].attr+'" data-id="'+a[i].id+'" data-dept="'+a[i].dept+'" style="margin:0px; text-align: left;font-weight:500;padding-left:'+pd+'px; height:'+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; font-size: '+__DEFAULT.showFontSize+'; cursor: pointer;position: relative;">' +
-                                '<hzw class="HshowOrHideIconHzw" style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; width: 20px;cursor: cell;display: inline-block">' +
+                            opt += '<li data-attr="' + a[i].attr + '" data-id="' + a[i].id + '" data-dept="' + a[i].dept + '" style="margin:0px; text-align: left;font-weight:500;padding-left:' + pd + 'px; height:' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; font-size: ' + __DEFAULT.showFontSize + '; cursor: pointer;position: relative;">' +
+                                '<hzw class="HshowOrHideIconHzw" style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; width: 20px;cursor: cell;display: inline-block">' +
                                 '<i class="icon-folder-open" style="color: #ccb008;"></i>' +
                                 '</hzw>' +
-                                '<span style="height: '+__DEFAULT.showLiHeight+'; line-height: '+__DEFAULT.showLiHeight+'; position: absolute;">'+a[i].text+'</span></li>'
+                                '<span style="height: ' + __DEFAULT.showLiHeight + '; line-height: ' + __DEFAULT.showLiHeight + '; position: absolute;">' + a[i].text + '</span></li>'
                         }
                     }
                 }
             }
-            opt +='</ul></div>'
+            opt += '</ul></div>'
             return opt;
         };
 
-        function showUp(e){
+        function showUp(e) {
             var dept = $(e).attr("data-dept")
-            $(e).prevAll().each(function(index,element){
-                if (parseInt(dept)>parseInt($(element).attr("data-dept"))){
+            $(e).prevAll().each(function (index, element) {
+                if (parseInt(dept) > parseInt($(element).attr("data-dept"))) {
                     $(element).show();
                     dept = $(element).attr("data-dept")
                 }
             })
         };
 
-        function initSelect(selObj,arr){
+        function initSelect(selObj, arr) {
             var optHtml = ""
-            for (var i = 0; i < arr.length; i++){
-                optHtml+='<option value="'+arr[i].id+'">'+arr[i].text+'</option>'
+            for (var i = 0; i < arr.length; i++) {
+                optHtml += '<option value="' + arr[i].id + '">' + arr[i].text + '</option>'
             }
             $(selObj).append(optHtml)
             $(selObj).hide()
         };
 
-        function showOrHide(e){
+        function showOrHide(e) {
 
             var dept = $(e).attr("data-dept")
             var nextObj = $(e).next()
             var nextDept = $(nextObj).attr("data-dept")
             var nextDisplay = $(nextObj).css("display")
-            if (nextDisplay == "none" && parseInt(nextDept)>parseInt(dept)){
+            if (nextDisplay == "none" && parseInt(nextDept) > parseInt(dept)) {
 
                 if ($(e).find("i").addClass("icon-folder-close")) {
-                    $(e).find("i").addClass("icon-folder-open").css({"color":"#ccb008"}).removeClass("icon-folder-close");
+                    $(e).find("i").addClass("icon-folder-open").css({"color": "#ccb008"}).removeClass("icon-folder-close");
                 }
 
-                $(e).nextAll().each(function(index,element) {
-                    if (parseInt(dept)+1==parseInt($(element).attr("data-dept"))){
+                $(e).nextAll().each(function (index, element) {
+                    if (parseInt(dept) + 1 == parseInt($(element).attr("data-dept"))) {
                         // 切换成打开状态
                         if (__DEFAULT.attr == true) {
                             if ($(element).attr("data-attr") == "0") {
@@ -1689,7 +1699,7 @@ var Hutils = {
                         } else {
                             $(element).show();
                         }
-                    } else if (parseInt(dept)+1 < parseInt($(element).attr("data-dept"))) {
+                    } else if (parseInt(dept) + 1 < parseInt($(element).attr("data-dept"))) {
                         // 切换成关闭状态
                         if ($(element).find("i").hasClass("icon-folder-open")) {
                             $(element).find("i").addClass("icon-folder-close").removeClass("icon-folder-open");
@@ -1699,24 +1709,24 @@ var Hutils = {
                         return false
                     }
                 })
-            }else if (nextDisplay == "none" && parseInt(nextDept)<=parseInt(dept)){
+            } else if (nextDisplay == "none" && parseInt(nextDept) <= parseInt(dept)) {
                 return
-            }else if (nextDisplay != "none" && parseInt(nextDept)>parseInt(dept)){
+            } else if (nextDisplay != "none" && parseInt(nextDept) > parseInt(dept)) {
                 if ($(e).find("i").hasClass("icon-folder-open")) {
                     $(e).find("i").removeClass("icon-folder-open").addClass("icon-folder-close")
                 }
 
-                $(e).nextAll().each(function(index,element){
-                    if (parseInt(dept)<parseInt($(element).attr("data-dept"))){
+                $(e).nextAll().each(function (index, element) {
+                    if (parseInt(dept) < parseInt($(element).attr("data-dept"))) {
                         if ($(element).find("i").hasClass("icon-folder-open")) {
                             $(element).find("i").removeClass("icon-folder-open").addClass("icon-folder-close")
                         }
                         $(element).hide();
-                    }else if (parseInt(dept)>=parseInt($(element).attr("data-dept"))){
+                    } else if (parseInt(dept) >= parseInt($(element).attr("data-dept"))) {
                         return false
                     }
                 })
-            }else {
+            } else {
                 return
             }
         };
@@ -1745,7 +1755,7 @@ var Hutils = {
                 }
             })
 
-            if (__DEFAULT.value != "hselectdefault" && flag == true){
+            if (__DEFAULT.value != "hselectdefault" && flag == true) {
                 $(sel).val(__DEFAULT.value);
                 var text = $(sel).find("option:selected").text()
                 $(obj).find(".HshowSelectValue span").html(text)
@@ -1753,7 +1763,7 @@ var Hutils = {
         };
 
         var ui = genTreeUI(sortTree(__DEFAULT.data));
-        initSelect(sel,__DEFAULT.data);
+        initSelect(sel, __DEFAULT.data);
 
         $(obj).html(ui);
         $(sel).after(obj);
@@ -1765,25 +1775,25 @@ var Hutils = {
         // 修正叶子节点
         // 如果设置了成员属性 attr == false, 则执行这个操作
         if (__DEFAULT.attr == false) {
-            $(obj).find("ul li").each(function(index,element){
+            $(obj).find("ul li").each(function (index, element) {
                 var curDept = parseInt($(element).attr("data-dept"))
                 var nextDept = parseInt($(element).next().attr("data-dept"))
-                if (curDept>=nextDept || isNaN(nextDept)){
-                    $(element).find("hzw i").removeClass("icon-folder-close").addClass("icon-leaf").css("color","green");
+                if (curDept >= nextDept || isNaN(nextDept)) {
+                    $(element).find("hzw i").removeClass("icon-folder-close").addClass("icon-leaf").css("color", "green");
                 }
             });
         }
 
-        if (__DEFAULT.disabled=="disabled"){
+        if (__DEFAULT.disabled == "disabled") {
             // 如果select禁止选择,
             // 不需要绑定触发事件
             return
         }
 
         // input 框中输入事件，当用户在Hselect的下拉框中搜索时，触发这个事件
-        $(obj).find("input:eq(0)").on('input',function(){
+        $(obj).find("input:eq(0)").on('input', function () {
             // 取消后续事件
-            if (window.event != undefined){
+            if (window.event != undefined) {
                 window.event.cancelBubble = true;
             } else {
                 var event = getEvent()
@@ -1791,24 +1801,24 @@ var Hutils = {
             }
 
             var inpText = $(this).val();
-            if (inpText == ""){
+            if (inpText == "") {
                 $(obj).find("ul li").show();
                 return
             }
-            $(obj).find("ul li").each(function(index,element){
-                if ($(element).find("span").html().indexOf(inpText)>=0){
+            $(obj).find("ul li").each(function (index, element) {
+                if ($(element).find("span").html().indexOf(inpText) >= 0) {
                     $(element).show()
                     showUp(element)
-                }else{
+                } else {
                     $(element).hide()
                 }
             })
         });
 
         // 当用户在搜索框中点击鼠标左键时，触发这个事件。
-        $(obj).find("input:eq(0)").on('click',function(){
+        $(obj).find("input:eq(0)").on('click', function () {
             // 取消后续事件
-            if (window.event != undefined){
+            if (window.event != undefined) {
                 window.event.cancelBubble = true;
             } else {
                 var event = getEvent()
@@ -1817,9 +1827,9 @@ var Hutils = {
             $(this).focus();
         });
 
-        $(obj).find("input[name='select_check']").on("click",function () {
+        $(obj).find("input[name='select_check']").on("click", function () {
             // 取消后续事件
-            if (window.event != undefined){
+            if (window.event != undefined) {
                 window.event.cancelBubble = true;
             } else {
                 var event = getEvent()
@@ -1828,11 +1838,11 @@ var Hutils = {
             var curli = $(this).parent();
             var dept = $(curli).attr("data-dept");
             var nextDept = $(curli).next().attr("data-dept");
-            if (parseInt(dept) < parseInt(nextDept)){
+            if (parseInt(dept) < parseInt(nextDept)) {
                 if ($(this).is(":checked")) {
                     $(curli).nextAll().each(function (index, element) {
                         if (parseInt($(element).attr("data-dept")) > parseInt(dept)) {
-                            $(element).find("input").prop("checked",true)
+                            $(element).find("input").prop("checked", true)
                         } else {
                             return false
                         }
@@ -1840,7 +1850,7 @@ var Hutils = {
                 } else {
                     $(curli).nextAll().each(function (index, element) {
                         if (parseInt($(element).attr("data-dept")) > parseInt(dept)) {
-                            $(element).find("input").prop("checked",false)
+                            $(element).find("input").prop("checked", false)
                         } else {
                             return false
                         }
@@ -1850,9 +1860,9 @@ var Hutils = {
         });
 
         // 图标, 点击隐藏或显示子菜单
-        $(obj).find(".HshowOrHideIconHzw").on("click",function(){
+        $(obj).find(".HshowOrHideIconHzw").on("click", function () {
             // 取消后续事件
-            if (window.event != undefined){
+            if (window.event != undefined) {
                 window.event.cancelBubble = true;
             } else {
                 var event = getEvent()
@@ -1864,9 +1874,9 @@ var Hutils = {
             showOrHide($(this).parent())
         });
 
-        $(obj).find("li").on('mouseover',function(){
+        $(obj).find("li").on('mouseover', function () {
             // 取消后续事件
-            if (window.event != undefined){
+            if (window.event != undefined) {
                 window.event.cancelBubble = true;
             } else {
                 var event = getEvent()
@@ -1876,35 +1886,35 @@ var Hutils = {
             var ul = $(this).closest("ul")
 
             $(ul).find("li").css({
-                "background-color":"",
-                "color":""
+                "background-color": "",
+                "color": ""
             })
 
             $(this).css({
-                "background-color":"#6699CC",
-                "color":"white"
+                "background-color": "#6699CC",
+                "color": "white"
             })
         });
 
-        $(obj).find("li").on('click',function(){
+        $(obj).find("li").on('click', function () {
             // 取消后续事件
-            if (window.event != undefined){
+            if (window.event != undefined) {
                 window.event.cancelBubble = true;
             } else {
                 var event = getEvent()
                 event.stopPropagation()
             }
 
-            if ( __DEFAULT.attr == true && __DEFAULT.nodeSelect == false && $(this).attr("data-attr") != "0"){
+            if (__DEFAULT.attr == true && __DEFAULT.nodeSelect == false && $(this).attr("data-attr") != "0") {
                 showOrHide($(this))
                 return
             }
 
             if (__DEFAULT.attr == true && __DEFAULT.selectBox == true && $(this).attr("data-attr") == "0") {
                 if ($(this).find("input").is(":checked")) {
-                    $(this).find("input").prop("checked",false)
+                    $(this).find("input").prop("checked", false)
                 } else {
-                    $(this).find("input").prop("checked",true)
+                    $(this).find("input").prop("checked", true)
                 }
             } else {
                 var text = $(this).find("span").html();
@@ -1912,24 +1922,25 @@ var Hutils = {
                 $(sel).val(id);
                 $(this).closest("div").prev().find("span").html(text);
                 $(this).closest("div").hide();
-                $("body").find(".Hzwy23FillBodyForSelectItems").animate({height:'0px'},500,function(){
+                $("body").find(".Hzwy23FillBodyForSelectItems").animate({height: '0px'}, 500, function () {
                     $(this).remove()
                 });
 
                 $(obj).find(".HshowSelectValue i").css({
-                    "border-color":"#888 transparent transparent transparent",
-                    "border-width":"5px 4px 0px 4px"
+                    "border-color": "#888 transparent transparent transparent",
+                    "border-width": "5px 4px 0px 4px"
                 });
 
-                if (typeof __DEFAULT.onChange == "function"){
+                if (typeof __DEFAULT.onChange == "function") {
                     __DEFAULT.onChange();
-                };
+                }
+                ;
             }
         });
 
-        $(obj).find("ul").on('mousewheel',function(){
+        $(obj).find("ul").on('mousewheel', function () {
             // 取消后续事件
-            if (window.event != undefined){
+            if (window.event != undefined) {
                 window.event.cancelBubble = true;
             } else {
                 var event = getEvent()
@@ -1940,22 +1951,22 @@ var Hutils = {
         // 如果没有层级,则清除第一层级的叶子
         adjustnormaltree()
 
-        $(obj).find(".HshowSelectValue").on('click',function(){
+        $(obj).find(".HshowSelectValue").on('click', function () {
             var showUiStatus = $(obj).find(".HselectShowAreaHuangZhanWei").css("display")
             // 取消后续事件
-            if (window.event != undefined){
+            if (window.event != undefined) {
                 window.event.cancelBubble = true;
             } else {
                 var event = getEvent()
                 event.stopPropagation()
             }
 
-            if (showUiStatus == "none"){
+            if (showUiStatus == "none") {
                 $(".HselectShowAreaHuangZhanWei").hide()
                 $(obj).find("ul li").show();
                 var w = $(obj).width();
-                $(obj).find(".HselectShowAreaHuangZhanWei").css("min-width",w);
-                $(obj).find(".HselectShowAreaHuangZhanWei input:eq(0)").css("min-width",w-12);
+                $(obj).find(".HselectShowAreaHuangZhanWei").css("min-width", w);
+                $(obj).find(".HselectShowAreaHuangZhanWei input:eq(0)").css("min-width", w - 12);
 
                 var nextObj = $(this).next();
                 $(nextObj).find("input:eq(0)").val("");
@@ -1965,8 +1976,8 @@ var Hutils = {
                 $(nextObj).find("ul").scrollLeft(0);
 
                 $(obj).find(".HshowSelectValue i").css({
-                    "border-color":"transparent transparent #888 transparent",
-                    "border-width":"0px 4px 5px 4px"
+                    "border-color": "transparent transparent #888 transparent",
+                    "border-width": "0px 4px 5px 4px"
                 });
 
                 // var ptop = $(obj).offset().top
@@ -1987,37 +1998,37 @@ var Hutils = {
                 //     top:tp,
                 //     left:pleft
                 // })
-            }else{
+            } else {
                 $(obj).find(".HshowSelectValue i").css({
-                    "border-color":"#888 transparent transparent transparent",
-                    "border-width":"5px 4px 0px 4px"
+                    "border-color": "#888 transparent transparent transparent",
+                    "border-width": "5px 4px 0px 4px"
                 });
 
                 $(obj).find("ul").closest("div").hide();
-                $("body").find(".Hzwy23FillBodyForSelectItems").animate({height:'0px'},500,function(){
+                $("body").find(".Hzwy23FillBodyForSelectItems").animate({height: '0px'}, 500, function () {
                     $(this).remove()
                 })
             }
         });
 
-        $(document).on('click',function(){
+        $(document).on('click', function () {
             $(obj).find("ul").closest("div").hide();
             $(obj).find(".HshowSelectValue i").css({
-                "border-color":"#888 transparent transparent transparent",
-                "border-width":"5px 4px 0px 4px"
+                "border-color": "#888 transparent transparent transparent",
+                "border-width": "5px 4px 0px 4px"
             });
 
-            $("body").find(".Hzwy23FillBodyForSelectItems").animate({height:'0px'},500,function(){
+            $("body").find(".Hzwy23FillBodyForSelectItems").animate({height: '0px'}, 500, function () {
                 $(this).remove()
             });
         });
 
         //when select was change
         //change show values
-        $(sel).on('change',function(){
+        $(sel).on('change', function () {
             var text = $(this).find("option:selected").text()
             $(obj).find(".HshowSelectValue span").html(text)
-            if (typeof __DEFAULT.onChange == "function"){
+            if (typeof __DEFAULT.onChange == "function") {
                 __DEFAULT.onChange();
             }
         });
@@ -2081,32 +2092,42 @@ var Hutils = {
 /*
  * 弹出框效果
  * */
-(function($){
+(function ($) {
 
     $.extend({
-        Notify:function(param){
+        Notify: function (param) {
 
             var DEFAULT = {
-                icon:"icon-ok",
-                caption:"",
-                title:$.i18n.prop("notify_header_title"),
-                message:$.i18n.prop("notify_header_success"),
-                content:"",
-                type:"success",
-                position:null,
+                icon: "icon-ok",
+                caption: "",
+                title: $.i18n.prop("notify_header_title"),
+                message: $.i18n.prop("notify_header_success"),
+                content: "",
+                type: "success",
+                position: null,
                 placement: {
                     from: "top",
                     align: "center"
                 },
             };
 
-            $.extend(true,DEFAULT,param);
-            switch (DEFAULT.type){
-                case "success":DEFAULT.icon = "icon-ok";break;
-                case "danger":DEFAULT.icon = "icon-remove" ; break;
-                case "info" : DEFAULT.icon = "icon-bullhorn";break;
-                case "primary": DEFAULT.icon = "icon-bell" ; break;
-                case "warning": DEFAULT.icon = "icon-warning-sign"; break;
+            $.extend(true, DEFAULT, param);
+            switch (DEFAULT.type) {
+                case "success":
+                    DEFAULT.icon = "icon-ok";
+                    break;
+                case "danger":
+                    DEFAULT.icon = "icon-remove";
+                    break;
+                case "info" :
+                    DEFAULT.icon = "icon-bullhorn";
+                    break;
+                case "primary":
+                    DEFAULT.icon = "icon-bell";
+                    break;
+                case "warning":
+                    DEFAULT.icon = "icon-warning-sign";
+                    break;
                 default :
                     DEFAULT.icon = "icon-bullhorn"
             }
@@ -2115,10 +2136,10 @@ var Hutils = {
                 // options
                 icon: DEFAULT.icon,
                 title: DEFAULT.title,
-                message:DEFAULT.message,
+                message: DEFAULT.message,
                 url: '',
                 target: '_blank'
-            },{
+            }, {
                 // settings
                 element: 'body',
                 position: DEFAULT.position,
@@ -2126,7 +2147,7 @@ var Hutils = {
                 allow_dismiss: true,
                 newest_on_top: true,
                 showProgressbar: false,
-                placement:DEFAULT.placement,
+                placement: DEFAULT.placement,
                 offset: 20,
                 spacing: 10,
                 z_index: 2147483647,
@@ -2145,98 +2166,99 @@ var Hutils = {
                 icon_type: 'class',
             });
         },
-        HAjaxRequest:function(a){
+        HAjaxRequest: function (a) {
             var b = {
-                type:"get",
-                url:"",
-                data:"",
-                cache:false,
-                async:false,
-                dataType:"json",
-                error:function(m) {
+                type: "get",
+                url: "",
+                data: "",
+                cache: false,
+                async: false,
+                dataType: "json",
+                error: function (m) {
                     var msg = JSON.parse(m.responseText);
                     jQuery.Notify({
                         title: $.i18n.prop("notify_header_title"),
                         message: msg.error_msg,
                         type: "danger",
                     });
-                    console.log("return message is :",msg);
-                    console.log("return code is :",msg.error_code);
-                    console.log("return details error info:",msg.error_details);
-                    console.log("return version: ",msg.version);
+                    console.log("return message is :", msg);
+                    console.log("return code is :", msg.error_code);
+                    console.log("return details error info:", msg.error_details);
+                    console.log("return version: ", msg.version);
                 },
-                success:function(b){
+                success: function (b) {
                 }
             };
-            $.extend(!0,b,a);
-            "delete"==b.type.toLowerCase()?(
-                b.data._method="DELETE",
+            $.extend(!0, b, a);
+            "delete" == b.type.toLowerCase() ? (
+                b.data._method = "DELETE",
                     $.ajax({
-                        type:"post",
-                        url:b.url,
-                        cache:b.cache,
-                        async:b.async,
-                        data:b.data,
-                        dataType:b.dataType,
-                        error:b.error,
-                        success:function(a){
-                            b.success(a)}
+                        type: "post",
+                        url: b.url,
+                        cache: b.cache,
+                        async: b.async,
+                        data: b.data,
+                        dataType: b.dataType,
+                        error: b.error,
+                        success: function (a) {
+                            b.success(a)
+                        }
                     })
-            ):$.ajax({
-                type:b.type,
-                url:b.url,
-                cache:b.cache,
-                async:b.async,
-                data:b.data,
-                dataType:b.dataType,
-                error:b.error,
-                success: function(da) {
+            ) : $.ajax({
+                type: b.type,
+                url: b.url,
+                cache: b.cache,
+                async: b.async,
+                data: b.data,
+                dataType: b.dataType,
+                error: b.error,
+                success: function (da) {
                     b.success(da)
                 },
             })
         },
-        Hdownload:function (params) {
+        Hdownload: function (params) {
             var __DEFAULT = {
-                url:"",
-                name:"导出数据",
+                url: "",
+                name: "导出数据",
             };
-            $.extend(true,__DEFAULT,params);
+            $.extend(true, __DEFAULT, params);
 
-            if (__DEFAULT.name == "" || __DEFAULT.name==undefined) {
+            if (__DEFAULT.name == "" || __DEFAULT.name == undefined) {
                 __DEFAULT.name = "导出参数信息"
             }
 
-            var expname = __DEFAULT.name+".xlsx";
+            var expname = __DEFAULT.name + ".xlsx";
 
-            var x=new XMLHttpRequest();
-            x.open("GET",__DEFAULT.url, true);
+            var x = new XMLHttpRequest();
+            x.open("GET", __DEFAULT.url, true);
             x.responseType = 'blob';
-            x.onload=function(e){
-                download(x.response, expname, "application/vnd.ms-excel" );
+            x.onload = function (e) {
+                download(x.response, expname, "application/vnd.ms-excel");
             };
             x.send();
         },
-        Hupload:function (param) {
+        Hupload: function (param) {
             var __DEFAULT = {
-                header:"数据导入",
-                height:"360px",
-                url:"",
-                callback:function () {
+                header: "数据导入",
+                height: "360px",
+                url: "",
+                callback: function () {
                 },
             };
 
-            $.extend(true,__DEFAULT,param)
+            $.extend(true, __DEFAULT, param)
 
             var uploader;
             var upload_modual = '<div class="row"><div class="col-sm-12 col-md-12 col-lg-12"><div class="pull-left"><div id="h-upload-select-file-btn">选择文件</div></div></div><div class="col-sm-12 col-md-12 col-lg-12 uploader-list" style="margin-top: 15px;"><table id="h-selected-files-list" class="table table-responsive table-bordered"><thead><tr><th>文件名</th><th>大小</th></tr></thead><tbody></tbody></table></div></div>'
 
             $.Hmodal({
-                header:__DEFAULT.header,
-                body:upload_modual,
-                height:__DEFAULT.height,
-                submitDesc:"上传",
-                cancelDesc:"关闭",
-                preprocess:function () {
+                header: __DEFAULT.header,
+                body: upload_modual,
+                height: __DEFAULT.height,
+                submitDesc: "上传",
+                cancelDesc: "关闭",
+                preprocess: function () {
                     uploader = WebUploader.create({
 
                         // swf文件路径
@@ -2252,59 +2274,59 @@ var Hutils = {
                         // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
                         resize: false
                     });
-                    uploader.on('beforeFileQueued',function () {
+                    uploader.on('beforeFileQueued', function () {
                         uploader.reset();
                     });
-                    uploader.on( 'fileQueued', function( file ) {
+                    uploader.on('fileQueued', function (file) {
 
                         var unit = "KB"
-                        var size = (file.size/1024).toFixed(0)
+                        var size = (file.size / 1024).toFixed(0)
                         if (size > 1024) {
-                            size = (size/1024).toFixed(2)
+                            size = (size / 1024).toFixed(2)
                             if (size > 256) {
                                 $.Notify({
-                                    title:"温馨提示:",
-                                    message:"上传文件大于256M,无法上传",
-                                    type:"danger",
+                                    title: "温馨提示:",
+                                    message: "上传文件大于256M,无法上传",
+                                    type: "danger",
                                 })
                                 uploader.reset();
                                 return
                             }
                             unit = "MB"
                         }
-                        var v = size +" "+ unit
+                        var v = size + " " + unit
 
-                        var optHtml = "<tr><td>"+file.name+"</td><td>"+v+"</td></tr>"
+                        var optHtml = "<tr><td>" + file.name + "</td><td>" + v + "</td></tr>"
 
                         $("#h-selected-files-list").find("tbody").html(optHtml)
 
                     });
 
-                    uploader.on("uploadError",function (file) {
+                    uploader.on("uploadError", function (file) {
                         $.Notify({
-                            title:"温馨提示:",
-                            message:"上传失败,请联系管理员",
-                            type:"info",
+                            title: "温馨提示:",
+                            message: "上传失败,请联系管理员",
+                            type: "info",
                         });
-                        $("#h-hauth-org-upload-progress").css("width","100%");
+                        $("#h-hauth-org-upload-progress").css("width", "100%");
                         $("#h-hauth-org-upload-progress").removeClass("progress-bar-info progress-bar-striped").addClass("progress-bar-danger")
                         $("#h-hauth-org-upload-progress span").html("导入失败")
                     });
 
                 },
-                callback:function () {
-                    uploader.on("uploadSuccess",function (file,response ) {
+                callback: function () {
+                    uploader.on("uploadSuccess", function (file, response) {
                         $.Notify({
-                            title:"温馨提示:",
-                            message:response.data,
-                            type:"success",
+                            title: "温馨提示:",
+                            message: response.data,
+                            type: "success",
                         });
                         $("#h-hauth-org-upload-progress span").html("100%")
-                        $("#h-hauth-org-upload-progress").css("width","100%");
+                        $("#h-hauth-org-upload-progress").css("width", "100%");
 
                         $("#h-hauth-org-upload-progress").removeClass("progress-bar-info progress-bar-striped").addClass("progress-bar-success")
 
-                        if (typeof __DEFAULT.callback == "function"){
+                        if (typeof __DEFAULT.callback == "function") {
                             __DEFAULT.callback()
                         }
                     });
@@ -2313,88 +2335,89 @@ var Hutils = {
                         $("#h-selected-files-list").find("tbody").append('<tr><td colspan="2"><span>上传进度:</span><div class="progress" style="margin-top: 5px;"><div id="h-hauth-org-upload-progress" class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"><span>0%</span></div></div></td></tr>')
                     } else {
                         $.Notify({
-                            title:"温馨提示:",
-                            message:"已经上传完成",
-                            type:"info",
+                            title: "温馨提示:",
+                            message: "已经上传完成",
+                            type: "info",
                         });
                         return
                     }
-                    uploader.on("uploadProgress",function (file, percentage) {
-                        if (percentage==1) {
+                    uploader.on("uploadProgress", function (file, percentage) {
+                        if (percentage == 1) {
                             percentage = 0.99
                         }
-                        var p = percentage*100+"%"
+                        var p = percentage * 100 + "%"
                         $("#h-hauth-org-upload-progress span").html(p)
-                        $("#h-hauth-org-upload-progress").css("width",p);
+                        $("#h-hauth-org-upload-progress").css("width", p);
                     });
                 },
             })
         },
-        Hmodal:function(param){
+        Hmodal: function (param) {
             var __DEFAULT = {
-                callback : "",
+                callback: "",
                 preprocess: "",
-                width:"800px",
-                height:"494px ",
+                width: "800px",
+                height: "494px ",
 
-                header:"弹框信息",
-                headerHeight:"40px",
-                headerFontSize:"14px",
-                headerFontColor:"",
+                header: "弹框信息",
+                headerHeight: "40px",
+                headerFontSize: "14px",
+                headerFontColor: "",
 
-                body:"",
+                body: "",
 
-                footer:"",
+                footer: "",
 
-                footerBtnStatus:true,
+                footerBtnStatus: true,
 
-                submitDesc:"提交",
+                submitDesc: "提交",
 
-                cancelDesc:"取消",
+                cancelDesc: "取消",
             }
-            $.extend(true,__DEFAULT,param)
+            $.extend(true, __DEFAULT, param)
 
             //初始化弹框主体
-            function init(){
-                var mframe='<div class="modal-dialog">'+
-                    '<div class="modal-content h-modal-content" style="width: '+__DEFAULT.width+'; height: '+__DEFAULT.height+';">'+
-                    '<div class="modal-header h-modal-header" style="height: '+__DEFAULT.headerHeight+'; line-height: '+__DEFAULT.headerHeight+'; padding: 0px;">'+
-                    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="height: '+__DEFAULT.headerHeight+'; line-height: '+__DEFAULT.headerHeight+'; width: 30px; padding-top: 2px;">×</button>'+
-                    '<h4 class="modal-title" style="margin-left: 15px;height: '+__DEFAULT.headerFontSize+';color: '+__DEFAULT.headerFontColor+'; line-height: '+__DEFAULT.headerHeight+';font-weight: 600; font-size: '+__DEFAULT.headerFontSize+'">'+__DEFAULT.header+'</h4>'+
-                    '</div>'+
-                    '<div class="modal-body" style="width: '+__DEFAULT.width+'; overflow-y: auto">'+__DEFAULT.body+'</div>'+
-                    '<div class="modal-footer btn-group-sm">'+
-                    '<button type="button" class="btn btn-danger cancel" data-dismiss="modal"><i class="icon-remove"></i>&nbsp;'+__DEFAULT.cancelDesc+'</button>'+
-                    '<button type="button" class="btn btn-primary submit"><i class="icon-ok"></i>&nbsp;'+__DEFAULT.submitDesc+'</button>'+
+            function init() {
+                var mframe = '<div class="modal-dialog">' +
+                    '<div class="modal-content h-modal-content" style="width: ' + __DEFAULT.width + '; height: ' + __DEFAULT.height + ';">' +
+                    '<div class="modal-header h-modal-header" style="height: ' + __DEFAULT.headerHeight + '; line-height: ' + __DEFAULT.headerHeight + '; padding: 0px;">' +
+                    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="height: ' + __DEFAULT.headerHeight + '; line-height: ' + __DEFAULT.headerHeight + '; width: 30px; padding-top: 2px;">×</button>' +
+                    '<h4 class="modal-title" style="margin-left: 15px;height: ' + __DEFAULT.headerFontSize + ';color: ' + __DEFAULT.headerFontColor + '; line-height: ' + __DEFAULT.headerHeight + ';font-weight: 600; font-size: ' + __DEFAULT.headerFontSize + '">' + __DEFAULT.header + '</h4>' +
+                    '</div>' +
+                    '<div class="modal-body" style="width: ' + __DEFAULT.width + '; overflow-y: auto">' + __DEFAULT.body + '</div>' +
+                    '<div class="modal-footer btn-group-sm">' +
+                    '<button type="button" class="btn btn-danger cancel" data-dismiss="modal"><i class="icon-remove"></i>&nbsp;' + __DEFAULT.cancelDesc + '</button>' +
+                    '<button type="button" class="btn btn-primary submit"><i class="icon-ok"></i>&nbsp;' + __DEFAULT.submitDesc + '</button>' +
                     '</div>' +
                     '</div>' +
                     '</div>';
                 return mframe;
             }
+
             //显示弹出框
-            function showModal(mframe){
-                var hmod=document.createElement("div");
+            function showModal(mframe) {
+                var hmod = document.createElement("div");
                 $(hmod).addClass("modal fade").attr({
-                    "tabindex":"-1",
-                    "role":"dialog",
-                    "aria-labelledby":"myModalLabel",
-                    "aria-hidden":"true",
+                    "tabindex": "-1",
+                    "role": "dialog",
+                    "aria-labelledby": "myModalLabel",
+                    "aria-hidden": "true",
                 })
-                hmod.innerHTML=mframe;
+                hmod.innerHTML = mframe;
                 document.body.appendChild(hmod);
-                $(hmod).modal({backdrop:false});
+                $(hmod).modal({backdrop: false});
                 $(hmod).modal("show");
                 return hmod
             }
 
             //根据类获取对象实例
-            function getObj(mod,className,typeObj){
-                if (typeof typeObj == "undefined"){
+            function getObj(mod, className, typeObj) {
+                if (typeof typeObj == "undefined") {
                     typeObj = "div"
                 }
                 var obj = {}
-                $(mod).find(typeObj).each(function(index,element){
-                    if ($(element).hasClass(className)){
+                $(mod).find(typeObj).each(function (index, element) {
+                    if ($(element).hasClass(className)) {
                         obj = element
                     }
                 })
@@ -2402,156 +2425,157 @@ var Hutils = {
             }
 
             //调节body高度和宽度
-            function modifyBodyHeightAndWidth(mod){
-                var headerObj = getObj(mod,"modal-header")
-                var contentObj = getObj(mod,"modal-content")
-                var bodyObj = getObj(hmode,"modal-body")
+            function modifyBodyHeightAndWidth(mod) {
+                var headerObj = getObj(mod, "modal-header")
+                var contentObj = getObj(mod, "modal-content")
+                var bodyObj = getObj(hmode, "modal-body")
                 var headHeight = $(headerObj).height()
                 var contentHeight = $(contentObj).height()
 
-                $(bodyObj).css("height",contentHeight-headHeight-65)
-                $(bodyObj).css("width","-=4")
+                $(bodyObj).css("height", contentHeight - headHeight - 65)
+                $(bodyObj).css("width", "-=4")
             }
 
             //modify location
-            function modifyLocation(mod){
+            function modifyLocation(mod) {
                 var ww = $(window).width()
                 var wh = $(window).height();
-                var mw = $(getObj(mod,"modal-content")).width()
-                var mh = $(getObj(mod,"modal-content")).height()
+                var mw = $(getObj(mod, "modal-content")).width()
+                var mh = $(getObj(mod, "modal-content")).height()
                 //var modifyY = (wh - 2*mh)/2
-                var modifyX = (ww - mw)/2
-                $(getObj(mod,"modal-content")).offset({
-                    left:modifyX
+                var modifyX = (ww - mw) / 2
+                $(getObj(mod, "modal-content")).offset({
+                    left: modifyX
                 })
             }
 
             //
-            var mframe =  init()
+            var mframe = init()
             var hmode = showModal(mframe)
             modifyBodyHeightAndWidth(hmode)
             modifyLocation(hmode)
             //close modal when click close button in right header
-            $(getObj(hmode,"modal-header")).find("button").on("click",function(){
+            $(getObj(hmode, "modal-header")).find("button").on("click", function () {
                 $(hmode).remove();
             })
 
             // init footer
             //
-            if (__DEFAULT.footerBtnStatus){
-                var footer = $(getObj(hmode,"modal-body")).find(".h-modal-footer")
-                if ($(footer).find("button").html()==""){
+            if (__DEFAULT.footerBtnStatus) {
+                var footer = $(getObj(hmode, "modal-body")).find(".h-modal-footer")
+                if ($(footer).find("button").html() == "") {
                     console.log("can not found button in modal body content")
-                    $(getObj(getObj(hmode,"modal-footer"),"submit","button")).on("click",function(){
+                    $(getObj(getObj(hmode, "modal-footer"), "submit", "button")).on("click", function () {
                         console.log("no button found, default submit")
                         $(hmode).remove()
                     })
-                    $(getObj(getObj(hmode,"modal-footer"),"cancel","button")).on("click",function(){
+                    $(getObj(getObj(hmode, "modal-footer"), "cancel", "button")).on("click", function () {
                         console.log("no button found, default cancel")
                         $(hmode).remove()
                     })
-                }else{
-                    $(getObj(hmode,"modal-footer")).html($(footer).html())
+                } else {
+                    $(getObj(hmode, "modal-footer")).html($(footer).html())
                     $(footer).remove()
                     if (__DEFAULT.callback == "") {
-                        $(getObj(getObj(hmode,"modal-footer"),"submit","button")).on("click",function(){
+                        $(getObj(getObj(hmode, "modal-footer"), "submit", "button")).on("click", function () {
                             console.log("no callback found, default submit")
                             $(hmode).remove()
                         })
-                        $(getObj(getObj(hmode,"modal-footer"),"cancel","button")).on("click",function(){
+                        $(getObj(getObj(hmode, "modal-footer"), "cancel", "button")).on("click", function () {
                             console.log("no callback found, default cancel")
                             $(hmode).remove()
                         })
-                    } else if (typeof __DEFAULT.callback == "function"){
-                        $(getObj(getObj(hmode,"modal-footer"),"cancel","button")).on("click",function(){
+                    } else if (typeof __DEFAULT.callback == "function") {
+                        $(getObj(getObj(hmode, "modal-footer"), "cancel", "button")).on("click", function () {
                             console.log("defined callback, cancel")
                             $(hmode).remove()
                         })
-                        $(getObj(getObj(hmode,"modal-footer"),"submit","button")).on("click",function(){
+                        $(getObj(getObj(hmode, "modal-footer"), "submit", "button")).on("click", function () {
                             console.log("defined callback, submit")
                             __DEFAULT.callback(hmode)
                         })
                     }
                 }
-            }else{
-                $(getObj(hmode,"modal-footer")).remove();
-                var h = $(getObj(hmode,"modal-body")).height();
-                $(getObj(hmode,"modal-body")).height(h+57);
+            } else {
+                $(getObj(hmode, "modal-footer")).remove();
+                var h = $(getObj(hmode, "modal-body")).height();
+                $(getObj(hmode, "modal-body")).height(h + 57);
             }
 
 
             // preprocess function
-            if (typeof  __DEFAULT.preprocess == "function"){
+            if (typeof  __DEFAULT.preprocess == "function") {
                 __DEFAULT.preprocess(hmode)
             }
 
 
             // 拖动绑定
-            var d = "getSelection" in window?function(){
+            var d = "getSelection" in window ? function () {
                 window.getSelection().removeAllRanges()
-            }:function(){
+            } : function () {
                 document.selection.empty()
             };
 
-            var f=0,c=0,e=0,b=0,a=0;
-            $(getObj(hmode,"modal-header")).bind("mousemove",function(h){
-                if(a==1){
-                    f=h.pageX-e;
-                    c=h.pageY-b;
-                    if(c<=0){
-                        c=0
+            var f = 0, c = 0, e = 0, b = 0, a = 0;
+            $(getObj(hmode, "modal-header")).bind("mousemove", function (h) {
+                if (a == 1) {
+                    f = h.pageX - e;
+                    c = h.pageY - b;
+                    if (c <= 0) {
+                        c = 0
                     }
-                    $(this).parent().offset({left:f,top:c})
+                    $(this).parent().offset({left: f, top: c})
                 }
-            }).bind("mousedown",function(h){
-                d();
-                e=h.pageX-$(this).parent().offset().left;
-                b=h.pageY-$(this).parent().offset().top;
-                a=1;
-                $(getObj(hmode,"modal-header")).css({"cursor":"move"})}
-            ).bind("mouseup",function(h){
-                $(getObj(hmode,"modal-header")).css({"cursor":"default"});
-                a=0;
-                e=0;
-                b=0
-            }).bind("mouseleave",function(h){
-                a=0;
-                $(getObj(hmode,"modal-header")).css({"cursor":"default"})
+            }).bind("mousedown", function (h) {
+                    d();
+                    e = h.pageX - $(this).parent().offset().left;
+                    b = h.pageY - $(this).parent().offset().top;
+                    a = 1;
+                    $(getObj(hmode, "modal-header")).css({"cursor": "move"})
+                }
+            ).bind("mouseup", function (h) {
+                $(getObj(hmode, "modal-header")).css({"cursor": "default"});
+                a = 0;
+                e = 0;
+                b = 0
+            }).bind("mouseleave", function (h) {
+                a = 0;
+                $(getObj(hmode, "modal-header")).css({"cursor": "default"})
             })
         },
-        Hconfirm:function(param){
+        Hconfirm: function (param) {
             var __DEFAULT = {
-                callback : "",
+                callback: "",
                 preprocess: "",
-                width:"420px",
-                height:"240px ",
+                width: "420px",
+                height: "240px ",
 
-                header:"",
-                headerHeight:"30px",
-                headerColor :"white",
-                headerFontSize:"14px",
-                headerFontColor:"#0c0c0c",
+                header: "",
+                headerHeight: "30px",
+                headerColor: "white",
+                headerFontSize: "14px",
+                headerFontColor: "#0c0c0c",
 
-                body:"",
-                footer:"",
-                iconClass:"icon-3x icon-question-sign",
-                cancelBtn:true,
-                submitBtn:true,
+                body: "",
+                footer: "",
+                iconClass: "icon-3x icon-question-sign",
+                cancelBtn: true,
+                submitBtn: true,
             }
-            $.extend(true,__DEFAULT,param)
+            $.extend(true, __DEFAULT, param)
 
             //初始化弹框主体
-            function init(){
-                var mframe='<div class="modal-dialog">'+
-                    '<div class="modal-content" style="border: '+__DEFAULT.headerColor+' solid 2px; width: '+__DEFAULT.width+'; height: '+__DEFAULT.height+';">'+
-                    '<div class="modal-header h-modal-header" style="border: none !important;background-color: '+__DEFAULT.headerColor+'; height: '+__DEFAULT.headerHeight+'; line-height: '+__DEFAULT.headerHeight+';">'+
-                    '<h4 class="modal-title" style="margin-left: 15px;height: '+__DEFAULT.headerFontSize+';color: '+__DEFAULT.headerFontColor+'; line-height: '+__DEFAULT.headerHeight+';font-weight: 600; font-size: '+__DEFAULT.headerFontSize+'; margin-right: 30px;">'+__DEFAULT.header+'</h4>'+
-                    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="width: 30px;">×</button>'+
-                    '</div>'+
-                    '<div class="modal-body" style="width: '+__DEFAULT.width+'; overflow-y: auto;text-align: center"><i style="color: red;" class="'+__DEFAULT.iconClass+'"></i><br/><span style="font-size: 16px;display: block; font-weight: 600; margin-top: 15px;">'+__DEFAULT.body+'</span></div>'+
-                    '<div class="modal-footer btn-group-sm" style="text-align: center; border: none;">'+
-                    '<button type="button" class="btn btn-danger cancel" style="width: 120px;" data-dismiss="modal"><i class="icon-remove"></i>&nbsp;&nbsp;&nbsp;&nbsp;取消</button>'+
-                    '<button type="button" class="btn btn-primary submit" style="width: 120px;margin-left: 50px;"><i class="icon-ok"></i>&nbsp;&nbsp;&nbsp;&nbsp;确定</button>'+
+            function init() {
+                var mframe = '<div class="modal-dialog">' +
+                    '<div class="modal-content" style="border: ' + __DEFAULT.headerColor + ' solid 2px; width: ' + __DEFAULT.width + '; height: ' + __DEFAULT.height + ';">' +
+                    '<div class="modal-header h-modal-header" style="border: none !important;background-color: ' + __DEFAULT.headerColor + '; height: ' + __DEFAULT.headerHeight + '; line-height: ' + __DEFAULT.headerHeight + ';">' +
+                    '<h4 class="modal-title" style="margin-left: 15px;height: ' + __DEFAULT.headerFontSize + ';color: ' + __DEFAULT.headerFontColor + '; line-height: ' + __DEFAULT.headerHeight + ';font-weight: 600; font-size: ' + __DEFAULT.headerFontSize + '; margin-right: 30px;">' + __DEFAULT.header + '</h4>' +
+                    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="width: 30px;">×</button>' +
+                    '</div>' +
+                    '<div class="modal-body" style="width: ' + __DEFAULT.width + '; overflow-y: auto;text-align: center"><i style="color: red;" class="' + __DEFAULT.iconClass + '"></i><br/><span style="font-size: 16px;display: block; font-weight: 600; margin-top: 15px;">' + __DEFAULT.body + '</span></div>' +
+                    '<div class="modal-footer btn-group-sm" style="text-align: center; border: none;">' +
+                    '<button type="button" class="btn btn-danger cancel" style="width: 120px;" data-dismiss="modal"><i class="icon-remove"></i>&nbsp;&nbsp;&nbsp;&nbsp;取消</button>' +
+                    '<button type="button" class="btn btn-primary submit" style="width: 120px;margin-left: 50px;"><i class="icon-ok"></i>&nbsp;&nbsp;&nbsp;&nbsp;确定</button>' +
                     '</div>' +
                     '</div>' +
                     '</div>';
@@ -2559,29 +2583,29 @@ var Hutils = {
             }
 
             //显示弹出框
-            function showModal(mframe){
-                var hmod=document.createElement("div");
+            function showModal(mframe) {
+                var hmod = document.createElement("div");
                 $(hmod).addClass("modal animated rubberBand").attr({
-                    "tabindex":"-1",
-                    "role":"dialog",
-                    "aria-labelledby":"myModalLabel",
-                    "aria-hidden":"true",
+                    "tabindex": "-1",
+                    "role": "dialog",
+                    "aria-labelledby": "myModalLabel",
+                    "aria-hidden": "true",
                 })
-                hmod.innerHTML=mframe;
+                hmod.innerHTML = mframe;
                 document.body.appendChild(hmod);
-                $(hmod).modal({backdrop:false});
+                $(hmod).modal({backdrop: false});
                 $(hmod).modal("show");
                 return hmod
             }
 
             //根据类获取对象实例
-            function getObj(mod,className,typeObj){
-                if (typeof typeObj == "undefined"){
+            function getObj(mod, className, typeObj) {
+                if (typeof typeObj == "undefined") {
                     typeObj = "div"
                 }
                 var obj = {}
-                $(mod).find(typeObj).each(function(index,element){
-                    if ($(element).hasClass(className)){
+                $(mod).find(typeObj).each(function (index, element) {
+                    if ($(element).hasClass(className)) {
                         obj = element
                     }
                 })
@@ -2589,84 +2613,84 @@ var Hutils = {
             }
 
             //调节body高度和宽度
-            function modifyBodyHeightAndWidth(mod){
-                var headerObj = getObj(mod,"modal-header")
-                var contentObj = getObj(mod,"modal-content")
-                var bodyObj = getObj(hmode,"modal-body")
+            function modifyBodyHeightAndWidth(mod) {
+                var headerObj = getObj(mod, "modal-header")
+                var contentObj = getObj(mod, "modal-content")
+                var bodyObj = getObj(hmode, "modal-body")
                 var headHeight = $(headerObj).height()
                 var contentHeight = $(contentObj).height()
 
-                $(bodyObj).css("height",contentHeight-headHeight-65)
-                $(bodyObj).css("width","-=4")
+                $(bodyObj).css("height", contentHeight - headHeight - 65)
+                $(bodyObj).css("width", "-=4")
             }
 
             //modify location
-            function modifyLocation(mod){
+            function modifyLocation(mod) {
                 var ww = $(window).width()
                 var wh = document.documentElement.clientHeight;
-                var mw = $(getObj(mod,"modal-content")).width()
-                var mh = $(getObj(mod,"modal-content")).height()
-                var modifyY = (wh - 1.5*mh)/2
-                var modifyX = (ww - mw)/2
-                if (modifyY < 0){
+                var mw = $(getObj(mod, "modal-content")).width()
+                var mh = $(getObj(mod, "modal-content")).height()
+                var modifyY = (wh - 1.5 * mh) / 2
+                var modifyX = (ww - mw) / 2
+                if (modifyY < 0) {
                     modifyY = 20
                 }
-                $(getObj(mod,"modal-content")).offset({
-                    left:modifyX,
-                    top:modifyY
+                $(getObj(mod, "modal-content")).offset({
+                    left: modifyX,
+                    top: modifyY
                 })
             }
 
-            function initfooter(mode){
-                if (!__DEFAULT.cancelBtn){
-                    $(getObj(mode,"cancel","button")).remove();
+            function initfooter(mode) {
+                if (!__DEFAULT.cancelBtn) {
+                    $(getObj(mode, "cancel", "button")).remove();
                 }
-                if (!__DEFAULT.submitBtn){
-                    $(getObj(mode,"submit","button")).remove();
+                if (!__DEFAULT.submitBtn) {
+                    $(getObj(mode, "submit", "button")).remove();
                 }
             }
 
             //
-            var mframe =  init()
+            var mframe = init()
             var hmode = showModal(mframe)
             modifyBodyHeightAndWidth(hmode)
             modifyLocation(hmode);
 
             //close modal when click close button in right header
-            $(getObj(hmode,"modal-header")).find("button").on("click",function(){
+            $(getObj(hmode, "modal-header")).find("button").on("click", function () {
                 $(hmode).remove();
             })
 
             // init footer
-            var footer = $(getObj(hmode,"modal-body")).find(".h-modal-footer")
-            if ($(footer).find("button").html()==""){
+            var footer = $(getObj(hmode, "modal-body")).find(".h-modal-footer")
+            if ($(footer).find("button").html() == "") {
                 console.log("can not found button in modal body content")
-                $(getObj(getObj(hmode,"modal-footer"),"submit","button")).on("click",function(){
+                $(getObj(getObj(hmode, "modal-footer"), "submit", "button")).on("click", function () {
                     console.log("no button found, default submit")
                     $(hmode).remove()
                 })
-                $(getObj(getObj(hmode,"modal-footer"),"cancel","button")).on("click",function(){
+                $(getObj(getObj(hmode, "modal-footer"), "cancel", "button")).on("click", function () {
                     console.log("no button found, default cancel")
                     $(hmode).remove()
                 })
-            }else{
-                $(getObj(hmode,"modal-footer")).html($(footer).html())
+            } else {
+                $(getObj(hmode, "modal-footer")).html($(footer).html())
                 $(footer).remove()
-                if (__DEFAULT.callback == ""){
-                    $(getObj(getObj(hmode,"modal-footer"),"submit","button")).on("click",function(){
+                if (__DEFAULT.callback == "") {
+                    $(getObj(getObj(hmode, "modal-footer"), "submit", "button")).on("click", function () {
                         console.log("no callback found, default submit")
                         $(hmode).remove()
                     })
-                    $(getObj(getObj(hmode,"modal-footer"),"cancel","button")).on("click",function(){
+                    $(getObj(getObj(hmode, "modal-footer"), "cancel", "button")).on("click", function () {
                         console.log("no callback found, default cancel")
                         $(hmode).remove()
                     })
-                }else if (typeof __DEFAULT.callback == "function"){
-                    $(getObj(getObj(hmode,"modal-footer"),"cancel","button")).on("click",function(){
+                } else if (typeof __DEFAULT.callback == "function") {
+                    $(getObj(getObj(hmode, "modal-footer"), "cancel", "button")).on("click", function () {
                         console.log("defined callback, cancel")
                         $(hmode).remove()
                     })
-                    $(getObj(getObj(hmode,"modal-footer"),"submit","button")).on("click",function(){
+                    $(getObj(getObj(hmode, "modal-footer"), "submit", "button")).on("click", function () {
                         console.log("defined callback, submit")
                         __DEFAULT.callback()
                         $(hmode).remove()
@@ -2675,82 +2699,83 @@ var Hutils = {
             }
             initfooter(hmode)
             // preprocess function
-            if (typeof  __DEFAULT.preprocess == "function"){
+            if (typeof  __DEFAULT.preprocess == "function") {
                 __DEFAULT.preprocess()
             }
             // 拖动绑定
-            var d = "getSelection" in window?function(){
+            var d = "getSelection" in window ? function () {
                 window.getSelection().removeAllRanges()
-            }:function(){
+            } : function () {
                 document.selection.empty()
             };
 
-            var f=0,c=0,e=0,b=0,a=0;
-            $(getObj(hmode,"modal-header")).bind("mousemove",function(h){
-                if(a==1){
-                    f=h.pageX-e;
-                    c=h.pageY-b;
-                    if(c<=0){
-                        c=0
+            var f = 0, c = 0, e = 0, b = 0, a = 0;
+            $(getObj(hmode, "modal-header")).bind("mousemove", function (h) {
+                if (a == 1) {
+                    f = h.pageX - e;
+                    c = h.pageY - b;
+                    if (c <= 0) {
+                        c = 0
                     }
-                    $(this).parent().offset({left:f,top:c})
+                    $(this).parent().offset({left: f, top: c})
                 }
-            }).bind("mousedown",function(h){
-                d();
-                e=h.pageX-$(this).parent().offset().left;
-                b=h.pageY-$(this).parent().offset().top;
-                a=1;
-                $(getObj(hmode,"modal-header")).css({"cursor":"move"})}
-            ).bind("mouseup",function(h){
-                $(getObj(hmode,"modal-header")).css({"cursor":"default"});
-                a=0;
-                e=0;
-                b=0
-            }).bind("mouseleave",function(h){
-                a=0;
-                $(getObj(hmode,"modal-header")).css({"cursor":"default"})
+            }).bind("mousedown", function (h) {
+                    d();
+                    e = h.pageX - $(this).parent().offset().left;
+                    b = h.pageY - $(this).parent().offset().top;
+                    a = 1;
+                    $(getObj(hmode, "modal-header")).css({"cursor": "move"})
+                }
+            ).bind("mouseup", function (h) {
+                $(getObj(hmode, "modal-header")).css({"cursor": "default"});
+                a = 0;
+                e = 0;
+                b = 0
+            }).bind("mouseleave", function (h) {
+                a = 0;
+                $(getObj(hmode, "modal-header")).css({"cursor": "default"})
             })
         },
-        Hworkflow:function (param) {
+        Hworkflow: function (param) {
             var __DEFAULT = {
-                callback : "",
+                callback: "",
                 preprocess: "",
-                width:"800px",
-                height:"494px ",
+                width: "800px",
+                height: "494px ",
 
-                header:"弹框信息",
-                headerHeight:"40px",
-                headerFontSize:"14px",
-                headerFontColor:"",
+                header: "弹框信息",
+                headerHeight: "40px",
+                headerFontSize: "14px",
+                headerFontColor: "",
 
-                submitDesc:"提交",
-                body:"",
+                submitDesc: "提交",
+                body: "",
 
                 footer: "",
             };
 
-            $.extend(true,__DEFAULT,param);
-            if (__DEFAULT.footer=="" || __DEFAULT.footer == undefined) {
+            $.extend(true, __DEFAULT, param);
+            if (__DEFAULT.footer == "" || __DEFAULT.footer == undefined) {
                 $(__DEFAULT.body).find(".hzwy23-page").each(function (index, element) {
                     index = index + 1
                     if (index > 1) {
-                        __DEFAULT.footer += "&nbsp;&nbsp;--&nbsp;<button class='btn btn-info' style='border-radius: 15px;'>"+index+"</button>"
+                        __DEFAULT.footer += "&nbsp;&nbsp;--&nbsp;<button class='btn btn-info' style='border-radius: 15px;'>" + index + "</button>"
                     } else {
-                        __DEFAULT.footer += "<button class='btn btn-info' style='border-radius: 15px;'>"+index+"</button>"
+                        __DEFAULT.footer += "<button class='btn btn-info' style='border-radius: 15px;'>" + index + "</button>"
                     }
                 });
             }
             //初始化弹框主体
-            function init(){
-                var mframe='<div class="modal-dialog">'+
-                    '<div class="modal-content h-modal-content" style="width: '+__DEFAULT.width+'; height: '+__DEFAULT.height+';">'+
-                    '<div class="modal-header h-modal-header" style="height: '+__DEFAULT.headerHeight+'; line-height: '+__DEFAULT.headerHeight+'; padding: 0px;">'+
-                    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="height: '+__DEFAULT.headerHeight+'; line-height: '+__DEFAULT.headerHeight+'; width: 30px; padding-top: 2px;">×</button>'+
-                    '<h4 class="modal-title" style="margin-left: 15px;height: '+__DEFAULT.headerFontSize+';color: '+__DEFAULT.headerFontColor+'; line-height: '+__DEFAULT.headerHeight+';font-weight: 600; font-size: '+__DEFAULT.headerFontSize+'">'+__DEFAULT.header+'</h4>'+
-                    '</div>'+
-                    '<div class="modal-body" style="width: '+__DEFAULT.width+'; overflow-y: auto">'+__DEFAULT.body+'</div>'+
-                    '<div class="modal-footer btn-group-sm" style="text-align: center;">'+__DEFAULT.footer+
-                    '<button type="button" class="btn btn-primary submit pull-right"><i class="icon-ok"></i>&nbsp;'+__DEFAULT.submitDesc+'</button>'+
+            function init() {
+                var mframe = '<div class="modal-dialog">' +
+                    '<div class="modal-content h-modal-content" style="width: ' + __DEFAULT.width + '; height: ' + __DEFAULT.height + ';">' +
+                    '<div class="modal-header h-modal-header" style="height: ' + __DEFAULT.headerHeight + '; line-height: ' + __DEFAULT.headerHeight + '; padding: 0px;">' +
+                    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="height: ' + __DEFAULT.headerHeight + '; line-height: ' + __DEFAULT.headerHeight + '; width: 30px; padding-top: 2px;">×</button>' +
+                    '<h4 class="modal-title" style="margin-left: 15px;height: ' + __DEFAULT.headerFontSize + ';color: ' + __DEFAULT.headerFontColor + '; line-height: ' + __DEFAULT.headerHeight + ';font-weight: 600; font-size: ' + __DEFAULT.headerFontSize + '">' + __DEFAULT.header + '</h4>' +
+                    '</div>' +
+                    '<div class="modal-body" style="width: ' + __DEFAULT.width + '; overflow-y: auto">' + __DEFAULT.body + '</div>' +
+                    '<div class="modal-footer btn-group-sm" style="text-align: center;">' + __DEFAULT.footer +
+                    '<button type="button" class="btn btn-primary submit pull-right"><i class="icon-ok"></i>&nbsp;' + __DEFAULT.submitDesc + '</button>' +
                     '</div>' +
                     '</div>' +
                     '</div>';
@@ -2758,29 +2783,29 @@ var Hutils = {
             };
 
             //显示弹出框
-            function showModal(mframe){
-                var hmod=document.createElement("div");
+            function showModal(mframe) {
+                var hmod = document.createElement("div");
                 $(hmod).addClass("modal fade").attr({
-                    "tabindex":"-1",
-                    "role":"dialog",
-                    "aria-labelledby":"myModalLabel",
-                    "aria-hidden":"true",
+                    "tabindex": "-1",
+                    "role": "dialog",
+                    "aria-labelledby": "myModalLabel",
+                    "aria-hidden": "true",
                 })
-                hmod.innerHTML=mframe;
+                hmod.innerHTML = mframe;
                 document.body.appendChild(hmod);
-                $(hmod).modal({backdrop:false});
+                $(hmod).modal({backdrop: false});
                 $(hmod).modal("show");
                 return hmod
             };
 
             //根据类获取对象实例
-            function getObj(mod,className,typeObj){
-                if (typeof typeObj == "undefined"){
+            function getObj(mod, className, typeObj) {
+                if (typeof typeObj == "undefined") {
                     typeObj = "div"
                 }
                 var obj = {}
-                $(mod).find(typeObj).each(function(index,element){
-                    if ($(element).hasClass(className)){
+                $(mod).find(typeObj).each(function (index, element) {
+                    if ($(element).hasClass(className)) {
                         obj = element
                     }
                 })
@@ -2788,50 +2813,50 @@ var Hutils = {
             };
 
             //调节body高度和宽度
-            function modifyBodyHeightAndWidth(mod){
-                var headerObj = getObj(mod,"modal-header")
-                var contentObj = getObj(mod,"modal-content")
-                var bodyObj = getObj(hmode,"modal-body")
+            function modifyBodyHeightAndWidth(mod) {
+                var headerObj = getObj(mod, "modal-header")
+                var contentObj = getObj(mod, "modal-content")
+                var bodyObj = getObj(hmode, "modal-body")
                 var headHeight = $(headerObj).height()
                 var contentHeight = $(contentObj).height()
 
-                $(bodyObj).css("height",contentHeight-headHeight-65)
-                $(bodyObj).css("width","-=4")
+                $(bodyObj).css("height", contentHeight - headHeight - 65)
+                $(bodyObj).css("width", "-=4")
             };
 
             //modify location
-            function modifyLocation(mod){
+            function modifyLocation(mod) {
                 var ww = $(window).width()
                 var wh = $(window).height();
-                var mw = $(getObj(mod,"modal-content")).width()
-                var mh = $(getObj(mod,"modal-content")).height()
+                var mw = $(getObj(mod, "modal-content")).width()
+                var mh = $(getObj(mod, "modal-content")).height()
                 //var modifyY = (wh - 2*mh)/2
-                var modifyX = (ww - mw)/2
-                $(getObj(mod,"modal-content")).offset({
-                    left:modifyX
+                var modifyX = (ww - mw) / 2
+                $(getObj(mod, "modal-content")).offset({
+                    left: modifyX
                 })
             };
 
             //
-            var mframe =  init();
+            var mframe = init();
             var hmode = showModal(mframe);
             modifyBodyHeightAndWidth(hmode);
             modifyLocation(hmode);
             //close modal when click close button in right header
-            $(getObj(hmode,"modal-header")).find("button").on("click",function(){
+            $(getObj(hmode, "modal-header")).find("button").on("click", function () {
                 $(hmode).remove();
             });
 
 
             // preprocess function
-            if (typeof  __DEFAULT.preprocess == "function"){
+            if (typeof  __DEFAULT.preprocess == "function") {
                 __DEFAULT.preprocess(hmode)
             }
 
-            $(getObj(hmode,"modal-footer")).find("button").on("click",function(){
+            $(getObj(hmode, "modal-footer")).find("button").on("click", function () {
                 if (!$(this).hasClass("submit")) {
                     var text = $(this).html();
-                    $(getObj(hmode,"modal-body")).find(".hzwy23-page").each(function (index, element) {
+                    $(getObj(hmode, "modal-body")).find(".hzwy23-page").each(function (index, element) {
                         var index = index + 1;
                         if (index == text) {
                             $(element).show();
@@ -2840,43 +2865,44 @@ var Hutils = {
                         }
                     });
                 } else {
-                    __DEFAULT.callback(hmode );
+                    __DEFAULT.callback(hmode);
                 }
             });
 
 
             // 移除文本选中状态
-            var d = "getSelection" in window?function(){
+            var d = "getSelection" in window ? function () {
                 window.getSelection().removeAllRanges()
-            }:function(){
+            } : function () {
                 document.selection.empty()
             };
 
             // 绑定拖动效果
-            var f=0,c=0,e=0,b=0,a=0;
-            $(getObj(hmode,"modal-header")).bind("mousemove",function(h){
-                if(a==1){
-                    f=h.pageX-e;
-                    c=h.pageY-b;
-                    if(c<=0){
-                        c=0
+            var f = 0, c = 0, e = 0, b = 0, a = 0;
+            $(getObj(hmode, "modal-header")).bind("mousemove", function (h) {
+                if (a == 1) {
+                    f = h.pageX - e;
+                    c = h.pageY - b;
+                    if (c <= 0) {
+                        c = 0
                     }
-                    $(this).parent().offset({left:f,top:c})
+                    $(this).parent().offset({left: f, top: c})
                 }
-            }).bind("mousedown",function(h){
-                d();
-                e=h.pageX-$(this).parent().offset().left;
-                b=h.pageY-$(this).parent().offset().top;
-                a=1;
-                $(getObj(hmode,"modal-header")).css({"cursor":"move"})}
-            ).bind("mouseup",function(h){
-                $(getObj(hmode,"modal-header")).css({"cursor":"default"});
-                a=0;
-                e=0;
-                b=0
-            }).bind("mouseleave",function(h){
-                a=0;
-                $(getObj(hmode,"modal-header")).css({"cursor":"default"})
+            }).bind("mousedown", function (h) {
+                    d();
+                    e = h.pageX - $(this).parent().offset().left;
+                    b = h.pageY - $(this).parent().offset().top;
+                    a = 1;
+                    $(getObj(hmode, "modal-header")).css({"cursor": "move"})
+                }
+            ).bind("mouseup", function (h) {
+                $(getObj(hmode, "modal-header")).css({"cursor": "default"});
+                a = 0;
+                e = 0;
+                b = 0
+            }).bind("mouseleave", function (h) {
+                a = 0;
+                $(getObj(hmode, "modal-header")).css({"cursor": "default"})
             })
         }
     })

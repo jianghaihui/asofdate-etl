@@ -19,7 +19,7 @@ import java.util.Set;
  * Created by hzwy23 on 2017/6/1.
  */
 @Repository
-public class DomainShareDaoImpl implements DomainShareDao{
+public class DomainShareDaoImpl implements DomainShareDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -30,7 +30,7 @@ public class DomainShareDaoImpl implements DomainShareDao{
     @Override
     public List<DomainShareModel> findAuth(String targetDomainID) {
         RowMapper<DomainShareModel> rowMapper = new BeanPropertyRowMapper<>(DomainShareModel.class);
-        List<DomainShareModel> list = jdbcTemplate.query(SqlDefine.sys_rdbms_116,rowMapper,targetDomainID);
+        List<DomainShareModel> list = jdbcTemplate.query(SqlDefine.sys_rdbms_116, rowMapper, targetDomainID);
         return list;
     }
 
@@ -39,11 +39,11 @@ public class DomainShareDaoImpl implements DomainShareDao{
         List<DomainModel> list = domainDao.findAll();
         List<DomainShareModel> dslist = findShareTo(domainId);
         Set<String> set = new HashSet<>();
-        for (DomainShareModel m: dslist){
+        for (DomainShareModel m : dslist) {
             set.add(m.getTarget_domain_id());
         }
-        for (int i = 0; i < list.size();i++){
-            if (set.contains(list.get(i).getDomain_id())){
+        for (int i = 0; i < list.size(); i++) {
+            if (set.contains(list.get(i).getDomain_id())) {
                 list.remove(i);
                 i--;
             }
@@ -54,18 +54,18 @@ public class DomainShareDaoImpl implements DomainShareDao{
     @Override
     public List<DomainShareModel> findShareTo(String domainId) {
         RowMapper<DomainShareModel> rowMapper = new BeanPropertyRowMapper<>(DomainShareModel.class);
-        List<DomainShareModel> list = jdbcTemplate.query(SqlDefine.sys_rdbms_117,rowMapper,domainId);
+        List<DomainShareModel> list = jdbcTemplate.query(SqlDefine.sys_rdbms_117, rowMapper, domainId);
         return list;
     }
 
     @Override
     public Set<String> findAll(String targetDomainId) {
         RowMapper<DomainShareModel> rowMapper = new BeanPropertyRowMapper<>(DomainShareModel.class);
-        List<DomainShareModel> list = jdbcTemplate.query(SqlDefine.sys_rdbms_116,rowMapper,targetDomainId);
+        List<DomainShareModel> list = jdbcTemplate.query(SqlDefine.sys_rdbms_116, rowMapper, targetDomainId);
 
         Set<String> set = new HashSet<>();
         set.add(targetDomainId);
-        for (DomainShareModel m: list){
+        for (DomainShareModel m : list) {
             set.add(m.getDomain_id());
         }
         return set;

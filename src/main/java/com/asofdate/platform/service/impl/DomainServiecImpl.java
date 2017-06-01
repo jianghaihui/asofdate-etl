@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -27,15 +26,15 @@ public class DomainServiecImpl implements DomainService {
     public JSONObject findAll(String domainId) {
         List<DomainModel> list = domainDao.findAll();
         Set<String> set = domainShareDao.findAll(domainId);
-        for(int i=0; i < list.size(); i++){
-            if (!set.contains(list.get(i).getDomain_id())){
+        for (int i = 0; i < list.size(); i++) {
+            if (!set.contains(list.get(i).getDomain_id())) {
                 list.remove(i);
                 i--;
             }
         }
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("domain_id",domainId);
-        jsonObject.put("owner_list",list);
+        jsonObject.put("domain_id", domainId);
+        jsonObject.put("owner_list", list);
         return jsonObject;
     }
 }

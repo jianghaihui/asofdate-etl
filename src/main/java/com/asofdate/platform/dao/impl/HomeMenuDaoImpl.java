@@ -78,7 +78,7 @@ public class HomeMenuDaoImpl implements HomeMenuDao {
 
         List<HomeMenuModel> rst = new ArrayList<HomeMenuModel>();
         for (ThemeResourceModel m : list) {
-            if (!set.contains(m.getRes_id())){
+            if (!set.contains(m.getRes_id())) {
                 continue;
             }
             if (resourceMap.containsKey(m.getRes_id())) {

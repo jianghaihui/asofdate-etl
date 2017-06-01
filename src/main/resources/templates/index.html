@@ -1,12 +1,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>大数据应用分析平台</title>
-    <link rel="stylesheet" href="/bootstrap-3.3.7-dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/Font-Awesome-3.2.1/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="/css/animate.css" />
-    <link rel="stylesheet" href="/theme/default/index.css" />
-    <link rel="stylesheet" href="/nprogress/nprogress.css" />
+    <link rel="stylesheet" href="/bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/Font-Awesome-3.2.1/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/css/animate.css"/>
+    <link rel="stylesheet" href="/theme/default/index.css"/>
+    <link rel="stylesheet" href="/nprogress/nprogress.css"/>
     <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
     <script src="/js/jquery-3.1.1.min.js"></script>
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
@@ -43,16 +43,16 @@
     NProgress.start();
     $(document).ready(function () {
         $.i18n.properties({
-            name:'Messages',
-            path:'/jquery-i18n-properties/bundle/',
-            mode:'both',
-            language :(navigator.language || navigator.browserLanguage).toLowerCase(),
+            name: 'Messages',
+            path: '/jquery-i18n-properties/bundle/',
+            mode: 'both',
+            language: (navigator.language || navigator.browserLanguage).toLowerCase(),
             async: true,
         });
         var $body = $(".container-fluid");
         $body.height(document.documentElement.clientHeight);
-        var margin_top = (document.documentElement.clientHeight - 370)/2;
-        var margin_left = (document.documentElement.clientWidth - 985)/2;
+        var margin_top = (document.documentElement.clientHeight - 370) / 2;
+        var margin_left = (document.documentElement.clientWidth - 985) / 2;
         var lf = document.getElementById("h-login-login-form");
         if (margin_top < 0) {
             margin_top = 0;
@@ -68,16 +68,16 @@
         $("#h-login-login-input").find("input[name='password']").val("");
     };
 
-    $(document).keydown(function(e){
-        if (e.keyCode == '13'){
-            setTimeout(LoginSubmit,200)
+    $(document).keydown(function (e) {
+        if (e.keyCode == '13') {
+            setTimeout(LoginSubmit, 200)
         }
     });
 
     window.onresize = function () {
         $(".container-fluid").height(document.documentElement.clientHeight);
-        var margin_top = (document.documentElement.clientHeight - 369)/2;
-        var margin_left = (document.documentElement.clientWidth - 980)/2;
+        var margin_top = (document.documentElement.clientHeight - 369) / 2;
+        var margin_left = (document.documentElement.clientWidth - 980) / 2;
         var lf = document.getElementById("h-login-login-form");
         if (margin_top < 0) {
             margin_top = 0;
@@ -86,67 +86,67 @@
         lf.style.marginLeft = margin_left;
     };
 
-    function LoginSubmit(obj){
+    function LoginSubmit(obj) {
         var user = $("#h-login-login-input").find("input[name='username']").val();
         var psd = $("#h-login-login-input").find("input[name='password']").val();
         $.HAjaxRequest({
-            url:"/login",
-            type:"post",
-            data:{username:user,password:psd},
-            dataType:'json',
-            success:function(data){
+            url: "/login",
+            type: "post",
+            data: {username: user, password: psd},
+            dataType: 'json',
+            success: function (data) {
                 if (data.status == "0") {
-                    window.location.href="/HomePage";
+                    window.location.href = "/HomePage";
                 } else {
                     $.Notify({
-                        message:data.message,
-                        type:"warning",
+                        message: data.message,
+                        type: "warning",
                     })
                 }
             },
-            error:function(msg){
+            error: function (msg) {
                 var imsg = JSON.parse(msg.responseText);
-                if (imsg.error_code == 401){
+                if (imsg.error_code == 401) {
                     $.Notify({
-                        title:"温馨提示",
-                        message:"用户名不存在,请检查您的账号是否输入错误",
-                        type:"warning",
-                        placement:{from:"bottom",align:"right"},
+                        title: "温馨提示",
+                        message: "用户名不存在,请检查您的账号是否输入错误",
+                        type: "warning",
+                        placement: {from: "bottom", align: "right"},
                     })
-                } else if (imsg.error_code==402){
+                } else if (imsg.error_code == 402) {
                     $.Notify({
-                        title:"温馨提示",
-                        message:"用户名不存在,系统中无法获取用户密码信息",
-                        type:"warning",
-                        placement:{from:"bottom",align:"right"},
+                        title: "温馨提示",
+                        message: "用户名不存在,系统中无法获取用户密码信息",
+                        type: "warning",
+                        placement: {from: "bottom", align: "right"},
                     })
-                } else if (imsg.error_code==403){
+                } else if (imsg.error_code == 403) {
                     $.Notify({
-                        title:"温馨提示",
-                        message:"已经连续6次输错密码,用户已被锁定,请联系管理员",
-                        type:"warning",
-                        placement:{from:"bottom",align:"right"},
+                        title: "温馨提示",
+                        message: "已经连续6次输错密码,用户已被锁定,请联系管理员",
+                        type: "warning",
+                        placement: {from: "bottom", align: "right"},
                     })
-                } else if (imsg.error_code==404){
+                } else if (imsg.error_code == 404) {
                     $.Notify({
-                        title:"温馨提示",
-                        message:"已经连续6次输错密码,用户已被锁定,请联系管理员",
-                        type:"warning",
-                        placement:{from:"bottom",align:"right"},
+                        title: "温馨提示",
+                        message: "已经连续6次输错密码,用户已被锁定,请联系管理员",
+                        type: "warning",
+                        placement: {from: "bottom", align: "right"},
                     })
-                }  else if (imsg.error_code==405){
+                } else if (imsg.error_code == 405) {
                     $.Notify({
-                        title:"温馨提示",
-                        message:"用户密码输入错误,如忘记密码,请联系管理员",
-                        type:"warning",
-                        placement:{from:"bottom",align:"right"},
+                        title: "温馨提示",
+                        message: "用户密码输入错误,如忘记密码,请联系管理员",
+                        type: "warning",
+                        placement: {from: "bottom", align: "right"},
                     })
-                } else if (imsg.error_code==406){
+                } else if (imsg.error_code == 406) {
                     $.Notify({
-                        title:"温馨提示",
-                        message:"用户已被锁定,请联系管理员",
-                        type:"warning",
-                        placement:{from:"bottom",align:"right"},
+                        title: "温馨提示",
+                        message: "用户已被锁定,请联系管理员",
+                        type: "warning",
+                        placement: {from: "bottom", align: "right"},
                     })
                 }
             }

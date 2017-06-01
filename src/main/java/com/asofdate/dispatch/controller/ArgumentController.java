@@ -35,48 +35,48 @@ public class ArgumentController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public String post(HttpServletRequest request){
+    public String post(HttpServletRequest request) {
 
         ArgumentDefineModel argumentDefineModel = parse(request);
-        if (1==argumentService.add(argumentDefineModel)){
-            return Hret.success(200,"success", JSONObject.NULL);
-        }else {
-            return Hret.error(500,"插入参数信息失败",JSONObject.NULL);
+        if (1 == argumentService.add(argumentDefineModel)) {
+            return Hret.success(200, "success", JSONObject.NULL);
+        } else {
+            return Hret.error(500, "插入参数信息失败", JSONObject.NULL);
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST,value = "/delete")
+    @RequestMapping(method = RequestMethod.POST, value = "/delete")
     @ResponseBody
-    public String delete(HttpServletRequest request){
+    public String delete(HttpServletRequest request) {
 
         List<ArgumentDefineModel> args = new ArrayList<>();
         JSONArray jsonArray = new JSONArray(request.getParameter("JSON"));
-        for (int i = 0; i< jsonArray.length();i++){
-            JSONObject jsonObject = (JSONObject)jsonArray.get(i);
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
             ArgumentDefineModel argumentDefineModel = new ArgumentDefineModel();
             argumentDefineModel.setArg_id(jsonObject.getString("arg_id"));
             argumentDefineModel.setDomain_id(jsonObject.getString("domain_id"));
             args.add(argumentDefineModel);
         }
 
-        if ("success".equals(argumentService.delete(args))){
-            return Hret.success(200,"success",JSONObject.NULL);
+        if ("success".equals(argumentService.delete(args))) {
+            return Hret.success(200, "success", JSONObject.NULL);
         }
-        return Hret.error(500,"删除参数失败,参数已经被引用,请先删除引用后,再来删除参数定义信息",JSONObject.NULL);
+        return Hret.error(500, "删除参数失败,参数已经被引用,请先删除引用后,再来删除参数定义信息", JSONObject.NULL);
     }
 
     @RequestMapping(method = RequestMethod.PUT)
     @ResponseBody
-    public String put(HttpServletRequest request){
+    public String put(HttpServletRequest request) {
         ArgumentDefineModel argumentDefineModel = parse(request);
-        if (1==argumentService.update(argumentDefineModel)){
-            return Hret.success(200,"success", JSONObject.NULL);
-        }else {
-            return Hret.error(500,"更新参数信息失败",JSONObject.NULL);
+        if (1 == argumentService.update(argumentDefineModel)) {
+            return Hret.success(200, "success", JSONObject.NULL);
+        } else {
+            return Hret.error(500, "更新参数信息失败", JSONObject.NULL);
         }
     }
 
-    private ArgumentDefineModel parse(HttpServletRequest request){
+    private ArgumentDefineModel parse(HttpServletRequest request) {
         ArgumentDefineModel argumentDefineModel = new ArgumentDefineModel();
         argumentDefineModel.setArg_id(request.getParameter("arg_id"));
         argumentDefineModel.setArg_value(request.getParameter("arg_value"));

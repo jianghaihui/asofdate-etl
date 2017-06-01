@@ -117,10 +117,10 @@
 
         // Place holder replacement
         /**
-        * Tested with:
-        *   test.t1=asdf ''{0}''
-        *   test.t2=asdf '{0}' '{1}'{1}'zxcv
-        *   test.t3=This is \"a quote" 'a''{0}''s'd{fgh{ij'
+         * Tested with:
+         *   test.t1=asdf ''{0}''
+         *   test.t2=asdf '{0}' '{1}'{1}'zxcv
+         *   test.t3=This is \"a quote" 'a''{0}''s'd{fgh{ij'
         *   test.t4="'''{'0}''" {0}{a}
         *   test.t5="'''{0}'''" {1}
         *   test.t6=a {1} b {0} c
@@ -270,12 +270,12 @@
 
     function loadAndParseFiles(filenames, settings) {
 
-	    if (filenames !== null && filenames.length > 0) {
-		    loadAndParseFile(filenames[0], settings, function () {
-			    filenames.shift();
-			    loadAndParseFiles(filenames,settings);
-		    });
-	    } else {
+        if (filenames !== null && filenames.length > 0) {
+            loadAndParseFile(filenames[0], settings, function () {
+                filenames.shift();
+                loadAndParseFiles(filenames, settings);
+            });
+        } else {
             callbackIfComplete(settings);
         }
     }
@@ -289,7 +289,7 @@
             console.log('filesLoaded: ' + settings.filesLoaded);
         }
 
-  	    if (filename !== null && typeof filename !== 'undefined') {
+        if (filename !== null && typeof filename !== 'undefined') {
             $.ajax({
                 url: filename,
                 async: settings.async,
@@ -427,11 +427,11 @@
 
         if (!lang || lang.length < 2) {
             lang = (navigator.languages) ? navigator.languages[0]
-                                        : (navigator.language || navigator.userLanguage /* IE */ || 'en');
+                : (navigator.language || navigator.userLanguage /* IE */ || 'en');
         }
 
         lang = lang.toLowerCase();
-        lang = lang.replace(/-/,"_"); // some browsers report language as en-US instead of en_US
+        lang = lang.replace(/-/, "_"); // some browsers report language as en-US instead of en_US
         if (lang.length > 3) {
             lang = lang.substring(0, 3) + lang.substring(3).toUpperCase();
         }
@@ -448,6 +448,8 @@
             codes.push(code);
         }
         // convert codes to text
-        return codes.reduce(function (acc, val) { return acc + String.fromCharCode(val); }, '');
+        return codes.reduce(function (acc, val) {
+            return acc + String.fromCharCode(val);
+        }, '');
     }
-}) (jQuery);
+})(jQuery);

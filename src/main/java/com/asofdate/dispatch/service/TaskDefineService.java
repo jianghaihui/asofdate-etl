@@ -9,6 +9,9 @@ import java.util.List;
  */
 public interface TaskDefineService {
     List<TaskDefineModel> findAll(String domainId, String batchId);
-
     List<TaskDefineModel> getAll(String domainId);
+
+    int add(TaskDefineModel m);
+    String delete(List<TaskDefineModel> m);
+    int update(TaskDefineModel m);
 }

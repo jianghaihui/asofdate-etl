@@ -49,4 +49,19 @@ public class TaskDefineServiceImpl implements TaskDefineService {
     public List<TaskDefineModel> getAll(String domainId) {
         return dispatchTaskDefineDao.findAll(domainId);
     }
+
+    @Override
+    public int add(TaskDefineModel m) {
+        return dispatchTaskDefineDao.add(m);
+    }
+
+    @Override
+    public String delete(List<TaskDefineModel> m) {
+        return dispatchTaskDefineDao.delete(m);
+    }
+
+    @Override
+    public int update(TaskDefineModel m) {
+        return dispatchTaskDefineDao.update(m);
+    }
 }

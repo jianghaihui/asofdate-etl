@@ -25,4 +25,37 @@ public class TaskDefineDaoImpl implements TaskDefineDao {
         List<TaskDefineModel> list = jdbcTemplate.query(SqlDefine.sys_rdbms_111, rowMapper, domainId);
         return list;
     }
+
+    @Override
+    public int add(TaskDefineModel m) {
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_125,
+                m.getTaskId(),
+                m.getCodeNumber(),
+                m.getTaskDesc(),
+                m.getTaskType(),
+                m.getCreateUser(),
+                m.getModifyUser(),
+                m.getDomainId(),
+                m.getScriptFile());
+    }
+
+    @Override
+    public String delete(List<TaskDefineModel> m) {
+        for (TaskDefineModel l :m){
+            if (1 != jdbcTemplate.update(SqlDefine.sys_rdbms_127,l.getTaskId(),l.getDomainId())){
+                return "删除["+l.getCodeNumber() + "]失败";
+            }
+        }
+        return "success";
+    }
+
+    @Override
+    public int update(TaskDefineModel m) {
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_126,
+                m.getTaskDesc(),
+                m.getTaskType(),
+                m.getScriptFile(),
+                m.getTaskId(),
+                m.getDomainId());
+    }
 }

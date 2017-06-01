@@ -7,7 +7,7 @@
         </div>
         <div id="h-mas-service" class="col-sm-12 col-md-6 col-lg-4">
         </div>
-        <div id="h-other-service"  class="col-sm-12 col-md-6 col-lg-4">
+        <div id="h-other-service" class="col-sm-12 col-md-6 col-lg-4">
         </div>
     </div>
 </div>
@@ -24,26 +24,26 @@
     /*
      * 调整页面宽度和高度
      * */
-    $(document).ready(function(){
+    $(document).ready(function () {
         var hwindow = document.documentElement.clientHeight;
         $("#wrapper").height(hwindow);
         $("#page-wrapper").height(hwindow);
-        $("#H-main-menu").height(hwindow-96)
+        $("#H-main-menu").height(hwindow - 96)
         $("#main-menu-bar").height(hwindow);
         $("#h-main-content").height(hwindow);
     });
 
-    $(document).ready(function(){
-        Hutils.initMenu(1,'0500000000',"调度参数配置","任务与任务组配置","批次配置管理");
+    $(document).ready(function () {
+        Hutils.initMenu(1, '0500000000', "调度参数配置", "任务与任务组配置", "批次配置管理");
         $("#page-wrapper").show();
         NProgress.done();
     });
 
-    window.onresize = function(){
+    window.onresize = function () {
         var hh = document.documentElement.clientHeight;
         $("#wrapper").height(hh);
         $("#page-wrapper").height(hh)
-        $("#H-main-menu").height(hh-96)
+        $("#H-main-menu").height(hh - 96)
         $("#H-main-content").height(hh);
     }
 </script>

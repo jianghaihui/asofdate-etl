@@ -1,7 +1,6 @@
 package com.asofdate.dispatch.dao;
 
 import com.asofdate.dispatch.model.ArgumentDefineModel;
-import com.asofdate.dispatch.model.TaskDefineModel;
 
 import java.util.List;
 
@@ -13,14 +12,17 @@ public interface ArgumentDefineDao {
     * 查询全部任务参数
     * */
     List findAll(String domainId);
+
     /*
     * 新增任务
     * */
     int add(ArgumentDefineModel m);
+
     /*
     * 删除任务
     * */
     String delete(List<ArgumentDefineModel> m);
+
     /*
     * 更新任务
     * */

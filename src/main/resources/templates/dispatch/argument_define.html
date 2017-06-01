@@ -10,10 +10,10 @@
                 <i class="icon-plus"> 新增</i>
             </button>
             <!--<button onclick="DispatchArgumentDefineObj.upload()" class="btn btn-success btn-sm" title="导入机构信息">-->
-                <!--<span class="icon-edit"> 导入</span>-->
+            <!--<span class="icon-edit"> 导入</span>-->
             <!--</button>-->
             <!--<button onclick="DispatchArgumentDefineObj.download()" class="btn btn-success btn-sm" title="导出机构信息">-->
-                <!--<span class="icon-trash"> 导出</span>-->
+            <!--<span class="icon-trash"> 导出</span>-->
             <!--</button>-->
             <button onclick="DispatchArgumentDefineObj.edit()" class="btn btn-success btn-sm" title="编辑机构信息">
                 <span class="icon-edit"> 编辑</span>
@@ -23,8 +23,10 @@
             </button>
         </div>
         <div class="pull-right" style="height: 44px; line-height: 44px; width: 260px;">
-            <span style="text-align:right;width:80px;height: 30px; line-height: 30px; margin-top: 7px;display: inline" class="pull-left">&nbsp;&nbsp;所属域：</span>
-            <select id="h-dispatch-argument-define-domain-list" class="form-control pull-right" style="width: 180px;height: 24px; line-height: 24px; margin-top: 10px;padding: 0px;">
+            <span style="text-align:right;width:80px;height: 30px; line-height: 30px; margin-top: 7px;display: inline"
+                  class="pull-left">&nbsp;&nbsp;所属域：</span>
+            <select id="h-dispatch-argument-define-domain-list" class="form-control pull-right"
+                    style="width: 180px;height: 24px; line-height: 24px; margin-top: 10px;padding: 0px;">
             </select>
         </div>
     </div>
@@ -68,119 +70,119 @@
 
 <script type="text/javascript">
     var DispatchArgumentDefineObj = {
-        $table:$('#h-dispatch-argument-define-info-table-details'),
-        formatter:function (value, row, index) {
+        $table: $('#h-dispatch-argument-define-info-table-details'),
+        formatter: function (value, row, index) {
             var tmp = value.split("_join_")
-            if (tmp.length == 2){
+            if (tmp.length == 2) {
                 return tmp[1]
             } else {
                 return tmp
             }
         },
-        add:function(){
+        add: function () {
             $.Hmodal({
-                body:$("#h-dispatch-argument-src").html(),
-                height:"360px",
-                header:"新增参数",
-                callback:function(hmode){
+                body: $("#h-dispatch-argument-src").html(),
+                height: "360px",
+                header: "新增参数",
+                callback: function (hmode) {
                     $.HAjaxRequest({
-                        url:"/v1/dispatch/argument/define",
-                        data:$("#h-dispatch-argument-define-form").serialize(),
-                        type:"POST",
-                        success:function (data) {
+                        url: "/v1/dispatch/argument/define",
+                        data: $("#h-dispatch-argument-define-form").serialize(),
+                        type: "POST",
+                        success: function (data) {
                             $.Notify({
-                                message:"新增费用信息成功",
-                                type:"success",
+                                message: "新增费用信息成功",
+                                type: "success",
                             });
                             $(hmode).remove();
                             DispatchArgumentDefineObj.$table.bootstrapTable("refresh")
                         },
                     })
                 },
-                preprocess:function(){
+                preprocess: function () {
                     var domain_id = $("#h-dispatch-argument-define-domain-list").val();
 
                     $("#h-dispatch-argument-define-form").find("select[name='arg_type']").Hselect({
-                        height:"30px",
-                        checkbox:false,
-                        nodeSelect:false,
+                        height: "30px",
+                        checkbox: false,
+                        nodeSelect: false,
                     });
 
                     $("#h-dispatch-argument-define-form").find("input[name='domain_id']").val(domain_id)
                 }
             })
         },
-        edit:function(){
+        edit: function () {
             var row = $("#h-dispatch-argument-define-info-table-details").bootstrapTable('getSelections');
             if (row.length == 0) {
                 $.Notify({
-                    message:"您没有选择需要编辑的参数信息",
-                    type:"info",
+                    message: "您没有选择需要编辑的参数信息",
+                    type: "info",
                 })
                 return
             } else if (row.length > 1) {
                 $.Notify({
-                    message:"您选择了多行信息,请选择一行进行编辑",
-                    type:"info",
+                    message: "您选择了多行信息,请选择一行进行编辑",
+                    type: "info",
                 })
                 return
             }
 
             $.Hmodal({
-                body:$("#h-dispatch-argument-src").html(),
-                height:"360px",
-                header:"编辑参数",
-                callback:function(hmode){
+                body: $("#h-dispatch-argument-src").html(),
+                height: "360px",
+                header: "编辑参数",
+                callback: function (hmode) {
                     $.HAjaxRequest({
-                        url:"/v1/dispatch/argument/define",
-                        data:$("#h-dispatch-argument-define-form").serialize(),
-                        type:"PUT",
-                        success:function (data) {
+                        url: "/v1/dispatch/argument/define",
+                        data: $("#h-dispatch-argument-define-form").serialize(),
+                        type: "PUT",
+                        success: function (data) {
                             $.Notify({
-                                message:"修改参数信息成功",
-                                type:"success",
+                                message: "修改参数信息成功",
+                                type: "success",
                             });
                             $(hmode).remove();
                             DispatchArgumentDefineObj.$table.bootstrapTable("refresh");
                         },
                     })
                 },
-                preprocess:function(){
+                preprocess: function () {
                     var domain_id = $("#h-dispatch-argument-define-domain-list").val();
                     $("#h-dispatch-argument-define-form").find("input[name='domain_id']").val(domain_id)
-                    $("#h-dispatch-argument-define-form").find("input[name='arg_id']").val(row[0].code_number).attr("readonly","readonly");
+                    $("#h-dispatch-argument-define-form").find("input[name='arg_id']").val(row[0].code_number).attr("readonly", "readonly");
                     $("#h-dispatch-argument-define-form").find("input[name='arg_desc']").val(row[0].arg_desc)
                     $("#h-dispatch-argument-define-form").find("input[name='arg_value']").val(row[0].arg_value)
                     $("#h-dispatch-argument-define-form").find("select[name='arg_type']").Hselect({
-                        value:row[0].arg_type,
-                        height:"30px",
+                        value: row[0].arg_type,
+                        height: "30px",
                     })
                 }
             })
         },
-        delete:function(){
+        delete: function () {
             var row = $("#h-dispatch-argument-define-info-table-details").bootstrapTable('getSelections');
             if (row.length == 0) {
                 $.Notify({
-                    message:"您没有选择需要编辑的参数信息",
-                    type:"info",
+                    message: "您没有选择需要编辑的参数信息",
+                    type: "info",
                 })
                 return
             }
             $.Hconfirm({
-                body:"点击确定,删除参数信息",
-                callback:function () {
+                body: "点击确定,删除参数信息",
+                callback: function () {
                     $.HAjaxRequest({
-                        url:"/v1/dispatch/argument/define/delete",
-                        type:"POST",
-                        data:{JSON:JSON.stringify(row)},
-                        success:function () {
+                        url: "/v1/dispatch/argument/define/delete",
+                        type: "POST",
+                        data: {JSON: JSON.stringify(row)},
+                        success: function () {
                             $.Notify({
-                                message:"删除参数信息成功",
-                                type:"success",
+                                message: "删除参数信息成功",
+                                type: "success",
                             });
                             $(row).each(function (index, element) {
-                                DispatchArgumentDefineObj.$table.bootstrapTable("removeByUniqueId",element.arg_id);
+                                DispatchArgumentDefineObj.$table.bootstrapTable("removeByUniqueId", element.arg_id);
                             })
                         },
                     })
@@ -204,33 +206,33 @@
 //            })
 //        },
     };
-    $(document).ready(function(){
+    $(document).ready(function () {
         var hwindow = document.documentElement.clientHeight;
         $("#h-dispatch-argument-define-info-table-details").bootstrapTable({
-            height:hwindow-130,
-            queryParams:function (params) {
+            height: hwindow - 130,
+            queryParams: function (params) {
                 params.domain_id = $("#h-dispatch-argument-define-domain-list").val();
                 return params;
             }
         });
 
-        $("#h-dispatch-argument-define-table-info").height(hwindow-130);
+        $("#h-dispatch-argument-define-table-info").height(hwindow - 130);
 
-        $.getJSON("/v1/auth/domain/self/owner",function(data){
+        $.getJSON("/v1/auth/domain/self/owner", function (data) {
             var arr = new Array()
-            $(data.owner_list).each(function(index,element){
+            $(data.owner_list).each(function (index, element) {
                 var ijs = {};
-                ijs.id=element.domain_id
-                ijs.text=element.domain_desc
-                ijs.upId="####hzwy23###"
+                ijs.id = element.domain_id
+                ijs.text = element.domain_desc
+                ijs.upId = "####hzwy23###"
                 arr.push(ijs)
             });
             $("#h-dispatch-argument-define-domain-list").Hselect({
-                data:arr,
-                height:"24px",
-                width:"180px",
-                value:data.domain_id,
-                onclick:function () {
+                data: arr,
+                height: "24px",
+                width: "180px",
+                value: data.domain_id,
+                onclick: function () {
                     $("#h-dispatch-argument-define-info-table-details").bootstrapTable('refresh');
                 },
             });
@@ -242,11 +244,13 @@
     <form id="h-dispatch-argument-define-form">
         <div class="col-sm-6 col-md-6 col-lg-6">
             <span>参数编码</span>
-            <input name="arg_id" placeholder="由1-30位字母,数字组成"  class="form-control" style="height: 30px; line-height: 30px; width: 100%;" />
+            <input name="arg_id" placeholder="由1-30位字母,数字组成" class="form-control"
+                   style="height: 30px; line-height: 30px; width: 100%;"/>
         </div>
         <div class="col-sm-6 col-md-6 col-lg-6">
             <span>参数名称</span>
-            <input name="arg_desc" placeholder="参数描述信息" class="form-control" style="height: 30px; line-height: 30px; width: 100%;" />
+            <input name="arg_desc" placeholder="参数描述信息" class="form-control"
+                   style="height: 30px; line-height: 30px; width: 100%;"/>
         </div>
         <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 15px;">
             <span>参数类型</span>
@@ -259,7 +263,8 @@
         </div>
         <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 15px;">
             <span>参数初始值</span>
-            <input name="arg_value" placeholder="请填写本月发生额,必须是数字" class="form-control" style="height: 30px; line-height: 30px; width: 100%;"/>
+            <input name="arg_value" placeholder="请填写本月发生额,必须是数字" class="form-control"
+                   style="height: 30px; line-height: 30px; width: 100%;"/>
         </div>
         <input name="domain_id" style="display: none;"/>
     </form>

@@ -22,7 +22,7 @@ public class DomainDaoImpl implements DomainDao {
     @Override
     public List<DomainModel> findAll() {
         RowMapper<DomainModel> rowMapper = new BeanPropertyRowMapper<>(DomainModel.class);
-        List<DomainModel> list = jdbcTemplate.query(SqlDefine.sys_rdbms_118,rowMapper);
+        List<DomainModel> list = jdbcTemplate.query(SqlDefine.sys_rdbms_118, rowMapper);
         return list;
     }
 }
