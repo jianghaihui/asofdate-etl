@@ -64,5 +64,17 @@ mysql -uroot -p dbname < mysql_init.sql
 ```
 请替换dbname为您数据库名字. 
 
+spring-boot参数配置文件在application.properties中.请按照spring的规范配置.
+
+默认启动端口号是: 443 且采用 https协议.
+
+项目启动后,在浏览器中输入: https://localhost
+
+登录用户名: admin
+
+密码: hzwy23
+
+如果没有权限开启443端口, 请修改配置文件,将端口替换成1024以上的端口号.
+
 ## 交流方式
 e-mail: hzwy23@163.com
