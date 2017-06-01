@@ -3,7 +3,10 @@
 
 有愿意加入项目的，请加QQ：309810957
 
-主要功能目标:
+
+**在下Java水平有限,项目中出现错误和不规范的地方,请不吝赐教,感激不尽**
+
+项目主要功能图:
 ![系统主界面](./HomePage.png)
 
 ![ETL调度管理界面](./dispatch_index.png)
@@ -51,6 +54,15 @@ ETL调度系统,最小的调度单元job，job可以是下边几种类型:
 2. 批次优先级控制 (开发中...)
 3. 最大并发数控制 (开发中...)
 4. 运行错误通知服务 (开发中...)
+
+## 创建工程
+1. asofdate-etl采用maven管理依赖关系,所以clone项目后,请安装maven工具,maven将会自动下载依赖包.
+
+2. 数据库表结构在项目根目录mysql_init.sql中.导入到mysql数据库中方法:
+```shell
+mysql -uroot -p dbname < mysql_init.sql
+```
+请替换dbname为您数据库名字. 
 
 ## 交流方式
 e-mail: hzwy23@163.com
