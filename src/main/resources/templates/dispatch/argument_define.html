@@ -106,6 +106,19 @@
                         height: "30px",
                         checkbox: false,
                         nodeSelect: false,
+                        onclick:function () {
+                            var argType = $("#h-dispatch-argument-define-form").find("select[name='arg_type']").val();
+                            switch (argType){
+                                case "1":
+                                    $("#h-dispatch-argument-define-form").find("input[name='arg_value']").attr("readonly",false);
+                                    break;
+                                case "2":
+                                case "3":
+                                case "4":
+                                    $("#h-dispatch-argument-define-form").find("input[name='arg_value']").attr("readonly","readonly").val("");
+                                    break
+                            }
+                        }
                     });
 
                     $("#h-dispatch-argument-define-form").find("input[name='domain_id']").val(domain_id)
@@ -156,7 +169,31 @@
                     $("#h-dispatch-argument-define-form").find("select[name='arg_type']").Hselect({
                         value: row[0].arg_type,
                         height: "30px",
-                    })
+                        onclick:function () {
+                            var argType = $("#h-dispatch-argument-define-form").find("select[name='arg_type']").val();
+                            switch (argType){
+                                case "1":
+                                    $("#h-dispatch-argument-define-form").find("input[name='arg_value']").attr("readonly",false);
+                                    break;
+                                case "2":
+                                case "3":
+                                case "4":
+                                    $("#h-dispatch-argument-define-form").find("input[name='arg_value']").attr("readonly","readonly").val("");
+                                    break
+                            }
+                        }
+                    });
+                    var argType = $("#h-dispatch-argument-define-form").find("select[name='arg_type']").val();
+                    switch (argType){
+                        case "1":
+                            $("#h-dispatch-argument-define-form").find("input[name='arg_value']").attr("readonly",false);
+                            break;
+                        case "2":
+                        case "3":
+                        case "4":
+                            $("#h-dispatch-argument-define-form").find("input[name='arg_value']").attr("readonly","readonly").val("");
+                            break
+                    }
                 }
             })
         },
@@ -263,7 +300,7 @@
         </div>
         <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 15px;">
             <span>参数初始值</span>
-            <input name="arg_value" placeholder="请填写本月发生额,必须是数字" class="form-control"
+            <input name="arg_value" readonly="readonly" placeholder="参数类型为[固定参数]时,填写这个选项" class="form-control"
                    style="height: 30px; line-height: 30px; width: 100%;"/>
         </div>
         <input name="domain_id" style="display: none;"/>

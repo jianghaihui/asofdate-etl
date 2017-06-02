@@ -20,4 +20,24 @@ public class BatchDefineServiceImpl implements BatchDefineService {
     public List<BatchDefineModel> findAll(String domainId) {
         return batchDefineDao.findAll(domainId);
     }
+
+    @Override
+    public int add(BatchDefineModel m) {
+        return batchDefineDao.add(m);
+    }
+
+    @Override
+    public String delete(List<BatchDefineModel> m) {
+        return batchDefineDao.delete(m);
+    }
+
+    @Override
+    public int update(BatchDefineModel m) {
+        return batchDefineDao.update(m);
+    }
+
+    @Override
+    public int getStatus(String batchId) {
+        return batchDefineDao.getStatus(batchId);
+    }
 }

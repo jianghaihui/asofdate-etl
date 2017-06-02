@@ -107,7 +107,11 @@ public class SqlDefine {
     public static String sys_rdbms_125 = "insert into dispatch_task_define(task_id,code_number,task_desc,task_type,create_user,create_date,modify_date,modify_user,domain_id,script_file) values(?,?,?,?,?,now(),now(),?,?,?)";
     public static String sys_rdbms_126 = "update dispatch_task_define set task_desc = ?, task_type = ?,script_file = ? where task_id = ? and domain_id = ?";
     public static String sys_rdbms_127 = "delete from dispatch_task_define where task_id = ? and domain_id = ?";
-    public static String sys_rdbms_128 = "insert into dispatch_batch_define(batch_id,code_number,batch_desc,batch_status,as_of_date,create_date,create_user,modify_user,modify_date,domain_id) values(?,?,?,?,?,now(),?,now(),?,?)";
+    public static String sys_rdbms_128 = "insert into dispatch_batch_define(batch_id,code_number,batch_desc,batch_status,as_of_date,create_date,create_user,modify_date,modify_user,domain_id) values(?,?,?,?,?,now(),?,now(),?,?)";
     public static String sys_rdbms_129 = "delete from dispatch_batch_define where batch_id = ? and domain_id = ?";
-    public static String sys_rdbms_130 = "update from dispatch_batch_define set batch_desc = ?, batch_status = ?,as_of_date = str_to_date(?,'%Y-%m-%d') where batch_id = ? and domain_id = ?";
+    public static String sys_rdbms_130 = "update dispatch_batch_define set batch_desc = ?, batch_status = ?,as_of_date = str_to_date(?,'%Y-%m-%d') where batch_id = ? and domain_id = ?";
+    public static String sys_rdbms_131 = "select batch_status from dispatch_batch_define where batch_id = ?";
+    public static String sys_rdbms_132 = "select t.uuid,t.task_id,t.arg_id,t.arg_value,t.sort_id,t.domain_id,d.arg_type,a.arg_type_desc,d.arg_desc,d.code_number,d.arg_value as fixed_arg_value from dispatch_task_argument_relation t left join dispatch_argument_define d on t.arg_id = d.arg_id left join dispatch_argument_type_attr a on d.arg_type = a.arg_type where t.task_id = ? order by sort_id asc";
+    public static String sys_rdbms_133 = "select t.id,t.group_id,t.task_id,t.domain_id,d.task_desc,d.task_type,a.task_type_desc,d.code_number from dispatch_group_task_relation t left join dispatch_task_define d on t.task_id = d.task_id left join dispatch_task_type_attr a on d.task_type = a.task_type where t.group_id = ?";
+    public static String sys_rdbms_134 = "select t.uuid,t.id,t.up_id,t.domain_id,r.group_id,r.task_id,d.task_desc,d.code_number from dispatch_task_dependency t left join dispatch_group_task_relation r on t.id = r.id left join dispatch_task_define d on r.task_id = d.task_id where t.id = ?";
 }

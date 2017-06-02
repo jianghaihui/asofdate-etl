@@ -8,7 +8,10 @@ import com.asofdate.utils.Hret;
 import com.asofdate.utils.JoinCode;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.HttpRequestHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,6 +27,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/v1/dispatch/task/define")
 public class TaskDefineController {
+    private final Logger logger = LoggerFactory.getLogger(TaskDefineController.class);
     @Autowired
     private TaskDefineService taskDefineService;
 
@@ -80,6 +84,14 @@ public class TaskDefineController {
             return Hret.error(500,"新增任务组信息失败,任务组编码重复",JSONObject.NULL);
         }
         return Hret.success(200,"success", JSONObject.NULL);
+    }
+
+    @RequestMapping(value = "/argument",method = RequestMethod.GET)
+    @ResponseBody
+    public String getTaskId(HttpServletRequest request){
+        String taskId = request.getParameter("task_id");
+        logger.info("task id is:" + taskId);
+        return taskDefineService.getTaskArg(taskId).toString();
     }
 
     private TaskDefineModel parse(HttpServletRequest request){

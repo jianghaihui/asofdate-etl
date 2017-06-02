@@ -9,4 +9,8 @@ import java.util.List;
  */
 public interface BatchDefineService {
     List<BatchDefineModel> findAll(String domainId);
+    int add(BatchDefineModel m);
+    String delete(List<BatchDefineModel> m);
+    int update(BatchDefineModel m);
+    int getStatus(String batchId);
 }

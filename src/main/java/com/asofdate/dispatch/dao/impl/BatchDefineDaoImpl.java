@@ -25,4 +25,42 @@ public class BatchDefineDaoImpl implements BatchDefineDao {
         List list = jdbcTemplate.query(SqlDefine.sys_rdbms_107, rowMapper, domainId);
         return list;
     }
+
+    @Override
+    public int add(BatchDefineModel m) {
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_128,
+                m.getBatch_id(),
+                m.getCode_number(),
+                m.getBatch_desc(),
+                m.getBatch_status(),
+                m.getAs_of_date(),
+                m.getCreate_user(),
+                m.getModify_user(),
+                m.getDomain_id());
+    }
+
+    @Override
+    public String delete(List<BatchDefineModel> m) {
+        for (BatchDefineModel l:m){
+            if ( 1!= jdbcTemplate.update(SqlDefine.sys_rdbms_129,l.getBatch_id(),l.getDomain_id())){
+                return "删除["+l.getBatch_desc()+"]失败";
+            }
+        }
+        return "success";
+    }
+
+    @Override
+    public int update(BatchDefineModel m) {
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_130,
+                m.getBatch_desc(),
+                m.getBatch_status(),
+                m.getAs_of_date(),
+                m.getBatch_id(),
+                m.getDomain_id());
+    }
+
+    @Override
+    public int getStatus(String batchId) {
+        return jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_131,Integer.class,batchId);
+    }
 }

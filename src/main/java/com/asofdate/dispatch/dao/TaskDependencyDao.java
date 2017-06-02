@@ -1,6 +1,7 @@
 package com.asofdate.dispatch.dao;
 
 import com.asofdate.dispatch.model.TaskDependencyModel;
+import org.json.JSONArray;
 
 import java.util.List;
 
@@ -11,4 +12,6 @@ public interface TaskDependencyDao {
     List<TaskDependencyModel> findAll(String domainId);
 
     List<TaskDependencyModel> findById(String domainId, String batchId);
+
+    JSONArray getTaskDependency(String id);
 }

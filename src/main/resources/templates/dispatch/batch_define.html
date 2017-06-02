@@ -9,12 +9,12 @@
             <button onclick="DispatchBatchDefineObj.add()" class="btn btn-success btn-sm" title="新增机构信息">
                 <i class="icon-plus"> 新增</i>
             </button>
-            <button onclick="DispatchBatchDefineObj.upload()" class="btn btn-success btn-sm" title="导入机构信息">
-                <span class="icon-edit"> 导入</span>
-            </button>
-            <button onclick="DispatchBatchDefineObj.download()" class="btn btn-success btn-sm" title="导出机构信息">
-                <span class="icon-trash"> 导出</span>
-            </button>
+            <!--<button onclick="DispatchBatchDefineObj.upload()" class="btn btn-success btn-sm" title="导入机构信息">-->
+                <!--<span class="icon-edit"> 导入</span>-->
+            <!--</button>-->
+            <!--<button onclick="DispatchBatchDefineObj.download()" class="btn btn-success btn-sm" title="导出机构信息">-->
+                <!--<span class="icon-trash"> 导出</span>-->
+            <!--</button>-->
             <button onclick="DispatchBatchDefineObj.edit()" class="btn btn-success btn-sm" title="编辑机构信息">
                 <span class="icon-edit"> 编辑</span>
             </button>
@@ -42,7 +42,7 @@
                        data-toggle="table"
                        data-striped="true"
                        data-page-size="30"
-                       data-unique-id="uuid"
+                       data-unique-id="batch_id"
                        data-toolbar="#h-dispatch-batch-manage-toolbar-list"
                        data-url="/v1/dispatch/batch/define"
                        data-side-pagination="client"
@@ -84,15 +84,15 @@
             $.Hmodal({
                 body: $("#h-dispatch-batch-define-src").html(),
                 height: "360px",
-                header: "新增费用",
+                header: "新增批次",
                 callback: function (hmode) {
                     $.HAjaxRequest({
-                        url: "/v1/ca/driver/manage/post",
+                        url: "/v1/dispatch/batch/define",
                         data: $("#h-dispatch-batch-define-form").serialize(),
                         type: "post",
                         success: function (data) {
                             $.Notify({
-                                message: "新增费用信息成功",
+                                message: "新增批次信息成功",
                                 type: "success",
                             });
                             $(hmode).remove();
@@ -103,39 +103,12 @@
                 preprocess: function () {
                     var domain_id = $("#h-dispatch-batch-domain-list").val();
 
-                    // 初始化成本池
-                    $.getJSON("/v1/ca/driver/get", {domain_id: domain_id}, function (data) {
-                        var arr = new Array()
-                        $(data).each(function (index, element) {
-                            var e = {};
-                            e.id = element.driver_id;
-                            e.text = element.driver_desc;
-                            e.upId = "##hzwy23##";
-                            arr.push(e)
-                        });
-                        $("#h-dispatch-batch-define-form").find("select[name='driver_id']").Hselect({
-                            height: "30px",
-                            data: arr,
-                        })
-                    });
-
-                    $.getJSON("/v1/ca/responsibility/get", {domain_id: domain_id}, function (data) {
-                        var arr = new Array()
-                        $(data).each(function (index, element) {
-                            var ijs = {}
-                            ijs.id = element.org_unit_id;
-                            ijs.text = element.org_unit_desc;
-                            ijs.upId = element.org_up_id;
-                            ijs.attr = element.org_attr_cd;
-                            arr.push(ijs)
-                        });
-
-                        $("#h-dispatch-batch-define-form").find("select[name='org_unit_id']").Hselect({
-                            data: arr,
-                            height: "30px",
-                            checkbox: false,
-                            nodeSelect: false,
-                        });
+                    $("#h-dispatch-batch-define-form").find("select[name='batch_status']").Hselect({
+                        height: "30px",
+                        checkbox: false,
+                        nodeSelect: false,
+                        disabled:true,
+                        value:0,
                     });
 
                     $("#h-dispatch-batch-define-form").find("input[name='domain_id']").val(domain_id)
@@ -161,15 +134,15 @@
             $.Hmodal({
                 body: $("#h-dispatch-batch-define-src").html(),
                 height: "360px",
-                header: "编辑费用",
+                header: "编辑批次",
                 callback: function (hmode) {
                     $.HAjaxRequest({
-                        url: "/v1/ca/driver/manage/put",
+                        url: "/v1/dispatch/batch/define",
                         data: $("#h-dispatch-batch-define-form").serialize(),
-                        type: "put",
+                        type: "PUT",
                         success: function (data) {
                             $.Notify({
-                                message: "修改费用信息成功",
+                                message: "修改批次信息成功",
                                 type: "success",
                             });
                             $(hmode).remove();
@@ -180,46 +153,16 @@
                 preprocess: function () {
                     var domain_id = $("#h-dispatch-batch-domain-list").val();
                     // 初始化成本池
-                    $.getJSON("/v1/ca/driver/get", {domain_id: domain_id}, function (data) {
-                        var arr = new Array()
-                        $(data).each(function (index, element) {
-                            var e = {};
-                            e.id = element.driver_id;
-                            e.text = element.driver_desc;
-                            e.upId = "##hzwy23##";
-                            arr.push(e)
-                        });
-                        $("#h-dispatch-batch-define-form").find("select[name='driver_id']").Hselect({
-                            height: "30px",
-                            data: arr,
-                            value: row[0].driver_id,
-                        })
+                    $("#h-dispatch-batch-define-form").find("select[name='batch_status']").Hselect({
+                        height: "30px",
+                        checkbox: false,
+                        nodeSelect: false,
+                        value: row[0].batch_status,
                     });
-
-                    $.getJSON("/v1/ca/responsibility/get", {domain_id: domain_id}, function (data) {
-                        var arr = new Array()
-                        $(data).each(function (index, element) {
-                            var ijs = {}
-                            ijs.id = element.org_unit_id;
-                            ijs.text = element.org_unit_desc;
-                            ijs.upId = element.org_up_id;
-                            ijs.attr = element.org_attr_cd;
-                            arr.push(ijs)
-                        });
-
-                        $("#h-dispatch-batch-define-form").find("select[name='org_unit_id']").Hselect({
-                            data: arr,
-                            height: "30px",
-                            checkbox: false,
-                            nodeSelect: false,
-                            value: row[0].org_unit_id,
-                        });
-                    });
-
-                    $("#h-dispatch-batch-define-form").find("input[name='domain_id']").val(domain_id)
-                    $("#h-dispatch-batch-define-form").find("input[name='month_amount']").val(row[0].month_amount)
-                    $("#h-dispatch-batch-define-form").find("input[name='as_of_date']").val(row[0].as_of_date)
-                    $("#h-dispatch-batch-define-form").find("input[name='uuid']").val(row[0].uuid)
+                    $("#h-dispatch-batch-define-form").find("input[name='domain_id']").val(domain_id);
+                    $("#h-dispatch-batch-define-form").find("input[name='batch_id']").val(row[0].code_number).attr("readonly","readonly");
+                    $("#h-dispatch-batch-define-form").find("input[name='as_of_date']").val(row[0].as_of_date);
+                    $("#h-dispatch-batch-define-form").find("input[name='batch_desc']").val(row[0].batch_desc);
                 }
             })
         },
@@ -227,47 +170,49 @@
             var row = $("#h-dispatch-batch-manage-info-table-details").bootstrapTable('getSelections');
             if (row.length == 0) {
                 $.Notify({
-                    message: "您没有选择需要编辑的费用信息",
+                    message: "您没有选择需要编辑的批次信息",
                     type: "info",
                 })
                 return
             }
             $.Hconfirm({
-                body: "点击确定,删除费用信息",
+                body: "点击确定,删除批次信息",
                 callback: function () {
                     $.HAjaxRequest({
-                        url: "/v1/ca/driver/manage/delete",
+                        url: "/v1/dispatch/batch/define/delete",
                         type: "post",
                         data: {JSON: JSON.stringify(row)},
-                        success: function () {
+                        success: function (data) {
+
                             $.Notify({
-                                message: "删除费用信息成功",
+                                message: "删除批次信息成功",
                                 type: "success",
                             });
                             $(row).each(function (index, element) {
-                                DispatchBatchDefineObj.$table.bootstrapTable("removeByUniqueId", element.uuid)
+                                DispatchBatchDefineObj.$table.bootstrapTable("removeByUniqueId", element.batch_id)
                             })
+
                         },
                     })
                 }
             })
         },
-        download: function () {
-            var domain_id = $("#h-dispatch-batch-domain-list").val();
-            $.Hdownload({
-                url: "/v1/ca/driver/manage/download?domain_id=" + domain_id,
-                name: "动因值详细信息",
-            })
-        },
-        upload: function () {
-            $.Hupload({
-                url: "/v1/ca/driver/manage/upload",
-                header: "动因值上传",
-                callback: function () {
-                    DispatchBatchDefineObj.$table.bootstrapTable("refresh");
-                }
-            })
-        },
+//        download: function () {
+//            var domain_id = $("#h-dispatch-batch-domain-list").val();
+//            $.Hdownload({
+//                url: "/v1/ca/driver/manage/download?domain_id=" + domain_id,
+//                name: "动因值详细信息",
+//            })
+//        },
+//        upload: function () {
+//            $.Hupload({
+//                url: "/v1/ca/driver/manage/upload",
+//                header: "动因值上传",
+//                callback: function () {
+//                    DispatchBatchDefineObj.$table.bootstrapTable("refresh");
+//                }
+//            })
+//        },
     };
     $(document).ready(function () {
         var hwindow = document.documentElement.clientHeight;
@@ -306,26 +251,29 @@
 <script id="h-dispatch-batch-define-src" type="text/html">
     <form id="h-dispatch-batch-define-form">
         <div class="col-sm-6 col-md-6 col-lg-6">
-            <span>数据日期</span>
-            <input name="as_of_date" placeholder="请选择数据日期" onclick="laydate(this)" class="form-control"
+            <span>批次编码</span>
+            <input name="batch_id" placeholder="由1-30位字母,数字组成" class="form-control"
                    style="height: 30px; line-height: 30px; width: 100%;"/>
         </div>
         <div class="col-sm-6 col-md-6 col-lg-6">
-            <span>责任中心</span>
-            <select name="org_unit_id" class="form-control" style="height: 30px; line-height: 30px; width: 100%;">
-            </select>
+            <span>批次名称</span>
+            <input name="batch_desc" placeholder="批次详细描述信息" class="form-control" style="height: 30px; line-height: 30px; width: 100%;" />
         </div>
         <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 15px;">
-            <span>动因信息</span>
-            <select name="driver_id" class="form-control" style="height: 30px; line-height: 30px; width: 100%;">
-            </select>
-        </div>
-        <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 15px;">
-            <span>期间发生额</span>
-            <input name="month_amount" placeholder="请填写本月发生额,必须是数字" class="form-control"
+            <span>批次日期</span>
+            <input name="as_of_date" onclick="laydate(this)" placeholder="批次运行日期" class="form-control"
                    style="height: 30px; line-height: 30px; width: 100%;"/>
         </div>
+        <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 15px;">
+            <span>批次状态</span>
+            <select name="batch_status" class="form-control" style="height: 30px; line-height: 30px; width: 100%;">
+                <option value="0">初始化</option>
+                <option value="1">运行中</option>
+                <option value="2">已完成</option>
+                <option value="3">错误</option>
+                <option value="4">停止</option>
+            </select>
+        </div>
         <input name="domain_id" style="display: none;"/>
-        <input name="uuid" style="display: none;"/>
     </form>
 </script>

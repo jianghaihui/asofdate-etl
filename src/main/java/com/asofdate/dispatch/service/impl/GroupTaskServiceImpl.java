@@ -5,6 +5,7 @@ import com.asofdate.dispatch.model.BatchGroupModel;
 import com.asofdate.dispatch.model.GroupTaskModel;
 import com.asofdate.dispatch.service.BatchGroupService;
 import com.asofdate.dispatch.service.GroupTaskService;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,5 +43,10 @@ public class GroupTaskServiceImpl implements GroupTaskService {
             }
         }
         return list;
+    }
+
+    @Override
+    public JSONArray getTask(String groupId) {
+        return groupTaskDao.getTask(groupId);
     }
 }

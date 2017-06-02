@@ -1,10 +1,13 @@
 package com.asofdate.dispatch.service.impl;
 
+import com.asofdate.dispatch.dao.TaskArgumentDao;
 import com.asofdate.dispatch.dao.TaskDefineDao;
 import com.asofdate.dispatch.model.GroupTaskModel;
 import com.asofdate.dispatch.model.TaskDefineModel;
 import com.asofdate.dispatch.service.GroupTaskService;
 import com.asofdate.dispatch.service.TaskDefineService;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +25,9 @@ public class TaskDefineServiceImpl implements TaskDefineService {
 
     @Autowired
     private GroupTaskService groupTaskService;
+
+    @Autowired
+    private TaskArgumentDao taskArgumentDao;
 
     @Override
     public List<TaskDefineModel> findAll(String domainId, String batchId) {
@@ -63,5 +69,10 @@ public class TaskDefineServiceImpl implements TaskDefineService {
     @Override
     public int update(TaskDefineModel m) {
         return dispatchTaskDefineDao.update(m);
+    }
+
+    @Override
+    public JSONArray getTaskArg(String taskId) {
+        return taskArgumentDao.getTaskArg(taskId);
     }
 }

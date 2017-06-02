@@ -73,10 +73,42 @@
     var DispatchGroupDefineObj = {
         $table: $('#h-dispatch-group-define-info-table-details'),
         formatter: function (value, row, index) {
-            return '<span class="h-td-btn btn-success btn-xs" onclick="DispatchGroupDefineObj.getTasks(\'' + row.group_id + '\')">任务管理</span>'
+            return '<span class="h-td-btn btn-success btn-xs" onclick="DispatchGroupDefineObj.getTasks(\'' + row.group_id + '\',\''+row.group_desc +'\')">任务列表</span>'
         },
-        getTasks: function (taskId) {
-
+        formatterTask:function (value, row, index) {
+            return '<span class="h-td-btn btn-info btn-xs" onclick="DispatchGroupDefineObj.getTaskRelation(\'' + row.id + '\',\''+row.task_desc +'\')">上级任务</span>'
+        },
+        getTaskRelation:function (id, taskDesc) {
+            $.Hmodal({
+                header:"[ "+taskDesc + " ]上级任务",
+                height: "430px",
+                body:$("#h-dispatch-group-task-dependency-src").html(),
+                preprocess:function () {
+                    $("#h-dispatch-group-task-dependency-table").bootstrapTable({
+                        height:290,
+                        queryParams:function (params) {
+                            params.id = id;
+                            return params;
+                        }
+                    })
+                }
+            })
+        },
+        getTasks: function (groupId,groupDesc) {
+            $.Hmodal({
+                header:"任务组[ "+groupDesc + " ]内任务列表",
+                height: "430px",
+                body:$("#h-dispatch-group-task-relation-src").html(),
+                preprocess:function () {
+                    $("#h-dispatch-group-task-relation-table").bootstrapTable({
+                        height:290,
+                        queryParams:function (params) {
+                            params.group_id = groupId;
+                            return params;
+                        }
+                    })
+                }
+            })
         },
         add: function () {
             $.Hmodal({
@@ -241,4 +273,45 @@
         </div>
         <input name="domain_id" style="display: none;"/>
     </form>
+</script>
+
+<script id="h-dispatch-group-task-relation-src" type="text/html">
+    <table id="h-dispatch-group-task-relation-table"
+           data-toggle="table"
+           data-striped="true"
+           data-unique-id="taskId"
+           data-url="/v1/dispatch/group/define/task"
+           data-side-pagination="client"
+           data-pagination="false"
+           data-search="false">
+        <thead>
+        <tr>
+            <th data-align="center" data-field="id">任务组内唯一任务ID号</th>
+            <th data-align="center" data-field="code_number">任务编码</th>
+            <th data-align="left" data-field="task_desc">任务名称</th>
+            <th data-align="center" data-field="task_type_desc">任务类型</th>
+            <th data-align="center" data-formatter="DispatchGroupDefineObj.formatterTask">上级任务</th>
+        </tr>
+        </thead>
+    </table>
+</script>
+
+
+<script id="h-dispatch-group-task-dependency-src" type="text/html">
+    <table id="h-dispatch-group-task-dependency-table"
+           data-toggle="table"
+           data-striped="true"
+           data-unique-id="taskId"
+           data-url="/v1/dispatch/group/define/task/dependency"
+           data-side-pagination="client"
+           data-pagination="false"
+           data-search="false">
+        <thead>
+        <tr>
+            <th data-align="center" data-field="up_id">任务组内上级唯一任务ID号</th>
+            <th data-align="center" data-field="code_number">任务编码</th>
+            <th data-align="left" data-field="task_desc">任务名称</th>
+        </tr>
+        </thead>
+    </table>
 </script>

@@ -3,11 +3,15 @@ package com.asofdate.dispatch.controller;
 import com.asofdate.dispatch.model.ArgumentDefineModel;
 import com.asofdate.dispatch.model.GroupDefineModel;
 import com.asofdate.dispatch.service.GroupDefineService;
+import com.asofdate.dispatch.service.GroupTaskService;
+import com.asofdate.dispatch.service.TaskDependencyService;
 import com.asofdate.platform.authentication.JwtService;
 import com.asofdate.utils.Hret;
 import com.asofdate.utils.JoinCode;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,8 +28,13 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/v1/dispatch/group/define")
 public class GroupDefineController {
+    private final Logger logger = LoggerFactory.getLogger(GroupDefineController.class);
     @Autowired
     private GroupDefineService groupDefineService;
+    @Autowired
+    private GroupTaskService groupTaskService;
+    @Autowired
+    private TaskDependencyService taskDependencyService;
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
@@ -79,6 +88,22 @@ public class GroupDefineController {
             return Hret.error(500,"新增任务组信息失败,任务组编码重复",JSONObject.NULL);
         }
         return Hret.success(200,"success", JSONObject.NULL);
+    }
+
+    @RequestMapping(value = "/task",method = RequestMethod.GET)
+    @ResponseBody
+    public String getTask(HttpServletRequest request){
+        String groupId = request.getParameter("group_id");
+        return groupTaskService.getTask(groupId).toString();
+    }
+
+    @RequestMapping(value = "/task/dependency",method = RequestMethod.GET)
+    @ResponseBody
+    public String getTaskDependency(HttpServletRequest request){
+        String id = request.getParameter("id");
+        JSONArray jsonArray = taskDependencyService.getTaskDependency(id);
+        logger.info(jsonArray.toString());
+        return jsonArray.toString();
     }
 
     private GroupDefineModel parse(HttpServletRequest request){
