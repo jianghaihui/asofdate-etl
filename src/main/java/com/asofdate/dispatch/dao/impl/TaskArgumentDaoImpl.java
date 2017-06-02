@@ -38,29 +38,29 @@ public class TaskArgumentDaoImpl implements TaskArgumentDao {
             @Override
             public void processRow(ResultSet resultSet) throws SQLException {
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("uuid",resultSet.getString("uuid"));
-                jsonObject.put("task_id",resultSet.getString("task_id"));
-                jsonObject.put("arg_id",resultSet.getString("arg_id"));
-                switch (resultSet.getString("arg_type")){
+                jsonObject.put("uuid", resultSet.getString("uuid"));
+                jsonObject.put("task_id", resultSet.getString("task_id"));
+                jsonObject.put("arg_id", resultSet.getString("arg_id"));
+                switch (resultSet.getString("arg_type")) {
                     case "1":
-                        jsonObject.put("arg_value",resultSet.getString("fixed_arg_value"));
+                        jsonObject.put("arg_value", resultSet.getString("fixed_arg_value"));
                         break;
                     case "2":
-                        jsonObject.put("arg_value",resultSet.getString("arg_value"));
+                        jsonObject.put("arg_value", resultSet.getString("arg_value"));
                         break;
                     default:
-                        jsonObject.put("arg_value","-");
+                        jsonObject.put("arg_value", "-");
                 }
 
-                jsonObject.put("sort_id",resultSet.getString("sort_id"));
-                jsonObject.put("domain_id",resultSet.getString("domain_id"));
-                jsonObject.put("arg_type",resultSet.getString("arg_type"));
-                jsonObject.put("arg_type_desc",resultSet.getString("arg_type_desc"));
-                jsonObject.put("arg_desc",resultSet.getString("arg_desc"));
-                jsonObject.put("code_number",resultSet.getString("code_number"));
+                jsonObject.put("sort_id", resultSet.getString("sort_id"));
+                jsonObject.put("domain_id", resultSet.getString("domain_id"));
+                jsonObject.put("arg_type", resultSet.getString("arg_type"));
+                jsonObject.put("arg_type_desc", resultSet.getString("arg_type_desc"));
+                jsonObject.put("arg_desc", resultSet.getString("arg_desc"));
+                jsonObject.put("code_number", resultSet.getString("code_number"));
                 jsonArray.put(jsonObject);
             }
-        },taskId);
+        }, taskId);
         return jsonArray;
     }
 }

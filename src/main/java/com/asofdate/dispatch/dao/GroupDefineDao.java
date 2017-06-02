@@ -9,7 +9,10 @@ import java.util.List;
  */
 public interface GroupDefineDao {
     List findAll(String domainId);
+
     int update(GroupDefineModel m);
+
     String delete(List<GroupDefineModel> m);
+
     int add(GroupDefineModel m);
 }

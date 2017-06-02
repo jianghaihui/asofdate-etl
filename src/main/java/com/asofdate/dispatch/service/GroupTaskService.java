@@ -10,5 +10,8 @@ import java.util.List;
  */
 public interface GroupTaskService {
     List<GroupTaskModel> findByBatchId(String domainId, String batchId);
+
     JSONArray getTask(String groupId);
+
+    JSONArray getTaskArg(String id);
 }

@@ -1,5 +1,7 @@
 package com.asofdate.dispatch.dao;
 
+import org.json.JSONArray;
+
 import java.util.List;
 
 /**
@@ -7,4 +9,6 @@ import java.util.List;
  */
 public interface BatchGroupDao {
     List findAll(String domainId);
+
+    JSONArray getGroup(String batchId);
 }

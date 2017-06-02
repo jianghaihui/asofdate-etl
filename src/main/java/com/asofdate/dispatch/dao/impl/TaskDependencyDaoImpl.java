@@ -54,17 +54,17 @@ public class TaskDependencyDaoImpl implements TaskDependencyDao {
             @Override
             public void processRow(ResultSet resultSet) throws SQLException {
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("uuid",resultSet.getString("uuid"));
-                jsonObject.put("id",resultSet.getString("id"));
-                jsonObject.put("up_id",resultSet.getString("up_id"));
-                jsonObject.put("domain_id",resultSet.getString("domain_id"));
-                jsonObject.put("group_id",resultSet.getString("group_id"));
-                jsonObject.put("task_id",resultSet.getString("task_id"));
-                jsonObject.put("task_desc",resultSet.getString("task_desc"));
-                jsonObject.put("code_number",resultSet.getString("code_number"));
+                jsonObject.put("uuid", resultSet.getString("uuid"));
+                jsonObject.put("id", resultSet.getString("id"));
+                jsonObject.put("up_id", resultSet.getString("up_id"));
+                jsonObject.put("domain_id", resultSet.getString("domain_id"));
+                jsonObject.put("group_id", resultSet.getString("group_id"));
+                jsonObject.put("task_id", resultSet.getString("task_id"));
+                jsonObject.put("task_desc", resultSet.getString("task_desc"));
+                jsonObject.put("code_number", resultSet.getString("code_number"));
                 jsonArray.put(jsonObject);
             }
-        },id);
+        }, id);
         return jsonArray;
     }
 }

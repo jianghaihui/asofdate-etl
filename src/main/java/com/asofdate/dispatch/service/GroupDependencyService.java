@@ -1,6 +1,7 @@
 package com.asofdate.dispatch.service;
 
 import com.asofdate.dispatch.model.GroupDependencyModel;
+import org.json.JSONArray;
 
 import java.util.List;
 import java.util.Set;
@@ -14,4 +15,6 @@ public interface GroupDependencyService {
     void afterPropertiesSet(String domainId, String batchId);
 
     Set<GroupDependencyModel> getGroupDependency(String gid);
+
+    JSONArray getUp(String id);
 }

@@ -1,6 +1,7 @@
 package com.asofdate.dispatch.dao;
 
 import com.asofdate.dispatch.model.GroupArgumentModel;
+import org.json.JSONArray;
 
 import java.util.List;
 
@@ -9,4 +10,6 @@ import java.util.List;
  */
 public interface GroupArgumentDao {
     List<GroupArgumentModel> findAll(String domainId);
+
+    JSONArray getGroupArg(String id);
 }

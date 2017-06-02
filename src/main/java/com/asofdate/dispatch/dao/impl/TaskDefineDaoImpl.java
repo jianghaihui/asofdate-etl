@@ -41,9 +41,9 @@ public class TaskDefineDaoImpl implements TaskDefineDao {
 
     @Override
     public String delete(List<TaskDefineModel> m) {
-        for (TaskDefineModel l :m){
-            if (1 != jdbcTemplate.update(SqlDefine.sys_rdbms_127,l.getTaskId(),l.getDomainId())){
-                return "删除["+l.getCodeNumber() + "]失败";
+        for (TaskDefineModel l : m) {
+            if (1 != jdbcTemplate.update(SqlDefine.sys_rdbms_127, l.getTaskId(), l.getDomainId())) {
+                return "删除[" + l.getCodeNumber() + "]失败";
             }
         }
         return "success";

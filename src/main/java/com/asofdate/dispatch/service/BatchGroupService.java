@@ -1,6 +1,7 @@
 package com.asofdate.dispatch.service;
 
 import com.asofdate.dispatch.model.BatchGroupModel;
+import org.json.JSONArray;
 
 import java.util.List;
 
@@ -9,4 +10,6 @@ import java.util.List;
  */
 public interface BatchGroupService {
     List<BatchGroupModel> findByBatchId(String domainId, String batchId);
+
+    JSONArray getGroup(String batchId);
 }

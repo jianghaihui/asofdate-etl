@@ -41,9 +41,9 @@ public class BatchDefineDaoImpl implements BatchDefineDao {
 
     @Override
     public String delete(List<BatchDefineModel> m) {
-        for (BatchDefineModel l:m){
-            if ( 1!= jdbcTemplate.update(SqlDefine.sys_rdbms_129,l.getBatch_id(),l.getDomain_id())){
-                return "删除["+l.getBatch_desc()+"]失败";
+        for (BatchDefineModel l : m) {
+            if (1 != jdbcTemplate.update(SqlDefine.sys_rdbms_129, l.getBatch_id(), l.getDomain_id())) {
+                return "删除[" + l.getBatch_desc() + "]失败";
             }
         }
         return "success";
@@ -61,6 +61,6 @@ public class BatchDefineDaoImpl implements BatchDefineDao {
 
     @Override
     public int getStatus(String batchId) {
-        return jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_131,Integer.class,batchId);
+        return jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_131, Integer.class, batchId);
     }
 }

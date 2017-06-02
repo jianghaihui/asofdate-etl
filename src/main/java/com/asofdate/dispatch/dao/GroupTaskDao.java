@@ -9,5 +9,8 @@ import java.util.List;
  */
 public interface GroupTaskDao {
     List findAll(String domainId);
+
     JSONArray getTask(String groupId);
+
+    String getTaskId(String id);
 }

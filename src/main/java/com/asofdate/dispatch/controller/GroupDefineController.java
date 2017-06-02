@@ -1,6 +1,5 @@
 package com.asofdate.dispatch.controller;
 
-import com.asofdate.dispatch.model.ArgumentDefineModel;
 import com.asofdate.dispatch.model.GroupDefineModel;
 import com.asofdate.dispatch.service.GroupDefineService;
 import com.asofdate.dispatch.service.GroupTaskService;
@@ -48,11 +47,11 @@ public class GroupDefineController {
     * */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public String add(HttpServletRequest request){
-        if (1 != groupDefineService.add(parse(request))){
-            return Hret.error(500,"新增任务组信息失败,任务组编码重复",JSONObject.NULL);
+    public String add(HttpServletRequest request) {
+        if (1 != groupDefineService.add(parse(request))) {
+            return Hret.error(500, "新增任务组信息失败,任务组编码重复", JSONObject.NULL);
         }
-        return Hret.success(200,"success", JSONObject.NULL);
+        return Hret.success(200, "success", JSONObject.NULL);
     }
 
     /*
@@ -60,7 +59,7 @@ public class GroupDefineController {
     * */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
-    public String delete(HttpServletRequest request){
+    public String delete(HttpServletRequest request) {
         List<GroupDefineModel> args = new ArrayList<>();
         JSONArray jsonArray = new JSONArray(request.getParameter("JSON"));
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -71,10 +70,10 @@ public class GroupDefineController {
             args.add(groupDefineModel);
         }
         String msg = groupDefineService.delete(args);
-        if ("success".equals(msg)){
-            return Hret.success(200,"success", JSONObject.NULL);
+        if ("success".equals(msg)) {
+            return Hret.success(200, "success", JSONObject.NULL);
         }
-        return Hret.error(500,msg,JSONObject.NULL);
+        return Hret.error(500, msg, JSONObject.NULL);
     }
 
 
@@ -83,33 +82,40 @@ public class GroupDefineController {
     * */
     @RequestMapping(method = RequestMethod.PUT)
     @ResponseBody
-    public String update(HttpServletRequest request){
-        if (1 != groupDefineService.update(parse(request))){
-            return Hret.error(500,"新增任务组信息失败,任务组编码重复",JSONObject.NULL);
+    public String update(HttpServletRequest request) {
+        if (1 != groupDefineService.update(parse(request))) {
+            return Hret.error(500, "新增任务组信息失败,任务组编码重复", JSONObject.NULL);
         }
-        return Hret.success(200,"success", JSONObject.NULL);
+        return Hret.success(200, "success", JSONObject.NULL);
     }
 
-    @RequestMapping(value = "/task",method = RequestMethod.GET)
+    @RequestMapping(value = "/task", method = RequestMethod.GET)
     @ResponseBody
-    public String getTask(HttpServletRequest request){
+    public String getTask(HttpServletRequest request) {
         String groupId = request.getParameter("group_id");
         return groupTaskService.getTask(groupId).toString();
     }
 
-    @RequestMapping(value = "/task/dependency",method = RequestMethod.GET)
+    @RequestMapping(value = "/task/dependency", method = RequestMethod.GET)
     @ResponseBody
-    public String getTaskDependency(HttpServletRequest request){
+    public String getTaskDependency(HttpServletRequest request) {
         String id = request.getParameter("id");
         JSONArray jsonArray = taskDependencyService.getTaskDependency(id);
         logger.info(jsonArray.toString());
         return jsonArray.toString();
     }
 
-    private GroupDefineModel parse(HttpServletRequest request){
+    @RequestMapping(value = "/task/argument", method = RequestMethod.GET)
+    @ResponseBody
+    public String getGroupTaskArgument(HttpServletRequest request) {
+        String id = request.getParameter("id");
+        return groupTaskService.getTaskArg(id).toString();
+    }
+
+    private GroupDefineModel parse(HttpServletRequest request) {
         String userId = JwtService.getConnectUser(request).get("UserId").toString();
         GroupDefineModel groupDefineModel = new GroupDefineModel();
-        String groupId = JoinCode.join(request.getParameter("domain_id"),request.getParameter("group_id"));
+        String groupId = JoinCode.join(request.getParameter("domain_id"), request.getParameter("group_id"));
         groupDefineModel.setGroup_id(groupId);
         groupDefineModel.setCode_number(request.getParameter("group_id"));
         groupDefineModel.setCreate_user(userId);

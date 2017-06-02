@@ -38,17 +38,22 @@ public class GroupTaskDaoImpl implements GroupTaskDao {
             @Override
             public void processRow(ResultSet resultSet) throws SQLException {
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("id",resultSet.getString("id"));
-                jsonObject.put("group_id",resultSet.getString("group_id"));
-                jsonObject.put("task_id",resultSet.getString("task_id"));
-                jsonObject.put("domain_id",resultSet.getString("domain_id"));
-                jsonObject.put("task_desc",resultSet.getString("task_desc"));
-                jsonObject.put("task_type",resultSet.getString("task_type"));
-                jsonObject.put("task_type_desc",resultSet.getString("task_type_desc"));
-                jsonObject.put("code_number",resultSet.getString("code_number"));
+                jsonObject.put("id", resultSet.getString("id"));
+                jsonObject.put("group_id", resultSet.getString("group_id"));
+                jsonObject.put("task_id", resultSet.getString("task_id"));
+                jsonObject.put("domain_id", resultSet.getString("domain_id"));
+                jsonObject.put("task_desc", resultSet.getString("task_desc"));
+                jsonObject.put("task_type", resultSet.getString("task_type"));
+                jsonObject.put("task_type_desc", resultSet.getString("task_type_desc"));
+                jsonObject.put("code_number", resultSet.getString("code_number"));
                 jsonArray.put(jsonObject);
             }
-        },groupId);
+        }, groupId);
         return jsonArray;
+    }
+
+    @Override
+    public String getTaskId(String id) {
+        return jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_136, String.class, id);
     }
 }

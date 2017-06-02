@@ -1,7 +1,6 @@
 package com.asofdate.dispatch.dao;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -10,5 +9,6 @@ import java.util.List;
  */
 public interface TaskArgumentDao {
     List findAll(String domainId);
+
     JSONArray getTaskArg(String taskId);
 }

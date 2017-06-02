@@ -3,6 +3,7 @@ package com.asofdate.dispatch.service.impl;
 import com.asofdate.dispatch.dao.GroupDependencyDao;
 import com.asofdate.dispatch.model.GroupDependencyModel;
 import com.asofdate.dispatch.service.GroupDependencyService;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -54,5 +55,10 @@ public class GroupDependencyServiceImpl implements GroupDependencyService {
     @Override
     public Set<GroupDependencyModel> getGroupDependency(String gid) {
         return this.groupMap.get(gid);
+    }
+
+    @Override
+    public JSONArray getUp(String id) {
+        return groupDependencyDao.getGroupDependency(id);
     }
 }
