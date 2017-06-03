@@ -2,6 +2,7 @@ package com.asofdate.dispatch.service;
 
 import com.asofdate.dispatch.model.ArgumentDefineModel;
 import com.asofdate.dispatch.model.TaskArgumentModel;
+import org.json.JSONArray;
 
 import java.util.List;
 
@@ -26,4 +27,6 @@ public interface ArgumentService {
     * 更新任务
     * */
     int update(ArgumentDefineModel m);
+
+    JSONArray getBatchArg(String batchId);
 }

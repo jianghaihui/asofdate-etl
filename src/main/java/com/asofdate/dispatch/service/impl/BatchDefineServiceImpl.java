@@ -40,4 +40,9 @@ public class BatchDefineServiceImpl implements BatchDefineService {
     public int getStatus(String batchId) {
         return batchDefineDao.getStatus(batchId);
     }
+
+    @Override
+    public int setStatus(String batchId, int status) {
+        return batchDefineDao.setStatus(batchId,status);
+    }
 }

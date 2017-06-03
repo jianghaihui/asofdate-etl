@@ -17,4 +17,6 @@ public interface BatchDefineDao {
     int update(BatchDefineModel m);
 
     int getStatus(String batchId);
+
+    int setStatus(String batchId,int status);
 }

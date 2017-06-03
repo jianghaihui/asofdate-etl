@@ -1,6 +1,8 @@
 package com.asofdate.dispatch.controller;
 
+import com.asofdate.dispatch.model.BatchStatus;
 import com.asofdate.dispatch.service.ArgumentService;
+import com.asofdate.dispatch.service.BatchDefineService;
 import com.asofdate.dispatch.service.GroupStatusService;
 import com.asofdate.dispatch.service.TaskStatusService;
 import com.asofdate.dispatch.support.JobScheduler;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by hzwy23 on 2017/5/23.
@@ -34,18 +37,27 @@ public class DispatchController {
     private GroupStatusService groupStatus;
     @Autowired
     private ArgumentService argumentService;
+    @Autowired
+    private BatchDefineService batchDefineService;
 
     @RequestMapping(value = "/v1/dispatch/start")
     @ResponseBody
-    public String start(HttpServletRequest request) throws Exception {
+    public String start(HttpServletResponse response,HttpServletRequest request) throws Exception {
 
         String domainId = request.getParameter("domain_id");
         String batchId = request.getParameter("batch_id");
 
         if (domainId == null || batchId == null) {
+            response.setStatus(421);
             return Hret.error(421, "domain_id is empty or batch_id is empty", JSONObject.NULL);
         }
 
+        if (BatchStatus.BATCH_STATUS_RUNNING == batchDefineService.getStatus(batchId)){
+            response.setStatus(421);
+            return Hret.error(421, "批次正在运行中", JSONObject.NULL);
+        }
+
+        batchDefineService.setStatus(batchId,BatchStatus.BATCH_STATUS_RUNNING);
         /*
         * 服务流程:
         *     1. 初始化任务组

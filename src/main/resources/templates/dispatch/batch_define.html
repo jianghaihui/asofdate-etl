@@ -18,6 +18,9 @@
             <button onclick="DispatchBatchDefineObj.edit()" class="btn btn-success btn-sm" title="编辑机构信息">
                 <span class="icon-edit"> 编辑</span>
             </button>
+            <button onclick="DispatchBatchDefineObj.start()" class="btn btn-success btn-sm" title="编辑机构信息">
+                <span class="icon-edit"> 运行</span>
+            </button>
             <button onclick="DispatchBatchDefineObj.delete()" class="btn btn-danger btn-sm" title="删除机构信息">
                 <span class="icon-trash"> 删除</span>
             </button>
@@ -61,7 +64,7 @@
                         <th data-sortable="true" data-align="center" data-field="modify_date">修改时间</th>
                         <th data-sortable="true" data-align="center" data-field="modify_user">修改人</th>
                         <th data-sortable="true" data-align="center" data-formatter="DispatchBatchDefineObj.formatter">
-                            批次内任务组管理
+                            操作
                         </th>
                     </tr>
                     </thead>
@@ -75,7 +78,53 @@
     var DispatchBatchDefineObj = {
         $table: $('#h-dispatch-batch-manage-info-table-details'),
         formatter: function (value, row, index) {
-            return '<span class="h-td-btn btn-success btn-xs" onclick="DispatchBatchDefineObj.getGroups(\'' + row.batch_id + '\',\''+row.batch_desc+'\')">任务组管理</span>'
+            return '<span class="h-td-btn btn-success btn-xs" onclick="DispatchBatchDefineObj.getGroups(\'' + row.batch_id + '\',\''+row.batch_desc+'\')">任务组管理</span>'+
+                '&nbsp;&nbsp;<span class="h-td-btn btn-warning btn-xs" onclick="DispatchBatchDefineObj.getBatchArg(\'' + row.batch_id + '\',\''+row.batch_desc+'\')">批次参数</span>';
+        },
+        start:function () {
+            var row = $("#h-dispatch-batch-manage-info-table-details").bootstrapTable('getSelections');
+            if (row.length == 0) {
+                $.Notify({
+                    message: "您没有选择需要编辑的费用信息",
+                    type: "info",
+                })
+                return
+            } else if (row.length > 1) {
+                $.Notify({
+                    message: "您选择了多行信息,请选择一行进行编辑",
+                    type: "info",
+                })
+                return
+            }
+
+            $.HAjaxRequest({
+                url:"/v1/dispatch/start",
+                type:"get",
+                data:{domain_id:row[0].domain_id,batch_id:row[0].batch_id},
+                success:function () {
+                    $.Notify({
+                        message:"批次启动成功",
+                        type:"success",
+                    })
+                }
+            })
+        },
+        getBatchArg:function (batchId, batchDesc) {
+            $.Hmodal({
+                header:"["+batchDesc + "]参数列表",
+                height: "430px",
+                body:$("#h-dispatch-batch-argument-relation-src").html(),
+                footerBtnStatus:false,
+                preprocess:function () {
+                    $("#h-dispatch-batch-argument-relation-table").bootstrapTable({
+                        height:290,
+                        queryParams:function (params) {
+                            params.batch_id = batchId;
+                            return params;
+                        }
+                    })
+                }
+            })
         },
         formatterGroup: function (value, row, index) {
             return '<span class="h-td-btn btn-success btn-xs" onclick="DispatchBatchDefineObj.getDependency(\'' + row.id + '\',\''+row.group_desc+'\')">上级任务组</span>'
@@ -346,6 +395,27 @@
             <th data-align="center" data-field="up_id">批次内上级唯一任务ID号</th>
             <th data-align="center" data-field="code_number">任务组编码</th>
             <th data-align="left" data-field="group_desc">任务组名称</th>
+        </tr>
+        </thead>
+    </table>
+</script>
+
+
+<script id="h-dispatch-batch-argument-relation-src" type="text/html">
+    <table id="h-dispatch-batch-argument-relation-table"
+           data-toggle="table"
+           data-striped="true"
+           data-unique-id="taskId"
+           data-url="/v1/dispatch/batch/define/argument"
+           data-side-pagination="client"
+           data-pagination="false"
+           data-search="false">
+        <thead>
+        <tr>
+            <th data-align="center" data-field="code_number">参数编码</th>
+            <th data-align="left" data-field="arg_desc">参数名称</th>
+            <th data-align="center" data-field="arg_type_desc">参数类型</th>
+            <th data-align="right" data-field="arg_value">参数设定值</th>
         </tr>
         </thead>
     </table>

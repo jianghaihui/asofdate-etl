@@ -118,4 +118,6 @@ public class SqlDefine {
     public static String sys_rdbms_136 = "select t.task_id from dispatch_group_task_relation t where t.id = ?";
     public static String sys_rdbms_137 = "select t.id,t.batch_id,t.group_id,t.domain_id,d.group_desc,d.code_number from dispatch_batch_group_relation t inner join dispatch_group_define d on t.group_id = d.group_id where batch_id = ?";
     public static String sys_rdbms_138 = "select t.uuid,t.id,t.up_id,t.domain_id,r.group_id,d.group_desc,d.code_number from dispatch_group_dependency t inner join dispatch_batch_group_relation r on t.up_id = r.id inner join dispatch_group_define d on r.group_id = d.group_id where t.id = ?";
+    public static String sys_rdbms_139 = "select t.uuid,t.batch_id,t.arg_id,t.arg_value,t.domain_id,r.arg_desc,r.arg_type,a.arg_type_desc,r.code_number from dispatch_batch_argument_relation t inner join dispatch_argument_define r on t.arg_id = r.arg_id inner join dispatch_argument_type_attr a on r.arg_type = a.arg_type where t.batch_id = ?";
+    public static String sys_rdbms_140 = "update dispatch_batch_define set batch_status = ? where batch_id = ?";
 }

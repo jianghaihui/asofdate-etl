@@ -7,6 +7,7 @@ import com.asofdate.dispatch.dao.TaskArgumentDao;
 import com.asofdate.dispatch.model.*;
 import com.asofdate.dispatch.service.ArgumentService;
 import com.asofdate.dispatch.service.GroupTaskService;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -132,6 +133,11 @@ public class ArgumentServiceImpl implements ArgumentService {
     @Override
     public int update(ArgumentDefineModel m) {
         return argumentDefineDao.update(m);
+    }
+
+    @Override
+    public JSONArray getBatchArg(String batchId) {
+        return batchArgumentDao.getBatchArg(batchId);
     }
 
     private void initArgDefineMap() {

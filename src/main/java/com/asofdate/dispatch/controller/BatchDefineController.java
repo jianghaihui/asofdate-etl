@@ -2,6 +2,7 @@ package com.asofdate.dispatch.controller;
 
 import com.asofdate.dispatch.model.BatchDefineModel;
 import com.asofdate.dispatch.model.BatchStatus;
+import com.asofdate.dispatch.service.ArgumentService;
 import com.asofdate.dispatch.service.BatchDefineService;
 import com.asofdate.dispatch.service.BatchGroupService;
 import com.asofdate.dispatch.service.GroupDependencyService;
@@ -33,6 +34,8 @@ public class BatchDefineController {
     private BatchGroupService batchGroupService;
     @Autowired
     private GroupDependencyService groupDependencyService;
+    @Autowired
+    private ArgumentService argumentService;
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
@@ -112,6 +115,13 @@ public class BatchDefineController {
     public String getDependency(HttpServletRequest request) {
         String id = request.getParameter("id");
         return groupDependencyService.getUp(id).toString();
+    }
+
+    @RequestMapping(value = "/argument", method = RequestMethod.GET)
+    @ResponseBody
+    public String getBatchArg(HttpServletRequest request) {
+        String id = request.getParameter("batch_id");
+        return argumentService.getBatchArg(id).toString();
     }
 
     private BatchDefineModel parse(HttpServletRequest request) {
