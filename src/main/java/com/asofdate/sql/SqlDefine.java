@@ -120,4 +120,9 @@ public class SqlDefine {
     public static String sys_rdbms_138 = "select t.uuid,t.id,t.up_id,t.domain_id,r.group_id,d.group_desc,d.code_number from dispatch_group_dependency t inner join dispatch_batch_group_relation r on t.up_id = r.id inner join dispatch_group_define d on r.group_id = d.group_id where t.id = ?";
     public static String sys_rdbms_139 = "select t.uuid,t.batch_id,t.arg_id,t.arg_value,t.domain_id,r.arg_desc,r.arg_type,a.arg_type_desc,r.code_number from dispatch_batch_argument_relation t inner join dispatch_argument_define r on t.arg_id = r.arg_id inner join dispatch_argument_type_attr a on r.arg_type = a.arg_type where t.batch_id = ?";
     public static String sys_rdbms_140 = "update dispatch_batch_define set batch_status = ? where batch_id = ?";
+    public static String sys_rdbms_141 = "update dispatch_task_argument_relation set sort_id = ? where uuid = ?";
+    public static String sys_rdbms_142 = "delete from dispatch_task_argument_relation where uuid = ?";
+    public static String sys_rdbms_143 = "select arg_id,arg_desc,arg_value,arg_type,domain_id from dispatch_argument_define where arg_id = ?";
+    public static String sys_rdbms_144 = "insert into dispatch_task_argument_relation(uuid,task_id,arg_id,domain_id,arg_value,sort_id) values(uuid(),?,?,?,?,?)";
+    public static String sys_rdbms_145 = "update dispatch_task_argument_relation set arg_value = ? where uuid = ?";
 }

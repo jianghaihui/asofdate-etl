@@ -49,4 +49,9 @@ public class GroupArgumentDaoImpl implements GroupArgumentDao {
         }, id);
         return jsonArray;
     }
+
+    @Override
+    public int updateArg(String argValue, String uuid) {
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_145,argValue,uuid);
+    }
 }

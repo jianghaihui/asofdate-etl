@@ -112,6 +112,18 @@ public class GroupDefineController {
         return groupTaskService.getTaskArg(id).toString();
     }
 
+    @RequestMapping(value = "/task/argument/update", method = RequestMethod.POST)
+    @ResponseBody
+    public String updateArgValue(HttpServletRequest request){
+        String argValue = request.getParameter("arg_value");
+        String uuid = request.getParameter("uuid");
+        logger.info("uuid is:" +uuid+",arg value is:" + argValue);
+        if (1 != groupDefineService.updateArg(argValue,uuid)){
+            return Hret.error(421,"修改任务组参数失败",JSONObject.NULL);
+        }
+        return Hret.success(200,"success",JSONObject.NULL);
+    }
+
     private GroupDefineModel parse(HttpServletRequest request) {
         String userId = JwtService.getConnectUser(request).get("UserId").toString();
         GroupDefineModel groupDefineModel = new GroupDefineModel();

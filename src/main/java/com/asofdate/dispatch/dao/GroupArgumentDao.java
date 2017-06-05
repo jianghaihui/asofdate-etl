@@ -12,4 +12,6 @@ public interface GroupArgumentDao {
     List<GroupArgumentModel> findAll(String domainId);
 
     JSONArray getGroupArg(String id);
+
+    int updateArg(String argValue,String uuid);
 }

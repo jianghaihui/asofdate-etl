@@ -15,4 +15,6 @@ public interface GroupDefineService {
     String delete(List<GroupDefineModel> m);
 
     int add(GroupDefineModel m);
+
+    int updateArg(String argValue,String uuid);
 }

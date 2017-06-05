@@ -1625,7 +1625,7 @@ var Hutils = {
                 });
             }
         }
-        
+
         function initDefaultValue() {
             var flag = false;
             $(sel).find("option").each(function (index, element) {
@@ -1956,7 +1956,7 @@ var Hutils = {
                 default :
                     DEFAULT.icon = "icon-bullhorn"
             }
-            
+
             $.notify({
                 // options
                 icon: DEFAULT.icon,
@@ -2193,12 +2193,10 @@ var Hutils = {
                 footer:"",
 
                 footerBtnStatus:true,
-                submitDesc:"提交",
-                submitIcon:"icon-ok",
-                cancelDesc:"取消",
 
-                cancelBtn:true,
-                submitBtn:true,
+                submitDesc:"提交",
+
+                cancelDesc:"取消",
             }
             $.extend(true,__DEFAULT,param)
 
@@ -2213,7 +2211,7 @@ var Hutils = {
                     '<div class="modal-body" style="width: '+__DEFAULT.width+'; overflow-y: auto">'+__DEFAULT.body+'</div>'+
                     '<div class="modal-footer btn-group-sm">'+
                     '<button type="button" class="btn btn-danger cancel" data-dismiss="modal"><i class="icon-remove"></i>&nbsp;'+__DEFAULT.cancelDesc+'</button>'+
-                    '<button type="button" class="btn btn-primary submit"><i class="'+__DEFAULT.submitIcon+'"></i>&nbsp;'+__DEFAULT.submitDesc+'</button>'+
+                    '<button type="button" class="btn btn-primary submit"><i class="icon-ok"></i>&nbsp;'+__DEFAULT.submitDesc+'</button>'+
                     '</div>' +
                     '</div>' +
                     '</div>';
@@ -2288,7 +2286,6 @@ var Hutils = {
             //
             if (__DEFAULT.footerBtnStatus){
                 var footer = $(getObj(hmode,"modal-body")).find(".h-modal-footer")
-
                 if ($(footer).find("button").html()==""){
                     console.log("can not found button in modal body content")
                     $(getObj(getObj(hmode,"modal-footer"),"submit","button")).on("click",function(){
@@ -2322,18 +2319,12 @@ var Hutils = {
                         })
                     }
                 }
-            } else {
+            }else{
                 $(getObj(hmode,"modal-footer")).remove();
                 var h = $(getObj(hmode,"modal-body")).height();
                 $(getObj(hmode,"modal-body")).height(h+57);
             }
 
-            if (!__DEFAULT.cancelBtn){
-                $(getObj(hmode,"modal-footer")).find("button.cancel").remove();
-            }
-            if (!__DEFAULT.submitBtn){
-                $(getObj(hmode,"modal-footer")).find("button.submit").remove();
-            }
 
             // preprocess function
             if (typeof  __DEFAULT.preprocess == "function"){

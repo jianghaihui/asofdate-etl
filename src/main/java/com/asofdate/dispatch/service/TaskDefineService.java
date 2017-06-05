@@ -2,6 +2,7 @@ package com.asofdate.dispatch.service;
 
 import com.asofdate.dispatch.model.TaskDefineModel;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -20,4 +21,14 @@ public interface TaskDefineService {
     int update(TaskDefineModel m);
 
     JSONArray getTaskArg(String taskId);
+
+    int updateArgumentSort(String sortId,String uuid);
+
+    int deleteArg(String uuid);
+
+    JSONObject getArgType(String argId);
+
+    int addArg(JSONObject jsonObject);
+
+    int updateArgValue(String argValue,String uuid);
 }

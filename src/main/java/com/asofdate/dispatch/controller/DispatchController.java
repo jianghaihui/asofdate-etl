@@ -27,10 +27,8 @@ public class DispatchController {
 
     @Autowired
     public QuartzConfiguration quartzConfiguration;
-
     @Autowired
     private JobScheduler jobScheduler;
-
     @Autowired
     private TaskStatusService taskStatus;
     @Autowired
@@ -77,7 +75,7 @@ public class DispatchController {
 
         // 进度调度依赖关系管理
         // 根据依赖关系,开启任务触发器
-        jobScheduler.createJobSchedulerService(quartzConfiguration, groupStatus, taskStatus);
+        jobScheduler.createJobSchedulerService(quartzConfiguration, groupStatus, taskStatus,batchDefineService);
         jobScheduler.start();
 
         return Hret.success(200, "start batch successfully. batch id is :" + batchId, JSONObject.NULL);

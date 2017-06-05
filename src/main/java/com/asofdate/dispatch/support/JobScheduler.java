@@ -1,6 +1,8 @@
 package com.asofdate.dispatch.support;
 
 import com.asofdate.dispatch.model.BatchGroupModel;
+import com.asofdate.dispatch.model.BatchStatus;
+import com.asofdate.dispatch.service.BatchDefineService;
 import com.asofdate.dispatch.service.GroupStatusService;
 import com.asofdate.dispatch.service.TaskStatusService;
 import com.asofdate.dispatch.support.utils.QuartzConfiguration;
@@ -29,14 +31,19 @@ public class JobScheduler extends Thread {
     private String batchId;
     private TaskStatusService taskStatus;
     private GroupStatusService groupStatus;
+    private BatchDefineService batchDefineService;
 
-    public void createJobSchedulerService(QuartzConfiguration quartzConfiguration, GroupStatusService groupStatus, TaskStatusService taskStatus) {
+    public void createJobSchedulerService(QuartzConfiguration quartzConfiguration,
+                                          GroupStatusService groupStatus,
+                                          TaskStatusService taskStatus,
+                                          BatchDefineService batchDefineService) {
         this.batchId = quartzConfiguration.getBatchId();
         this.domainId = quartzConfiguration.getDomainId();
         this.quartzConfiguration = quartzConfiguration;
         this.scheduler = quartzConfiguration.getSchedulerFactoryBean();
         this.groupStatus = groupStatus;
         this.taskStatus = taskStatus;
+        this.batchDefineService = batchDefineService;
     }
 
     @Override
@@ -66,6 +73,7 @@ public class JobScheduler extends Thread {
                     logger.info("batch completed.");
                     logger.info("stop scheduler.");
                     scheduler.stop();
+                    batchDefineService.setStatus(batchId, BatchStatus.BATCH_STATUS_COMPLETED);
                     return;
                 }
 
@@ -78,6 +86,7 @@ public class JobScheduler extends Thread {
                     logger.info("task error, 销毁批次");
                     scheduler.stop();
                     scheduler.destroy();
+                    batchDefineService.setStatus(batchId,BatchStatus.BATCH_STATUS_ERROR);
                 }
                 logger.info("batch running. scanning runable group...");
                 Thread.sleep(500);

@@ -92,7 +92,27 @@
                             params.id = id;
                             return params;
                         }
-                    })
+                    });
+
+                    $("#h-dispatch-group-task-argument-relation-table").on("editable-save.bs.table",function (editable, field, row, oldValue, $el) {
+                        if ("arg_value" == field){
+                            if (row.arg_type == "3"){
+                                $.HAjaxRequest({
+                                    url:"/v1/dispatch/group/define/task/argument/update",
+                                    type:"post",
+                                    data:{arg_value:row.arg_value,uuid:row.uuid},
+                                })
+                            } else {
+                                $.notifyClose();
+                                $.Notify({
+                                    message:"任务组定义中,只能给参数类型为[任务组参数]的参数赋值",
+                                    type:"warning",
+                                });
+                            }
+                        }
+                        $("#h-dispatch-group-task-argument-relation-table").bootstrapTable('refresh');
+                    });
+
                 }
             })
         },
@@ -349,9 +369,9 @@
         <tr>
             <th data-align="center" data-field="code_number">参数编码</th>
             <th data-align="left" data-field="arg_desc">参数名称</th>
-            <th data-align="center" data-field="arg_type_desc">参数类型</th>
-            <th data-align="right" data-field="arg_value">参数设定值</th>
+            <th data-align="right" data-editable="true" data-field="arg_value">参数设定值</th>
             <th data-align="center" data-field="sort_id">序号</th>
+            <th data-align="center" data-field="arg_type_desc">参数类型</th>
         </tr>
         </thead>
     </table>

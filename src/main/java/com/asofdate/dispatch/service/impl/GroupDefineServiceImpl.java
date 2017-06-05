@@ -1,5 +1,6 @@
 package com.asofdate.dispatch.service.impl;
 
+import com.asofdate.dispatch.dao.GroupArgumentDao;
 import com.asofdate.dispatch.dao.GroupDefineDao;
 import com.asofdate.dispatch.model.GroupDefineModel;
 import com.asofdate.dispatch.service.GroupDefineService;
@@ -15,6 +16,8 @@ import java.util.List;
 public class GroupDefineServiceImpl implements GroupDefineService {
     @Autowired
     private GroupDefineDao groupDefineDao;
+    @Autowired
+    private GroupArgumentDao groupArgumentDao;
 
     @Override
     public List<GroupDefineModel> findAll(String domainId) {
@@ -34,5 +37,10 @@ public class GroupDefineServiceImpl implements GroupDefineService {
     @Override
     public int add(GroupDefineModel m) {
         return groupDefineDao.add(m);
+    }
+
+    @Override
+    public int updateArg(String argValue, String uuid) {
+        return groupArgumentDao.updateArg(argValue,uuid);
     }
 }

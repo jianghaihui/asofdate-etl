@@ -7,6 +7,7 @@ import com.asofdate.dispatch.model.TaskDefineModel;
 import com.asofdate.dispatch.service.GroupTaskService;
 import com.asofdate.dispatch.service.TaskDefineService;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,5 +74,30 @@ public class TaskDefineServiceImpl implements TaskDefineService {
     @Override
     public JSONArray getTaskArg(String taskId) {
         return taskArgumentDao.getTaskArg(taskId);
+    }
+
+    @Override
+    public int updateArgumentSort(String sortId, String uuid) {
+        return taskArgumentDao.updateSort(sortId,uuid);
+    }
+
+    @Override
+    public int deleteArg(String uuid) {
+        return taskArgumentDao.deleteArg(uuid);
+    }
+
+    @Override
+    public JSONObject getArgType(String argId) {
+        return taskArgumentDao.getArgType(argId);
+    }
+
+    @Override
+    public int addArg(JSONObject jsonObject) {
+        return taskArgumentDao.addArg(jsonObject);
+    }
+
+    @Override
+    public int updateArgValue(String argValue, String uuid) {
+        return taskArgumentDao.updateArgValue(argValue,uuid);
     }
 }

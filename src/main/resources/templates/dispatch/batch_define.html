@@ -24,6 +24,9 @@
             <button onclick="DispatchBatchDefineObj.delete()" class="btn btn-danger btn-sm" title="删除机构信息">
                 <span class="icon-trash"> 删除</span>
             </button>
+            <button onclick="DispatchBatchDefineObj.refresh()" class="btn btn-info btn-sm" title="刷新">
+                <span class="icon-trash"> 刷新</span>
+            </button>
         </div>
         <div class="pull-right" style="height: 44px; line-height: 44px; width: 260px;">
             <span style="text-align:right;width:80px;height: 30px; line-height: 30px; margin-top: 7px;display: inline"
@@ -106,8 +109,12 @@
                         message:"批次启动成功",
                         type:"success",
                     })
+                    DispatchBatchDefineObj.refresh();
                 }
             })
+        },
+        refresh:function () {
+            $("#h-dispatch-batch-manage-info-table-details").bootstrapTable("refresh");
         },
         getBatchArg:function (batchId, batchDesc) {
             $.Hmodal({
@@ -372,7 +379,7 @@
            data-search="false">
         <thead>
         <tr>
-            <th data-align="center" data-field="id">批次内唯一任务ID号</th>
+            <th data-align="center" data-field="id">批次内唯一任务组ID号</th>
             <th data-align="center" data-field="code_number">任务组编码</th>
             <th data-align="left" data-field="group_desc">任务组名称</th>
             <th data-align="center" data-formatter="DispatchBatchDefineObj.formatterGroup">上级任务组</th>
@@ -392,7 +399,7 @@
            data-search="false">
         <thead>
         <tr>
-            <th data-align="center" data-field="up_id">批次内上级唯一任务ID号</th>
+            <th data-align="center" data-field="up_id">批次内上级唯一任务组ID号</th>
             <th data-align="center" data-field="code_number">任务组编码</th>
             <th data-align="left" data-field="group_desc">任务组名称</th>
         </tr>
