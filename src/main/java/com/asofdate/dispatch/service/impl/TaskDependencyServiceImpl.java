@@ -7,6 +7,7 @@ import com.asofdate.dispatch.service.BatchGroupService;
 import com.asofdate.dispatch.service.TaskDependencyService;
 import com.asofdate.utils.JoinCode;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -58,6 +59,21 @@ public class TaskDependencyServiceImpl implements TaskDependencyService {
     @Override
     public JSONArray getTaskDependency(String id) {
         return taskDependencyDao.getTaskDependency(id);
+    }
+
+    @Override
+    public JSONArray getGroupTask(String groupId) {
+        return taskDependencyDao.getGroupTasks(groupId);
+    }
+
+    @Override
+    public int addTaskDependency(JSONObject jsonObject) {
+        return taskDependencyDao.addTaskDependency(jsonObject);
+    }
+
+    @Override
+    public int deleteTaskDependency(String uuid) {
+        return taskDependencyDao.deleteTaskDependency(uuid);
     }
 
 

@@ -108,4 +108,19 @@ public class GroupTaskServiceImpl implements GroupTaskService {
         }
         return ret;
     }
+
+    @Override
+    public int deleteTask(String id) {
+        return groupTaskDao.deleteTask(id);
+    }
+
+    @Override
+    public int addTask(String id, String groupId, String taskId, String domainId) {
+        return groupTaskDao.addTask(id,groupId,taskId,domainId);
+    }
+
+    @Override
+    public int addGroupArg(JSONArray jsonArray) {
+        return groupTaskDao.addArg(jsonArray);
+    }
 }

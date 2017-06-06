@@ -56,4 +56,29 @@ public class GroupTaskDaoImpl implements GroupTaskDao {
     public String getTaskId(String id) {
         return jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_136, String.class, id);
     }
+
+    @Override
+    public int deleteTask(String id) {
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_147,id);
+    }
+
+    @Override
+    public int addTask(String id, String groupId, String taskId, String domainId) {
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_148,id,groupId,taskId,domainId);
+    }
+
+    @Override
+    public int addArg(JSONArray jsonArray) {
+        for (int i = 0; i < jsonArray.length();i++){
+            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+            if (1 != jdbcTemplate.update(SqlDefine.sys_rdbms_149,
+                    jsonObject.getString("id"),
+                    jsonObject.getString("arg_id"),
+                    jsonObject.getString("arg_value"),
+                    jsonObject.getString("domain_id"))){
+                return 0;
+            }
+        }
+        return 0;
+    }
 }

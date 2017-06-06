@@ -67,4 +67,36 @@ public class TaskDependencyDaoImpl implements TaskDependencyDao {
         }, id);
         return jsonArray;
     }
+
+    @Override
+    public JSONArray getGroupTasks(String groupId) {
+        JSONArray jsonArray = new JSONArray();
+        logger.info("id is :" + groupId);
+        jdbcTemplate.query(SqlDefine.sys_rdbms_150, new RowCallbackHandler() {
+            @Override
+            public void processRow(ResultSet resultSet) throws SQLException {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("id", resultSet.getString("id"));
+                jsonObject.put("group_id", resultSet.getString("group_id"));
+                jsonObject.put("task_id", resultSet.getString("task_id"));
+                jsonObject.put("task_desc", resultSet.getString("task_desc"));
+                jsonObject.put("domain_id", resultSet.getString("domain_id"));
+                jsonArray.put(jsonObject);
+            }
+        }, groupId);
+        return jsonArray;
+    }
+
+    @Override
+    public int addTaskDependency(JSONObject jsonObject) {
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_151,
+                jsonObject.getString("id"),
+                jsonObject.getString("up_id"),
+                jsonObject.getString("domain_id"));
+    }
+
+    @Override
+    public int deleteTaskDependency(String uuid) {
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_152,uuid);
+    }
 }

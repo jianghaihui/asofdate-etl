@@ -13,5 +13,5 @@ public interface GroupArgumentDao {
 
     JSONArray getGroupArg(String id);
 
-    int updateArg(String argValue,String uuid);
+    int updateArg(String argValue,String uuid,String argId);
 }

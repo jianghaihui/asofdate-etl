@@ -2,6 +2,7 @@ package com.asofdate.dispatch.dao;
 
 import com.asofdate.dispatch.model.TaskDependencyModel;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -14,4 +15,10 @@ public interface TaskDependencyDao {
     List<TaskDependencyModel> findById(String domainId, String batchId);
 
     JSONArray getTaskDependency(String id);
+
+    JSONArray getGroupTasks(String groupId);
+
+    int addTaskDependency(JSONObject jsonObject);
+
+    int deleteTaskDependency(String uuid);
 }
