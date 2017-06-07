@@ -71,7 +71,7 @@ public class TaskDependencyDaoImpl implements TaskDependencyDao {
     @Override
     public JSONArray getGroupTasks(String groupId) {
         JSONArray jsonArray = new JSONArray();
-        logger.info("id is :" + groupId);
+        logger.info("groupId is :" + groupId);
         jdbcTemplate.query(SqlDefine.sys_rdbms_150, new RowCallbackHandler() {
             @Override
             public void processRow(ResultSet resultSet) throws SQLException {
@@ -88,11 +88,19 @@ public class TaskDependencyDaoImpl implements TaskDependencyDao {
     }
 
     @Override
-    public int addTaskDependency(JSONObject jsonObject) {
-        return jdbcTemplate.update(SqlDefine.sys_rdbms_151,
-                jsonObject.getString("id"),
-                jsonObject.getString("up_id"),
-                jsonObject.getString("domain_id"));
+    public int addTaskDependency(JSONArray jsonArray) {
+        for (int i=0; i < jsonArray.length(); i++){
+            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+
+            if ( 1 != jdbcTemplate.update(SqlDefine.sys_rdbms_151,
+                    jsonObject.getString("id"),
+                    jsonObject.getString("up_id"),
+                    jsonObject.getString("domain_id"))){
+                return -1;
+            }
+        }
+
+        return 1;
     }
 
     @Override

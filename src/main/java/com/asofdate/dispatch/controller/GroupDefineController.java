@@ -121,11 +121,8 @@ public class GroupDefineController {
     @RequestMapping(value = "/group/task/dependency",method = RequestMethod.POST)
     @ResponseBody
     public String addGroupTask(HttpServletResponse response ,HttpServletRequest request){
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("domain_id",request.getParameter("domain_id"));
-        jsonObject.put("id",request.getParameter("id"));
-        jsonObject.put("up_id",request.getParameter("up_id"));
-        if (1 != taskDependencyService.addTaskDependency(jsonObject)){
+        JSONArray jsonArray = new JSONArray(request.getParameter("JSON"));
+        if (1 != taskDependencyService.addTaskDependency(jsonArray)){
             response.setStatus(421);
             return Hret.error(421,"添加任务依赖失败",JSONObject.NULL);
         }

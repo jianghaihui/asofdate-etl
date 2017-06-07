@@ -67,8 +67,8 @@ public class TaskDependencyServiceImpl implements TaskDependencyService {
     }
 
     @Override
-    public int addTaskDependency(JSONObject jsonObject) {
-        return taskDependencyDao.addTaskDependency(jsonObject);
+    public int addTaskDependency(JSONArray jsonArray) {
+        return taskDependencyDao.addTaskDependency(jsonArray);
     }
 
     @Override

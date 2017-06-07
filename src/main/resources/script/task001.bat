@@ -1,6 +1,5 @@
-echo "ExitMsg=completed"
+echo "ExitMsg=completed"%1 >> C:\Users\hzwy23\Desktop\output\output.txt
 mkdir C:\Users\hzwy23\Desktop\output\task001%1
-
 
 
 echo "ExitCode=0"

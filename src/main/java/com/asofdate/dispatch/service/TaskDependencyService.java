@@ -21,7 +21,7 @@ public interface TaskDependencyService {
 
     JSONArray getGroupTask(String groupId);
 
-    int addTaskDependency(JSONObject jsonObject);
+    int addTaskDependency(JSONArray jsonArray);
 
     int deleteTaskDependency(String uuid);
 }

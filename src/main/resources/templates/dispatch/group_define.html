@@ -176,6 +176,7 @@
             });
         },
         addDependency:function (id,groupId) {
+
             $.Hmodal({
                 header:"新增依赖任务",
                 height: "430px",
@@ -183,21 +184,29 @@
                 preprocess:function () {
                     $("#h-dispatch-group-task-dependency-relation-form").bootstrapTable({
                         height:280,
-                        url:"/v1/dispatch/group/define/group/task/current",
-                        quaryParams:function (params) {
-                            params.group_id = groupId;
-                            return params;
-                        }
+                    });
+                    $.getJSON("/v1/dispatch/group/define/group/task/current",{group_id:groupId},function (data) {
+                        $("#h-dispatch-group-task-dependency-relation-form").bootstrapTable('load',data);
+                        $("#h-dispatch-group-task-dependency-relation-form").bootstrapTable('removeByUniqueId',id);
                     });
                 },
                 callback:function (hmode) {
-                    console.log(id);
                     var domain_id = $("#h-dispatch-group-define-domain-list").val();
-                    var up_id = $("#h-dispatch-group-task-dependency-relation-form").find("select[name='id']").val();
+                    var rows = $("#h-dispatch-group-task-dependency-relation-form").bootstrapTable('getSelections');
+
+                    var args = new Array();
+                    $(rows).each(function (index, element) {
+                        var e = {};
+                        e.domain_id = domain_id;
+                        e.id = id;
+                        e.up_id = element.id;
+                        args.push(e)
+                    });
+
                     $.HAjaxRequest({
                         url:"/v1/dispatch/group/define/group/task/dependency",
                         type:"POST",
-                        data:{domain_id:domain_id,id:id,up_id:up_id},
+                        data:{JSON:JSON.stringify(args)},
                         success:function () {
                             $(hmode).remove();
                             $.getJSON("/v1/dispatch/group/define/task/dependency",{id:id},function (val) {

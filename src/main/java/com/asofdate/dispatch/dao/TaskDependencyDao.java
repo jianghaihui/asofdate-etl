@@ -18,7 +18,7 @@ public interface TaskDependencyDao {
 
     JSONArray getGroupTasks(String groupId);
 
-    int addTaskDependency(JSONObject jsonObject);
+    int addTaskDependency(JSONArray jsonArray);
 
     int deleteTaskDependency(String uuid);
 }
