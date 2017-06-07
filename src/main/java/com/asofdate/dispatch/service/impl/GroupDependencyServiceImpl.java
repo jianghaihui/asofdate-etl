@@ -61,4 +61,14 @@ public class GroupDependencyServiceImpl implements GroupDependencyService {
     public JSONArray getUp(String id) {
         return groupDependencyDao.getGroupDependency(id);
     }
+
+    @Override
+    public int deleteGroupDependency(String uuid) {
+        return groupDependencyDao.deleteGroupDependency(uuid);
+    }
+
+    @Override
+    public int addGroupDependency(JSONArray jsonArray) {
+        return groupDependencyDao.addGroupDependency(jsonArray);
+    }
 }

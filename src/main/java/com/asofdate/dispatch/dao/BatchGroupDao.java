@@ -11,4 +11,8 @@ public interface BatchGroupDao {
     List findAll(String domainId);
 
     JSONArray getGroup(String batchId);
+
+    int addGroup(JSONArray jsonArray);
+
+    int deleteGroup(JSONArray jsonArray);
 }

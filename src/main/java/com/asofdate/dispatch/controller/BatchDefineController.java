@@ -110,12 +110,73 @@ public class BatchDefineController {
         return batchGroupService.getGroup(batchId).toString();
     }
 
+    @RequestMapping(value = "/group", method = RequestMethod.POST)
+    @ResponseBody
+    public String addGroup(HttpServletRequest request) {
+        String batchId = request.getParameter("batch_id");
+        String domainId = request.getParameter("domain_id");
+        String JSON = request.getParameter("JSON");
+        JSONArray jsonArray = new JSONArray(JSON);
+        JSONArray arg = new JSONArray();
+        for (int i = 0; i < jsonArray.length(); i++){
+            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+            jsonObject.put("domain_id",domainId);
+            jsonObject.put("batch_id",batchId);
+            arg.put(jsonObject);
+        }
+        if (1 != batchGroupService.addGroup(arg)){
+            return Hret.error(421,"添加任务组失败",JSONObject.NULL);
+        }
+        return Hret.success(200,"success",JSONObject.NULL);
+    }
+
+    @RequestMapping(value = "/group/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public String deleteGroup(HttpServletRequest request) {
+        String id = request.getParameter("id");
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id",id);
+        jsonArray.put(jsonObject);
+        if (1 != batchGroupService.deleteGroup(jsonArray)){
+            return Hret.error(421,"删除任务组失败",JSONObject.NULL);
+        }
+        return Hret.success(200,"success",JSONObject.NULL);
+    }
+
+
     @RequestMapping(value = "/group/dependency", method = RequestMethod.GET)
     @ResponseBody
     public String getDependency(HttpServletRequest request) {
         String id = request.getParameter("id");
         return groupDependencyService.getUp(id).toString();
     }
+
+    @RequestMapping(value = "/group/dependency", method = RequestMethod.POST)
+    @ResponseBody
+    public String addDependency(HttpServletResponse response ,HttpServletRequest request){
+
+        String JSON = request.getParameter("JSON");
+        JSONArray jsonArray = new JSONArray(JSON);
+
+        if (1 != groupDependencyService.addGroupDependency(jsonArray)){
+            response.setStatus(421);
+            return Hret.success(421,"新增任务依赖失败",JSONObject.NULL);
+        }
+        return Hret.success(200,"success",JSONObject.NULL);
+    }
+
+    @RequestMapping(value = "/group/dependency/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public String deleteGroupDependency(HttpServletResponse response ,HttpServletRequest request) {
+        String uuid = request.getParameter("uuid");
+        if ( 1 != groupDependencyService.deleteGroupDependency(uuid)){
+            response.setStatus(421);
+            return Hret.error(421,"删除任务组依赖关系失败,请联系管理员",JSONObject.NULL);
+        }
+        return Hret.success(200,"success",JSONObject.NULL);
+    }
+
 
     @RequestMapping(value = "/argument", method = RequestMethod.GET)
     @ResponseBody

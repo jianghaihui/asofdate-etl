@@ -132,4 +132,8 @@ public class SqlDefine {
     public static String sys_rdbms_150 = "select t.id,t.group_id,t.task_id,d.task_desc,t.domain_id from dispatch_group_task_relation t inner join dispatch_task_define d on t.task_id = d.task_id where t.group_id = ?";
     public static String sys_rdbms_151 = "insert into dispatch_task_dependency(uuid,id,up_id,domain_id) values(uuid(),?,?,?)";
     public static String sys_rdbms_152 = "delete from dispatch_task_dependency where uuid = ?";
+    public static String sys_rdbms_153 = "delete from dispatch_group_dependency where uuid = ?";
+    public static String sys_rdbms_154 = "insert into dispatch_batch_group_relation(id,batch_id,group_id,domain_id) values(?,?,?,?)";
+    public static String sys_rdbms_155 = "delete from dispatch_batch_group_relation where id = ?";
+    public static String sys_rdbms_156 = "insert into dispatch_group_dependency(uuid,id,up_id,domain_id) values(uuid(),?,?,?)";
 }

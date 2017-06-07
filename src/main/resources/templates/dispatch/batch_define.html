@@ -133,42 +133,22 @@
                 }
             })
         },
-        formatterGroup: function (value, row, index) {
-            return '<span class="h-td-btn btn-success btn-xs" onclick="DispatchBatchDefineObj.getDependency(\'' + row.id + '\',\''+row.group_desc+'\')">上级任务组</span>'
-        },
-        getDependency:function (id,desc) {
-            $.Hmodal({
-                header:"[ "+desc + " ]上级任务组",
-                height: "430px",
-                body:$("#h-dispatch-batch-group-dependency-src").html(),
-                footerBtnStatus:false,
-                preprocess:function () {
-                    $("#h-dispatch-batch-group-dependency-table").bootstrapTable({
-                        height:290,
-                        queryParams:function (params) {
-                            params.id = id;
-                            return params;
-                        }
-                    })
-                }
-            })
-        },
         getGroups: function (batchId,batchDesc) {
-            $.Hmodal({
-                header:"[ "+batchDesc + " ]任务组列表",
-                height: "430px",
-                body:$("#h-dispatch-batch-group-relation-src").html(),
-                footerBtnStatus:false,
-                preprocess:function () {
-                    $("#h-dispatch-batch-group-relation-table").bootstrapTable({
-                        height:290,
-                        queryParams:function (params) {
-                            params.batch_id = batchId;
-                            return params;
-                        }
+            /*<![CDATA[*/
+            var name = batchDesc+"中任务组配置";
+            Hutils.openTab({
+                url:"/v1/dispatch/batchAndGroup/page?batchId="+batchId+"&batchDesc="+batchDesc,
+                id:"batchGroup1989",
+                title:name,
+                error:function (m) {
+                    $.Notify({
+                        title:"温馨提示：",
+                        message:"您没有被授权访问这个域。",
+                        type:"info",
                     })
                 }
-            })
+            });
+            /*]]>*/
         },
         add: function () {
             $.Hmodal({
@@ -367,46 +347,6 @@
         <input name="domain_id" style="display: none;"/>
     </form>
 </script>
-
-<script id="h-dispatch-batch-group-relation-src" type="text/html">
-    <table id="h-dispatch-batch-group-relation-table"
-           data-toggle="table"
-           data-striped="true"
-           data-unique-id="taskId"
-           data-url="/v1/dispatch/batch/define/group"
-           data-side-pagination="client"
-           data-pagination="false"
-           data-search="false">
-        <thead>
-        <tr>
-            <th data-align="center" data-field="id">批次内唯一任务组ID号</th>
-            <th data-align="center" data-field="code_number">任务组编码</th>
-            <th data-align="left" data-field="group_desc">任务组名称</th>
-            <th data-align="center" data-formatter="DispatchBatchDefineObj.formatterGroup">上级任务组</th>
-        </tr>
-        </thead>
-    </table>
-</script>
-
-<script id="h-dispatch-batch-group-dependency-src" type="text/html">
-    <table id="h-dispatch-batch-group-dependency-table"
-           data-toggle="table"
-           data-striped="true"
-           data-unique-id="taskId"
-           data-url="/v1/dispatch/batch/define/group/dependency"
-           data-side-pagination="client"
-           data-pagination="false"
-           data-search="false">
-        <thead>
-        <tr>
-            <th data-align="center" data-field="up_id">批次内上级唯一任务组ID号</th>
-            <th data-align="center" data-field="code_number">任务组编码</th>
-            <th data-align="left" data-field="group_desc">任务组名称</th>
-        </tr>
-        </thead>
-    </table>
-</script>
-
 
 <script id="h-dispatch-batch-argument-relation-src" type="text/html">
     <table id="h-dispatch-batch-argument-relation-table"

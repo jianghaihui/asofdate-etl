@@ -114,6 +114,7 @@ public class GroupDefineController {
     @ResponseBody
     public String getGroupTasks(HttpServletRequest request){
         String groupId = request.getParameter("group_id");
+        logger.info("group_id is："+groupId);
         return taskDependencyService.getGroupTask(groupId).toString();
     }
 

@@ -12,4 +12,8 @@ public interface BatchGroupService {
     List<BatchGroupModel> findByBatchId(String domainId, String batchId);
 
     JSONArray getGroup(String batchId);
+
+    int addGroup(JSONArray jsonArray);
+
+    int deleteGroup(JSONArray jsonArray);
 }

@@ -17,4 +17,8 @@ public interface GroupDependencyService {
     Set<GroupDependencyModel> getGroupDependency(String gid);
 
     JSONArray getUp(String id);
+
+    int deleteGroupDependency(String uuid);
+
+    int addGroupDependency(JSONArray jsonArray);
 }

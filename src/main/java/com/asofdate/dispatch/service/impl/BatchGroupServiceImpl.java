@@ -33,4 +33,14 @@ public class BatchGroupServiceImpl implements BatchGroupService {
     public JSONArray getGroup(String batchId) {
         return batchGroupDao.getGroup(batchId);
     }
+
+    @Override
+    public int addGroup(JSONArray jsonArray) {
+        return batchGroupDao.addGroup(jsonArray);
+    }
+
+    @Override
+    public int deleteGroup(JSONArray jsonArray) {
+        return batchGroupDao.deleteGroup(jsonArray);
+    }
 }
