@@ -11,6 +11,8 @@ import com.asofdate.utils.Hret;
 import com.asofdate.utils.JoinCode;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,6 +30,8 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/v1/dispatch/batch/define")
 public class BatchDefineController {
+
+    private static Logger logger = LoggerFactory.getLogger(BatchDefineController.class);
     @Autowired
     private BatchDefineService batchDefineService;
     @Autowired
@@ -202,6 +206,20 @@ public class BatchDefineController {
         if (1 != argumentService.addBatchArg(jsonArray)){
             return Hret.error(421,"添加批次参数失败",JSONObject.NULL);
         }
+        return Hret.success(200,"success",JSONObject.NULL);
+    }
+
+    @RequestMapping(value = "/asofdate",method = RequestMethod.PUT)
+    @ResponseBody
+    public String updateAsofdate(HttpServletResponse response,HttpServletRequest request){
+        String batchId = request.getParameter("batch_id");
+        String asofdate = request.getParameter("as_of_date");
+        logger.info("batch id is :"+ batchId+",as of date is :" + asofdate);
+        if (1 != batchDefineService.updateAsofdate(asofdate,batchId)){
+            response.setStatus(421);
+            return Hret.error(421,"更新批次日期失败",JSONObject.NULL);
+        }
+
         return Hret.success(200,"success",JSONObject.NULL);
     }
 

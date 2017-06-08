@@ -118,7 +118,7 @@ public class SqlDefine {
     public static String sys_rdbms_136 = "select t.task_id from dispatch_group_task_relation t where t.id = ?";
     public static String sys_rdbms_137 = "select t.id,t.batch_id,t.group_id,t.domain_id,d.group_desc,d.code_number from dispatch_batch_group_relation t inner join dispatch_group_define d on t.group_id = d.group_id where batch_id = ?";
     public static String sys_rdbms_138 = "select t.uuid,t.id,t.up_id,t.domain_id,r.group_id,d.group_desc,d.code_number from dispatch_group_dependency t inner join dispatch_batch_group_relation r on t.up_id = r.id inner join dispatch_group_define d on r.group_id = d.group_id where t.id = ?";
-    public static String sys_rdbms_139 = "select r.batch_id,d.arg_id,d.code_number,d.arg_desc,a.arg_value,a.uuid,d.bind_as_of_date,r.domain_id from dispatch_batch_group_relation r inner join dispatch_group_task_relation g on r.group_id=g.group_id inner join dispatch_task_argument_rel t on g.task_id = t.task_id inner join dispatch_argument_define d on t.arg_id = d.arg_id left join dispatch_batch_argument_rel a on a.batch_id = r.batch_id where d.arg_type = '4' and r.batch_id = ?";
+    public static String sys_rdbms_139 = "select distinct r.batch_id,d.arg_id,d.code_number,d.arg_desc,a.arg_value,a.uuid,d.bind_as_of_date,r.domain_id from dispatch_batch_group_relation r inner join dispatch_group_task_relation g on r.group_id=g.group_id inner join dispatch_task_argument_rel t on g.task_id = t.task_id inner join dispatch_argument_define d on t.arg_id = d.arg_id left join dispatch_batch_argument_rel a on a.batch_id = r.batch_id where d.arg_type = '4' and r.batch_id = ?";
     public static String sys_rdbms_140 = "update dispatch_batch_define set batch_status = ? where batch_id = ?";
     public static String sys_rdbms_141 = "update dispatch_task_argument_rel set sort_id = ? where uuid = ?";
     public static String sys_rdbms_142 = "delete from dispatch_task_argument_rel where uuid = ?";
@@ -136,6 +136,10 @@ public class SqlDefine {
     public static String sys_rdbms_154 = "insert into dispatch_batch_group_relation(id,batch_id,group_id,domain_id) values(?,?,?,?)";
     public static String sys_rdbms_155 = "delete from dispatch_batch_group_relation where id = ?";
     public static String sys_rdbms_156 = "insert into dispatch_group_dependency(uuid,id,up_id,domain_id) values(uuid(),?,?,?)";
-    public static String sys_rdbms_157 = "select to_char(as_of_date,'YYYY-MM-DD') as as_of_date from dispatch_batch_define where batch_id = ?";
+    public static String sys_rdbms_157 = "select as_of_date from dispatch_batch_define where batch_id = ?";
     public static String sys_rdbms_158 = "insert into dispatch_batch_argument_rel(uuid,batch_id,arg_id,arg_value,domain_id) values(uuid(),?,?,?,?)";
+    public static String sys_rdbms_159 = "select count(*) from dispatch_batch_argument_rel where batch_id = ? and arg_id = ?";
+    public static String sys_rdbms_160 = "update dispatch_batch_argument_rel set arg_value = ? where batch_id = ? and arg_id = ?";
+    public static String sys_rdbms_161 = "update dispatch_batch_define set as_of_date = ? where batch_id = ?";
+    public static String sys_rdbms_162 = "select distinct uuid() as uuid,r.batch_id,d.arg_id,a.arg_value,r.domain_id from dispatch_batch_group_relation r inner join dispatch_group_task_relation g on r.group_id=g.group_id inner join dispatch_task_argument_rel t on g.task_id = t.task_id inner join dispatch_argument_define d on t.arg_id = d.arg_id left join dispatch_batch_argument_rel a on a.batch_id = r.batch_id where d.arg_type = '4' and r.domain_id = ?";
 }

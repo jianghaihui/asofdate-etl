@@ -45,4 +45,9 @@ public class BatchDefineServiceImpl implements BatchDefineService {
     public int setStatus(String batchId, int status) {
         return batchDefineDao.setStatus(batchId, status);
     }
+
+    @Override
+    public int updateAsofdate(String asofdate, String batchId) {
+        return batchDefineDao.updateAsofdate(asofdate,batchId);
+    }
 }

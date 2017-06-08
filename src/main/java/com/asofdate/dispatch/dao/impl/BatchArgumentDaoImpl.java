@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
@@ -28,6 +29,9 @@ public class BatchArgumentDaoImpl implements BatchArgumentDao {
     public List findAll(String domainId) {
         RowMapper<BatchArgumentModel> rowMapper = new BeanPropertyRowMapper<BatchArgumentModel>(BatchArgumentModel.class);
         List list = jdbcTemplate.query(SqlDefine.sys_rdbms_105, rowMapper, domainId);
+        List list2 = jdbcTemplate.query(SqlDefine.sys_rdbms_162,rowMapper,domainId);
+        list.addAll(list2);
+
         return list;
     }
 
@@ -36,7 +40,6 @@ public class BatchArgumentDaoImpl implements BatchArgumentDao {
     public JSONArray getBatchArg(String batchId) {
         JSONArray jsonArray = new JSONArray();
         String asOfDate = getAsOfDate(batchId);
-        System.out.println("as of date is :" + asOfDate);
         jdbcTemplate.query(SqlDefine.sys_rdbms_139, new RowCallbackHandler() {
             @Override
             public void processRow(ResultSet resultSet) throws SQLException {
@@ -58,7 +61,7 @@ public class BatchArgumentDaoImpl implements BatchArgumentDao {
                 jsonArray.put(jsonObject);
             }
         }, batchId);
-        System.out.println(jsonArray.toString());
+
         return jsonArray;
     }
 
@@ -67,20 +70,33 @@ public class BatchArgumentDaoImpl implements BatchArgumentDao {
         return jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_157,String.class,batchId);
     }
 
+    private boolean isExists(JSONObject jsonObject){
+        int flag = jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_159,Integer.class,jsonObject.getString("batch_id"),jsonObject.getString("arg_id"));
+        System.out.println("count is：" + flag);
+        if (flag >= 1){
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public int addBatchArg(JSONArray jsonArray) {
         for (int i = 0; i < jsonArray.length(); i++){
             JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-
-
-
-
-            if (1 != jdbcTemplate.update(SqlDefine.sys_rdbms_158,
-                    jsonObject.getString("batch_id"),
-                    jsonObject.getString("arg_id"),
-                    jsonObject.getString("arg_value"),
-                    jsonObject.getString("domain_id"))){
-                return -1;
+            if (isExists(jsonObject)) {
+                if ( 1 != jdbcTemplate.update(SqlDefine.sys_rdbms_160,jsonObject.getString("arg_value"),
+                        jsonObject.getString("batch_id"),
+                        jsonObject.getString("arg_id"))){
+                    return -1;
+                }
+            } else {
+                if (1 != jdbcTemplate.update(SqlDefine.sys_rdbms_158,
+                        jsonObject.getString("batch_id"),
+                        jsonObject.getString("arg_id"),
+                        jsonObject.getString("arg_value"),
+                        jsonObject.getString("domain_id"))){
+                    return -1;
+                }
             }
         }
         return 1;
