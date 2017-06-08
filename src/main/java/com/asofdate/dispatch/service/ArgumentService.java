@@ -29,4 +29,6 @@ public interface ArgumentService {
     int update(ArgumentDefineModel m);
 
     JSONArray getBatchArg(String batchId);
+
+    int addBatchArg(JSONArray jsonArray);
 }

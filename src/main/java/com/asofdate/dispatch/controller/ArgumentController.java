@@ -83,6 +83,7 @@ public class ArgumentController {
         argumentDefineModel.setArg_type(request.getParameter("arg_type"));
         argumentDefineModel.setArg_desc(request.getParameter("arg_desc"));
         argumentDefineModel.setDomain_id(request.getParameter("domain_id"));
+        argumentDefineModel.setBind_as_of_date(request.getParameter("bind_as_of_date"));
         String userId = JwtService.getConnectUser(request).get("UserId").toString();
         argumentDefineModel.setCreate_user(userId);
         argumentDefineModel.setModify_user(userId);

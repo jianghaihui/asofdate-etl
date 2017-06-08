@@ -21,6 +21,9 @@
             <button onclick="DispatchBatchDefineObj.start()" class="btn btn-success btn-sm" title="编辑机构信息">
                 <span class="icon-edit"> 运行</span>
             </button>
+            <button onclick="DispatchBatchDefineObj.stop()" class="btn btn-warning btn-sm" title="停止批次">
+                <span class="icon-edit"> 停止</span>
+            </button>
             <button onclick="DispatchBatchDefineObj.delete()" class="btn btn-danger btn-sm" title="删除机构信息">
                 <span class="icon-trash"> 删除</span>
             </button>
@@ -113,6 +116,35 @@
                 }
             })
         },
+        stop:function () {
+            var row = $("#h-dispatch-batch-manage-info-table-details").bootstrapTable('getSelections');
+            if (row.length == 0) {
+                $.Notify({
+                    message: "您没有选择需要编辑的费用信息",
+                    type: "info",
+                })
+                return
+            } else if (row.length > 1) {
+                $.Notify({
+                    message: "您选择了多行信息,请选择一行进行编辑",
+                    type: "info",
+                })
+                return
+            }
+
+            $.HAjaxRequest({
+                url:"/v1/dispatch/batch/define/stop",
+                type:"POST",
+                data:{batch_id:row[0].batch_id},
+                success:function () {
+                    $.Notify({
+                        message:"停止批次成功",
+                        type:"success",
+                    });
+                    DispatchBatchDefineObj.refresh();
+                }
+            })
+        },
         refresh:function () {
             $("#h-dispatch-batch-manage-info-table-details").bootstrapTable("refresh");
         },
@@ -121,7 +153,7 @@
                 header:"["+batchDesc + "]参数列表",
                 height: "430px",
                 body:$("#h-dispatch-batch-argument-relation-src").html(),
-                footerBtnStatus:false,
+                submitBtn:false,
                 preprocess:function () {
                     $("#h-dispatch-batch-argument-relation-table").bootstrapTable({
                         height:290,
@@ -129,7 +161,31 @@
                             params.batch_id = batchId;
                             return params;
                         }
-                    })
+                    });
+
+
+                    $("#h-dispatch-batch-argument-relation-table").on("editable-save.bs.table",function (editable, field, row, oldValue, $el) {
+                        if (row.bind_as_of_date == "0") {
+                            // 批次非绑定日期变量
+                            var arr = new Array();
+                            var e = {};
+                            e.batch_id = row.batch_id;
+                            e.arg_id = row.arg_id;
+                            e.arg_value = row.arg_value;
+                            e.domain_id = row.domain_id;
+                            arr.push(e);
+
+                            $.HAjaxRequest({
+                                url: "/v1/dispatch/batch/define/argument",
+                                type: "post",
+                                data: {JSON:JSON.stringify(arr)},
+                            })
+                        } else {
+                            // 绑定批次日期变量
+                        }
+
+                        $("#h-dispatch-batch-argument-relation-table").bootstrapTable('refresh')
+                    });
                 }
             })
         },
@@ -352,17 +408,16 @@
     <table id="h-dispatch-batch-argument-relation-table"
            data-toggle="table"
            data-striped="true"
-           data-unique-id="taskId"
            data-url="/v1/dispatch/batch/define/argument"
            data-side-pagination="client"
+           data-unique-id="arg_id"
            data-pagination="false"
            data-search="false">
         <thead>
         <tr>
             <th data-align="center" data-field="code_number">参数编码</th>
             <th data-align="left" data-field="arg_desc">参数名称</th>
-            <th data-align="center" data-field="arg_type_desc">参数类型</th>
-            <th data-align="right" data-field="arg_value">参数设定值</th>
+            <th data-align="left" data-editable="true" data-field="arg_value">参数设定值</th>
         </tr>
         </thead>
     </table>

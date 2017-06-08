@@ -69,6 +69,7 @@ public class JobScheduler extends Thread {
                             m.getUuid(),
                             m.getGroup_id()).start();
                 }
+
                 if (taskStatus.isBatchCompleted()) {
                     logger.info("batch completed.");
                     logger.info("stop scheduler.");
@@ -86,10 +87,15 @@ public class JobScheduler extends Thread {
                     logger.info("task error, 销毁批次");
                     scheduler.stop();
                     scheduler.destroy();
-                    batchDefineService.setStatus(batchId,BatchStatus.BATCH_STATUS_ERROR);
+                    batchDefineService.setStatus(batchId, BatchStatus.BATCH_STATUS_ERROR);
                 }
                 logger.info("batch running. scanning runable group...");
-                Thread.sleep(500);
+                Thread.sleep(100);
+                if (BatchStatus.BATCH_STATUS_RUNNING != batchDefineService.getStatus(batchId)){
+                    logger.info("batch status is not running");
+                    scheduler.stop();
+                    scheduler.destroy();
+                }
             }
         } catch (InterruptedException e) {
             e.printStackTrace();

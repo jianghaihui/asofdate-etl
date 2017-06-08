@@ -110,6 +110,16 @@ public class BatchDefineController {
         return batchGroupService.getGroup(batchId).toString();
     }
 
+    @RequestMapping(value = "/stop",method = RequestMethod.POST)
+    @ResponseBody
+    public String stop(HttpServletRequest request){
+        String batchId = request.getParameter("batch_id");
+        if (1 != batchDefineService.setStatus(batchId,4)){
+            return Hret.error(421,"停止批次失败",JSONObject.NULL);
+        }
+        return Hret.success(200,"停止批次成功",JSONObject.NULL);
+    }
+
     @RequestMapping(value = "/group", method = RequestMethod.POST)
     @ResponseBody
     public String addGroup(HttpServletRequest request) {
@@ -118,16 +128,16 @@ public class BatchDefineController {
         String JSON = request.getParameter("JSON");
         JSONArray jsonArray = new JSONArray(JSON);
         JSONArray arg = new JSONArray();
-        for (int i = 0; i < jsonArray.length(); i++){
+        for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-            jsonObject.put("domain_id",domainId);
-            jsonObject.put("batch_id",batchId);
+            jsonObject.put("domain_id", domainId);
+            jsonObject.put("batch_id", batchId);
             arg.put(jsonObject);
         }
-        if (1 != batchGroupService.addGroup(arg)){
-            return Hret.error(421,"添加任务组失败",JSONObject.NULL);
+        if (1 != batchGroupService.addGroup(arg)) {
+            return Hret.error(421, "添加任务组失败", JSONObject.NULL);
         }
-        return Hret.success(200,"success",JSONObject.NULL);
+        return Hret.success(200, "success", JSONObject.NULL);
     }
 
     @RequestMapping(value = "/group/delete", method = RequestMethod.POST)
@@ -136,12 +146,12 @@ public class BatchDefineController {
         String id = request.getParameter("id");
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("id",id);
+        jsonObject.put("id", id);
         jsonArray.put(jsonObject);
-        if (1 != batchGroupService.deleteGroup(jsonArray)){
-            return Hret.error(421,"删除任务组失败",JSONObject.NULL);
+        if (1 != batchGroupService.deleteGroup(jsonArray)) {
+            return Hret.error(421, "删除任务组失败", JSONObject.NULL);
         }
-        return Hret.success(200,"success",JSONObject.NULL);
+        return Hret.success(200, "success", JSONObject.NULL);
     }
 
 
@@ -154,27 +164,27 @@ public class BatchDefineController {
 
     @RequestMapping(value = "/group/dependency", method = RequestMethod.POST)
     @ResponseBody
-    public String addDependency(HttpServletResponse response ,HttpServletRequest request){
+    public String addDependency(HttpServletResponse response, HttpServletRequest request) {
 
         String JSON = request.getParameter("JSON");
         JSONArray jsonArray = new JSONArray(JSON);
 
-        if (1 != groupDependencyService.addGroupDependency(jsonArray)){
+        if (1 != groupDependencyService.addGroupDependency(jsonArray)) {
             response.setStatus(421);
-            return Hret.success(421,"新增任务依赖失败",JSONObject.NULL);
+            return Hret.success(421, "新增任务依赖失败", JSONObject.NULL);
         }
-        return Hret.success(200,"success",JSONObject.NULL);
+        return Hret.success(200, "success", JSONObject.NULL);
     }
 
     @RequestMapping(value = "/group/dependency/delete", method = RequestMethod.POST)
     @ResponseBody
-    public String deleteGroupDependency(HttpServletResponse response ,HttpServletRequest request) {
+    public String deleteGroupDependency(HttpServletResponse response, HttpServletRequest request) {
         String uuid = request.getParameter("uuid");
-        if ( 1 != groupDependencyService.deleteGroupDependency(uuid)){
+        if (1 != groupDependencyService.deleteGroupDependency(uuid)) {
             response.setStatus(421);
-            return Hret.error(421,"删除任务组依赖关系失败,请联系管理员",JSONObject.NULL);
+            return Hret.error(421, "删除任务组依赖关系失败,请联系管理员", JSONObject.NULL);
         }
-        return Hret.success(200,"success",JSONObject.NULL);
+        return Hret.success(200, "success", JSONObject.NULL);
     }
 
 
@@ -183,6 +193,16 @@ public class BatchDefineController {
     public String getBatchArg(HttpServletRequest request) {
         String id = request.getParameter("batch_id");
         return argumentService.getBatchArg(id).toString();
+    }
+
+    @RequestMapping(value = "/argument", method = RequestMethod.POST)
+    @ResponseBody
+    public String addBatchArg(HttpServletRequest request){
+        JSONArray jsonArray = new JSONArray(request.getParameter("JSON"));
+        if (1 != argumentService.addBatchArg(jsonArray)){
+            return Hret.error(421,"添加批次参数失败",JSONObject.NULL);
+        }
+        return Hret.success(200,"success",JSONObject.NULL);
     }
 
     private BatchDefineModel parse(HttpServletRequest request) {

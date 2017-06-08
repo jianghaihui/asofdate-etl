@@ -170,9 +170,19 @@
             })
         },
         getTaskRelation:function (id, taskDesc,groupId) {
-            $("#h-dispatch-group-task-current-id").html("id:[ "+id+" ] ");
-            $.getJSON("/v1/dispatch/group/define/task/dependency",{id:id},function (data) {
-                $("#h-dispatch-group-task-dependency-table").bootstrapTable('load',data);
+            $.Hmodal({
+                header:taskDesc+" 依赖任务,ID: ["+id+"]",
+                height:"430px",
+                submitBtn:false,
+                body:$("#h-dispatch-group-task-dependency-src").html(),
+                preprocess:function () {
+                    $("#h-dispatch-group-task-dependency-table").bootstrapTable({
+                        height:280,
+                    });
+                    $.getJSON("/v1/dispatch/group/define/task/dependency",{id:id},function (data) {
+                        $("#h-dispatch-group-task-dependency-table").bootstrapTable('load',data);
+                    });
+                }
             });
         },
         addDependency:function (id,groupId) {

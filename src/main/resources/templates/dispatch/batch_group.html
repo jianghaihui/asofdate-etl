@@ -1,13 +1,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <div class="row subsystem-header">
     <div class="pull-left">
-        批次[ <span class="label label-info" th:text="${batchDesc}"></span> ]&nbsp;任务组配置
+        <span class="label label-info" style="font-size: 13px" th:text="${batchDesc}"></span><span>&nbsp;任务组配置管理</span>
         <i  id="h-batch-group-batch-id" style="display: none;" th:text="${batchId}"></i>
         <i id="h-batch-group-domain-id" style="display: none;" th:text="${domainId}"></i>
     </div>
 </div>
 <div class="row" style="margin-top:6px;">
-    <div class="col-sm-7 col-md-7 col-lg-7">
+    <div class="col-sm-12 col-md-12 col-lg-12">
         <div id="h-dispatch-batch-group-table-info">
             <div id="h-dispatch-batch-group-toolbar-list" class="pull-left">
                 <button onclick="DispatchBatchGroupObj.addGroup()" class="btn btn-success btn-sm" title="新增任务">
@@ -20,8 +20,8 @@
                    data-striped="true"
                    data-url="/v1/dispatch/batch/define/group"
                    data-side-pagination="client"
-                   data-pagination="false"
-                   data-search="false">
+                   data-pagination="true"
+                   data-search="true">
                 <thead>
                 <tr>
                     <th data-align="center" data-field="id">批次内唯一任务组ID号</th>
@@ -33,31 +33,14 @@
             </table>
         </div>
     </div>
-    <div class="col-sm-5 col-md-5 col-lg-5" style="padding-left:0px;">
-        <div id="h-dispatch-batch-group-dependency-info">
-            <div id="h-dispatch-up-group-toolbar-list" class="pull-left">
-               <span class="label label-info" id="h-dispatch-group-task-current-id"></span>&nbsp;<span>依赖任务组列表</span>
-            </div>
-            <table id="h-dispatch-batch-group-dependency-table"
-                   data-toggle="table"
-                   data-toolbar="#h-dispatch-up-group-toolbar-list"
-                   data-striped="true"
-                   data-unique-id="uuid"
-                   data-url="/v1/dispatch/batch/define/group/dependency"
-                   data-side-pagination="client"
-                   data-pagination="false"
-                   data-search="false">
-                <thead>
-                <tr>
-                    <th data-align="center" data-field="up_id">任务组内上级唯一任务ID号</th>
-                    <th data-align="center" data-field="code_number">任务组编码</th>
-                    <th data-align="left" data-field="group_desc">任务组名称</th>
-                    <th data-align="center" data-formatter="DispatchBatchGroupObj.formatterDependency">操作</th>
-                </tr>
-                </thead>
-            </table>
-        </div>
-    </div>
+    <!--<div class="col-sm-5 col-md-5 col-lg-5" style="padding-left:0px;">-->
+        <!--<div id="h-dispatch-batch-group-dependency-info">-->
+            <!--<div id="h-dispatch-up-group-toolbar-list" class="pull-left">-->
+               <!--<span class="label label-info" id="h-dispatch-group-task-current-id"></span>&nbsp;<span>依赖任务组列表</span>-->
+            <!--</div>-->
+
+        <!--</div>-->
+    <!--</div>-->
 </div>
 
 <script type="text/javascript">
@@ -146,10 +129,21 @@
             })
         },
         getDependency:function (id,desc) {
-            $("#h-dispatch-group-task-current-id").html(id);
-            $.getJSON("/v1/dispatch/batch/define/group/dependency",{id:id},function (data) {
-                $("#h-dispatch-batch-group-dependency-table").bootstrapTable('load',data);
-            });
+            $.Hmodal({
+                header:desc,
+                body:$("#h-dispatch-batch-group-dependency-src").html(),
+                height:"430px",
+                submitBtn:false,
+                preprocess:function () {
+                    $("#h-dispatch-batch-group-dependency-table").bootstrapTable({
+                        height:280,
+                    });
+                    $("#h-dispatch-group-task-current-id").html(id);
+                    $.getJSON("/v1/dispatch/batch/define/group/dependency",{id:id},function (data) {
+                        $("#h-dispatch-batch-group-dependency-table").bootstrapTable('load',data);
+                    });
+                }
+            })
         },
         deleteGroup:function (id) {
             $.HAjaxRequest({
@@ -230,6 +224,26 @@
             <th data-sortable="true" data-align="center" data-field="create_date">创建时间</th>
             <th data-sortable="true" data-align="center" data-field="modify_user">修改人</th>
             <th data-sortable="true" data-align="center" data-field="modify_date">修改时间</th>
+        </tr>
+        </thead>
+    </table>
+</script>
+<script id="h-dispatch-batch-group-dependency-src" type="text/html">
+    <table id="h-dispatch-batch-group-dependency-table"
+           data-toggle="table"
+           data-toolbar="#h-dispatch-up-group-toolbar-list"
+           data-striped="true"
+           data-unique-id="uuid"
+           data-url="/v1/dispatch/batch/define/group/dependency"
+           data-side-pagination="client"
+           data-pagination="false"
+           data-search="false">
+        <thead>
+        <tr>
+            <th data-align="center" data-field="up_id">任务组内上级唯一任务ID号</th>
+            <th data-align="center" data-field="code_number">任务组编码</th>
+            <th data-align="left" data-field="group_desc">任务组名称</th>
+            <th data-align="center" data-formatter="DispatchBatchGroupObj.formatterDependency">操作</th>
         </tr>
         </thead>
     </table>

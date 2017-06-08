@@ -7,7 +7,6 @@ import com.asofdate.dispatch.service.BatchGroupService;
 import com.asofdate.dispatch.service.TaskDependencyService;
 import com.asofdate.utils.JoinCode;
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;

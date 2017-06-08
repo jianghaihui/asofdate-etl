@@ -53,15 +53,15 @@ public class BatchGroupDaoImpl implements BatchGroupDao {
 
     @Override
     public int addGroup(JSONArray jsonArray) {
-        for (int i = 0; i < jsonArray.length(); i++){
+        for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject = (JSONObject) jsonArray.get(i);
             String id = UUID.randomUUID().toString();
             String batch_id = jsonObject.getString("batch_id");
             String group_id = jsonObject.getString("group_id");
             String domain_id = jsonObject.getString("domain_id");
 
-            if ( 1 != jdbcTemplate.update(SqlDefine.sys_rdbms_154,
-                    id,batch_id,group_id,domain_id)){
+            if (1 != jdbcTemplate.update(SqlDefine.sys_rdbms_154,
+                    id, batch_id, group_id, domain_id)) {
                 return -1;
             }
         }
@@ -70,10 +70,10 @@ public class BatchGroupDaoImpl implements BatchGroupDao {
 
     @Override
     public int deleteGroup(JSONArray jsonArray) {
-        for (int i = 0; i < jsonArray.length(); i++){
+        for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject = (JSONObject) jsonArray.get(i);
             String id = jsonObject.getString("id");
-            if ( 1 != jdbcTemplate.update(SqlDefine.sys_rdbms_155, id)){
+            if (1 != jdbcTemplate.update(SqlDefine.sys_rdbms_155, id)) {
                 return -1;
             }
         }

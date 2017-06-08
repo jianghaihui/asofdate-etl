@@ -116,7 +116,7 @@ public class GroupTaskServiceImpl implements GroupTaskService {
 
     @Override
     public int addTask(String id, String groupId, String taskId, String domainId) {
-        return groupTaskDao.addTask(id,groupId,taskId,domainId);
+        return groupTaskDao.addTask(id, groupId, taskId, domainId);
     }
 
     @Override

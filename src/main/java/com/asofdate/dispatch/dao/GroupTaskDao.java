@@ -1,7 +1,6 @@
 package com.asofdate.dispatch.dao;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -17,7 +16,7 @@ public interface GroupTaskDao {
 
     int deleteTask(String id);
 
-    int addTask(String id,String groupId,String taskId,String domainId);
+    int addTask(String id, String groupId, String taskId, String domainId);
 
     int addArg(JSONArray jsonArray);
 }

@@ -35,16 +35,16 @@ public class StaticPageController {
 
     @RequestMapping(value = "/v1/dispatch/groupAndTask/page", method = RequestMethod.GET)
     public String getGroupTaskPage(HttpServletRequest request, Map<String, Object> map) {
-        map.put("groupId",request.getParameter("groupId"));
-        map.put("groupDesc",request.getParameter("groupDesc"));
+        map.put("groupId", request.getParameter("groupId"));
+        map.put("groupDesc", request.getParameter("groupDesc"));
         return "dispatch/group_task";
     }
 
     @RequestMapping(value = "/v1/dispatch/batchAndGroup/page", method = RequestMethod.GET)
     public String getBatchGroupPage(HttpServletRequest request, Map<String, Object> map) {
-        map.put("batchId",request.getParameter("batchId"));
-        map.put("batchDesc",request.getParameter("batchDesc"));
-        map.put("domainId",JoinCode.getFirst(request.getParameter("batchId")));
+        map.put("batchId", request.getParameter("batchId"));
+        map.put("batchDesc", request.getParameter("batchDesc"));
+        map.put("domainId", JoinCode.getFirst(request.getParameter("batchId")));
         return "dispatch/batch_group";
     }
 }

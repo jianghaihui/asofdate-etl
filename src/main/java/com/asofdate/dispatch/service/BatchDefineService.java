@@ -18,5 +18,5 @@ public interface BatchDefineService {
 
     int getStatus(String batchId);
 
-    int setStatus(String batchId,int status);
+    int setStatus(String batchId, int status);
 }

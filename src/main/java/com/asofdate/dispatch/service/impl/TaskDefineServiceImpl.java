@@ -78,7 +78,7 @@ public class TaskDefineServiceImpl implements TaskDefineService {
 
     @Override
     public int updateArgumentSort(String sortId, String uuid) {
-        return taskArgumentDao.updateSort(sortId,uuid);
+        return taskArgumentDao.updateSort(sortId, uuid);
     }
 
     @Override
@@ -98,6 +98,6 @@ public class TaskDefineServiceImpl implements TaskDefineService {
 
     @Override
     public int updateArgValue(String argValue, String uuid) {
-        return taskArgumentDao.updateArgValue(argValue,uuid);
+        return taskArgumentDao.updateArgValue(argValue, uuid);
     }
 }

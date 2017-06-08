@@ -13,7 +13,7 @@ public interface TaskArgumentDao {
 
     JSONArray getTaskArg(String taskId);
 
-    int updateSort(String sortId,String uuid);
+    int updateSort(String sortId, String uuid);
 
     int deleteArg(String uuid);
 

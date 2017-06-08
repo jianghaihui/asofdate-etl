@@ -40,7 +40,7 @@ public class DispatchController {
 
     @RequestMapping(value = "/v1/dispatch/start")
     @ResponseBody
-    public String start(HttpServletResponse response,HttpServletRequest request) throws Exception {
+    public String start(HttpServletResponse response, HttpServletRequest request) throws Exception {
 
         String domainId = request.getParameter("domain_id");
         String batchId = request.getParameter("batch_id");
@@ -50,21 +50,13 @@ public class DispatchController {
             return Hret.error(421, "domain_id is empty or batch_id is empty", JSONObject.NULL);
         }
 
-        if (BatchStatus.BATCH_STATUS_RUNNING == batchDefineService.getStatus(batchId)){
+        if (BatchStatus.BATCH_STATUS_RUNNING == batchDefineService.getStatus(batchId)) {
             response.setStatus(421);
             return Hret.error(421, "批次正在运行中", JSONObject.NULL);
         }
 
-        batchDefineService.setStatus(batchId,BatchStatus.BATCH_STATUS_RUNNING);
-        /*
-        * 服务流程:
-        *     1. 初始化任务组
-        *     2. 初始化任务
-        *     3. 注册任务
-        *     4. 初始化调度器
-        *     5. 初始化任务控制服务
-        *     6. 开启服务
-        * */
+        batchDefineService.setStatus(batchId, BatchStatus.BATCH_STATUS_RUNNING);
+
         groupStatus.afterPropertiesSet(domainId, batchId);
         taskStatus.afterPropertiesSet(domainId, batchId);
         argumentService.afterPropertySet(domainId, batchId);
@@ -75,7 +67,7 @@ public class DispatchController {
 
         // 进度调度依赖关系管理
         // 根据依赖关系,开启任务触发器
-        jobScheduler.createJobSchedulerService(quartzConfiguration, groupStatus, taskStatus,batchDefineService);
+        jobScheduler.createJobSchedulerService(quartzConfiguration, groupStatus, taskStatus, batchDefineService);
         jobScheduler.start();
 
         return Hret.success(200, "start batch successfully. batch id is :" + batchId, JSONObject.NULL);

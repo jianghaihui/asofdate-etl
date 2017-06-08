@@ -16,5 +16,5 @@ public interface GroupDefineService {
 
     int add(GroupDefineModel m);
 
-    int updateArg(String argValue,String uuid,String arg_id);
+    int updateArg(String argValue, String uuid, String arg_id);
 }

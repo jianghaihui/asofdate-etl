@@ -22,7 +22,7 @@ public interface TaskDefineService {
 
     JSONArray getTaskArg(String taskId);
 
-    int updateArgumentSort(String sortId,String uuid);
+    int updateArgumentSort(String sortId, String uuid);
 
     int deleteArg(String uuid);
 
@@ -30,5 +30,5 @@ public interface TaskDefineService {
 
     int addArg(JSONObject jsonObject);
 
-    int updateArgValue(String argValue,String uuid);
+    int updateArgValue(String argValue, String uuid);
 }

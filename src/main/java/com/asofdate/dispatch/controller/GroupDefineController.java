@@ -5,7 +5,6 @@ import com.asofdate.dispatch.service.GroupDefineService;
 import com.asofdate.dispatch.service.GroupTaskService;
 import com.asofdate.dispatch.service.TaskDependencyService;
 import com.asofdate.platform.authentication.JwtService;
-import com.asofdate.utils.CryptoAES;
 import com.asofdate.utils.Hret;
 import com.asofdate.utils.JoinCode;
 import org.json.JSONArray;
@@ -13,7 +12,6 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.Digits;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -112,32 +109,32 @@ public class GroupDefineController {
 
     @RequestMapping(value = "/group/task/current", method = RequestMethod.GET)
     @ResponseBody
-    public String getGroupTasks(HttpServletRequest request){
+    public String getGroupTasks(HttpServletRequest request) {
         String groupId = request.getParameter("group_id");
-        logger.info("group_id is："+groupId);
+        logger.info("group_id is：" + groupId);
         return taskDependencyService.getGroupTask(groupId).toString();
     }
 
-    @RequestMapping(value = "/group/task/dependency",method = RequestMethod.POST)
+    @RequestMapping(value = "/group/task/dependency", method = RequestMethod.POST)
     @ResponseBody
-    public String addGroupTask(HttpServletResponse response ,HttpServletRequest request){
+    public String addGroupTask(HttpServletResponse response, HttpServletRequest request) {
         JSONArray jsonArray = new JSONArray(request.getParameter("JSON"));
-        if (1 != taskDependencyService.addTaskDependency(jsonArray)){
+        if (1 != taskDependencyService.addTaskDependency(jsonArray)) {
             response.setStatus(421);
-            return Hret.error(421,"添加任务依赖失败",JSONObject.NULL);
+            return Hret.error(421, "添加任务依赖失败", JSONObject.NULL);
         }
-        return Hret.success(200,"新增依赖成功",JSONObject.NULL);
+        return Hret.success(200, "新增依赖成功", JSONObject.NULL);
     }
 
-    @RequestMapping(value = "/group/task/dependency/delete",method = RequestMethod.POST)
+    @RequestMapping(value = "/group/task/dependency/delete", method = RequestMethod.POST)
     @ResponseBody
-    public String deleteTaskDependency(HttpServletResponse response,HttpServletRequest request){
+    public String deleteTaskDependency(HttpServletResponse response, HttpServletRequest request) {
         String uuid = request.getParameter("uuid");
-        if ( 1 != taskDependencyService.deleteTaskDependency(uuid) ){
+        if (1 != taskDependencyService.deleteTaskDependency(uuid)) {
             response.setStatus(421);
-            return  Hret.error(421,"删除任务依赖失败",JSONObject.NULL);
+            return Hret.error(421, "删除任务依赖失败", JSONObject.NULL);
         }
-        return Hret.success(200,"success",JSONObject.NULL);
+        return Hret.success(200, "success", JSONObject.NULL);
     }
 
     @RequestMapping(value = "/task/argument", method = RequestMethod.GET)
@@ -149,59 +146,59 @@ public class GroupDefineController {
 
     @RequestMapping(value = "/task/argument/update", method = RequestMethod.POST)
     @ResponseBody
-    public String updateArgValue(HttpServletRequest request){
+    public String updateArgValue(HttpServletRequest request) {
         String argValue = request.getParameter("arg_value");
         String uuid = request.getParameter("uuid");
         String argId = request.getParameter("arg_id");
 
-        logger.info("uuid is:" +uuid+",arg value is:" + argValue);
-        if (1 != groupDefineService.updateArg(argValue,uuid,argId)){
-            return Hret.error(421,"修改任务组参数失败",JSONObject.NULL);
+        logger.info("uuid is:" + uuid + ",arg value is:" + argValue);
+        if (1 != groupDefineService.updateArg(argValue, uuid, argId)) {
+            return Hret.error(421, "修改任务组参数失败", JSONObject.NULL);
         }
-        return Hret.success(200,"success",JSONObject.NULL);
+        return Hret.success(200, "success", JSONObject.NULL);
     }
 
     @RequestMapping(value = "/task/delete", method = RequestMethod.POST)
     @ResponseBody
-    public String deleteTask(HttpServletResponse response,HttpServletRequest request){
+    public String deleteTask(HttpServletResponse response, HttpServletRequest request) {
         String id = request.getParameter("id");
-        if (1!=groupTaskService.deleteTask(id)){
+        if (1 != groupTaskService.deleteTask(id)) {
             response.setStatus(421);
-            return Hret.error(500,"删除任务组中的任务信息失败",JSONObject.NULL);
+            return Hret.error(500, "删除任务组中的任务信息失败", JSONObject.NULL);
         }
-        return Hret.success(200,"success",JSONObject.NULL);
+        return Hret.success(200, "success", JSONObject.NULL);
     }
 
     @RequestMapping(value = "/task/add", method = RequestMethod.POST)
     @ResponseBody
-    public String addTask(HttpServletResponse response,HttpServletRequest request){
+    public String addTask(HttpServletResponse response, HttpServletRequest request) {
         String group_id = request.getParameter("group_id");
         String task_id = request.getParameter("task_id");
         String domain_id = request.getParameter("domain_id");
         String arg_list = request.getParameter("arg_list");
         String id = UUID.randomUUID().toString();
 
-        if (1 != groupTaskService.addTask(id,group_id,task_id,domain_id)){
+        if (1 != groupTaskService.addTask(id, group_id, task_id, domain_id)) {
             response.setStatus(421);
-            return Hret.error(421,"添加任务失败",JSONObject.NULL);
+            return Hret.error(421, "添加任务失败", JSONObject.NULL);
         }
 
         if (!"[]".equals(arg_list)) {
             JSONArray jsonArray = new JSONArray(arg_list);
             JSONArray arg = new JSONArray();
-            for(int i = 0; i < jsonArray.length();i++){
+            for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = (JSONObject) jsonArray.get(i);
                 jsonObject.getString("arg_id");
                 jsonObject.getString("arg_value");
-                jsonObject.put("id",id);
-                jsonObject.put("domain_id",domain_id);
+                jsonObject.put("id", id);
+                jsonObject.put("domain_id", domain_id);
                 arg.put(jsonObject);
             }
-            if (1 != groupTaskService.addGroupArg(arg)){
-                return Hret.error(421,"任务组添加参数失败",JSONObject.NULL);
+            if (1 != groupTaskService.addGroupArg(arg)) {
+                return Hret.error(421, "任务组添加参数失败", JSONObject.NULL);
             }
         }
-        return Hret.success(200,"success",JSONObject.NULL);
+        return Hret.success(200, "success", JSONObject.NULL);
     }
 
     private GroupDefineModel parse(HttpServletRequest request) {

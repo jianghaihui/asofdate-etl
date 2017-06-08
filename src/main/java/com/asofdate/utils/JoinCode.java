@@ -28,7 +28,7 @@ public class JoinCode {
         }
     }
 
-    public static String getFirst(String str){
+    public static String getFirst(String str) {
         String[] tmp = str.split(SPLIT_STRING);
         if (tmp.length == 2) {
             return tmp[0];
@@ -37,7 +37,7 @@ public class JoinCode {
         }
     }
 
-    public static String getLast(String str){
+    public static String getLast(String str) {
         String[] tmp = str.split(SPLIT_STRING);
         if (tmp.length == 2) {
             return tmp[1];

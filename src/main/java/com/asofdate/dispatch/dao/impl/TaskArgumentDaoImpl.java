@@ -66,27 +66,27 @@ public class TaskArgumentDaoImpl implements TaskArgumentDao {
 
     @Override
     public int updateSort(String sortId, String uuid) {
-        return jdbcTemplate.update(SqlDefine.sys_rdbms_141,sortId,uuid);
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_141, sortId, uuid);
     }
 
     @Override
     public int deleteArg(String uuid) {
-        return jdbcTemplate.update(SqlDefine.sys_rdbms_142,uuid);
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_142, uuid);
     }
 
     @Override
     public JSONObject getArgType(String argId) {
         JSONObject jsonObject = new JSONObject();
-         jdbcTemplate.query(SqlDefine.sys_rdbms_143, new RowCallbackHandler() {
-             @Override
-             public void processRow(ResultSet resultSet) throws SQLException {
-                 jsonObject.put("arg_id",resultSet.getString("arg_id"));
-                 jsonObject.put("arg_desc",resultSet.getString("arg_desc"));
-                 jsonObject.put("arg_value",resultSet.getString("arg_value"));
-                 jsonObject.put("arg_type",resultSet.getString("arg_type"));
-                 jsonObject.put("domain_id",resultSet.getString("domain_id"));
-             }
-         },argId);
+        jdbcTemplate.query(SqlDefine.sys_rdbms_143, new RowCallbackHandler() {
+            @Override
+            public void processRow(ResultSet resultSet) throws SQLException {
+                jsonObject.put("arg_id", resultSet.getString("arg_id"));
+                jsonObject.put("arg_desc", resultSet.getString("arg_desc"));
+                jsonObject.put("arg_value", resultSet.getString("arg_value"));
+                jsonObject.put("arg_type", resultSet.getString("arg_type"));
+                jsonObject.put("domain_id", resultSet.getString("domain_id"));
+            }
+        }, argId);
         return jsonObject;
     }
 
@@ -97,11 +97,11 @@ public class TaskArgumentDaoImpl implements TaskArgumentDao {
         String domainId = jsonObject.getString("domain_id");
         String argValue = jsonObject.getString("arg_value");
         String sortId = jsonObject.getString("sort_id");
-        return jdbcTemplate.update(SqlDefine.sys_rdbms_144,taskId,argId,domainId,argValue,sortId);
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_144, taskId, argId, domainId, argValue, sortId);
     }
 
     @Override
     public int updateArgValue(String argValue, String uuid) {
-        return jdbcTemplate.update(SqlDefine.sys_rdbms_145,argValue,uuid);
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_145, argValue, uuid);
     }
 }

@@ -56,6 +56,7 @@
                         <th data-sortable="true" data-field="arg_desc">参数描述</th>
                         <th data-sortable="true" data-align="center" data-field="arg_type_desc">参数类型</th>
                         <th data-sortable="true" data-align="right" data-field="arg_value">参数初始值</th>
+                        <th data-sortable="true" data-align="right" data-field="bind_as_of_date" data-formatter="DispatchArgumentDefineObj.formatter2">是否绑定批次</th>
                         <th data-align="center" data-field="create_user">创建人</th>
                         <th data-align="center" data-field="create_date">创建时间</th>
                         <th data-align="center" data-field="modify_user">修改人</th>
@@ -77,6 +78,17 @@
                 return tmp[1]
             } else {
                 return tmp
+            }
+        },
+        formatter2:function (value, row, index) {
+            if (row.arg_type == 4){
+                if (value == "0"){
+                    return "不绑定";
+                } else {
+                    return "绑定";
+                }
+            } else {
+                return "-";
             }
         },
         add: function () {
@@ -110,11 +122,26 @@
                             var argType = $("#h-dispatch-argument-define-form").find("select[name='arg_type']").val();
                             switch (argType){
                                 case "1":
+                                    var $bind = $("#h-dispatch-argument-define-form").find("select[name='bind_as_of_date']");
+                                    $bind.parent().hide();
                                     $("#h-dispatch-argument-define-form").find("input[name='arg_value']").attr("readonly",false);
                                     break;
                                 case "2":
+                                    var $bind = $("#h-dispatch-argument-define-form").find("select[name='bind_as_of_date']");
+                                    $bind.parent().hide();
+                                    $("#h-dispatch-argument-define-form").find("input[name='arg_value']").attr("readonly","readonly").val("");
+                                    break;
                                 case "3":
+                                    var $bind = $("#h-dispatch-argument-define-form").find("select[name='bind_as_of_date']");
+                                    $bind.parent().hide();
+                                    $("#h-dispatch-argument-define-form").find("input[name='arg_value']").attr("readonly","readonly").val("");
+                                    break;
                                 case "4":
+                                    var $bind = $("#h-dispatch-argument-define-form").find("select[name='bind_as_of_date']");
+                                    $bind.parent().show();
+                                    $bind.Hselect({
+                                        height:"30px",
+                                    });
                                     $("#h-dispatch-argument-define-form").find("input[name='arg_value']").attr("readonly","readonly").val("");
                                     break
                             }
@@ -302,6 +329,15 @@
             <span>参数初始值</span>
             <input name="arg_value" readonly="readonly" placeholder="参数类型为[固定参数]时,填写这个选项" class="form-control"
                    style="height: 30px; line-height: 30px; width: 100%;"/>
+        </div>
+
+        <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 15px; display: none;">
+            <span>与批次日期绑定</span>
+            <select name="bind_as_of_date" class="form-control"
+                   style="height: 30px; line-height: 30px; width: 100%;">
+                <option value="0" selected="selected">不绑定</option>
+                <option value="1">绑定</option>
+            </select>
         </div>
         <input name="domain_id" style="display: none;"/>
     </form>

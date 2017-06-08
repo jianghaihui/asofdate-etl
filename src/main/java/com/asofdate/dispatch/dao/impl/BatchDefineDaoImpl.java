@@ -65,7 +65,7 @@ public class BatchDefineDaoImpl implements BatchDefineDao {
     }
 
     @Override
-    public int setStatus(String batchId,int status) {
-        return jdbcTemplate.update(SqlDefine.sys_rdbms_140,Integer.toString(status),batchId);
+    public int setStatus(String batchId, int status) {
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_140, Integer.toString(status), batchId);
     }
 }

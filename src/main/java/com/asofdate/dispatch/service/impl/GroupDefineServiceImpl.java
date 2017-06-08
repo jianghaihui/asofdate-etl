@@ -40,7 +40,7 @@ public class GroupDefineServiceImpl implements GroupDefineService {
     }
 
     @Override
-    public int updateArg(String argValue, String uuid,String argId) {
-        return groupArgumentDao.updateArg(argValue,uuid,argId);
+    public int updateArg(String argValue, String uuid, String argId) {
+        return groupArgumentDao.updateArg(argValue, uuid, argId);
     }
 }

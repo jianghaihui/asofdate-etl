@@ -95,58 +95,58 @@ public class TaskDefineController {
 
     @RequestMapping(value = "/argument/sort", method = RequestMethod.PUT)
     @ResponseBody
-    public String updateSort(HttpServletResponse response,HttpServletRequest request) {
+    public String updateSort(HttpServletResponse response, HttpServletRequest request) {
         String sortId = request.getParameter("sort_id");
         String uuid = request.getParameter("uuid");
         logger.info("uuid is:" + sortId);
-        if ( 1 != taskDefineService.updateArgumentSort(sortId,uuid)){
-            return Hret.error(421,"更新参数序号信息失败",JSONObject.NULL);
+        if (1 != taskDefineService.updateArgumentSort(sortId, uuid)) {
+            return Hret.error(421, "更新参数序号信息失败", JSONObject.NULL);
         }
-        return Hret.success(200,"success",JSONObject.NULL);
+        return Hret.success(200, "success", JSONObject.NULL);
     }
 
     @RequestMapping(value = "/argument/delete", method = RequestMethod.POST)
     @ResponseBody
-    public String deleteArg(HttpServletResponse response,HttpServletRequest request) {
+    public String deleteArg(HttpServletResponse response, HttpServletRequest request) {
         String uuid = request.getParameter("uuid");
-        if ( 1 != taskDefineService.deleteArg(uuid)){
-            return Hret.error(421,"删除参数信息失败",JSONObject.NULL);
+        if (1 != taskDefineService.deleteArg(uuid)) {
+            return Hret.error(421, "删除参数信息失败", JSONObject.NULL);
         }
-        return Hret.success(200,"success",JSONObject.NULL);
+        return Hret.success(200, "success", JSONObject.NULL);
     }
 
     @RequestMapping(value = "/argument/type", method = RequestMethod.GET)
     @ResponseBody
-    public String getArgType(HttpServletResponse response,HttpServletRequest request) {
+    public String getArgType(HttpServletResponse response, HttpServletRequest request) {
         String argId = request.getParameter("arg_id");
         return taskDefineService.getArgType(argId).toString();
     }
 
     @RequestMapping(value = "/argument/value", method = RequestMethod.POST)
     @ResponseBody
-    public String updateArgValue(HttpServletResponse response,HttpServletRequest request) {
+    public String updateArgValue(HttpServletResponse response, HttpServletRequest request) {
         String argValue = request.getParameter("arg_value");
         String uuid = request.getParameter("uuid");
-        if (1 != taskDefineService.updateArgValue(argValue,uuid)){
-            return Hret.error(500,"更新任务参数信息值失败,请联系管理员",JSONObject.NULL);
+        if (1 != taskDefineService.updateArgValue(argValue, uuid)) {
+            return Hret.error(500, "更新任务参数信息值失败,请联系管理员", JSONObject.NULL);
         }
-        return Hret.success(200,"success",JSONObject.NULL);
+        return Hret.success(200, "success", JSONObject.NULL);
     }
 
 
-    @RequestMapping(value = "/argument/add",method = RequestMethod.POST)
+    @RequestMapping(value = "/argument/add", method = RequestMethod.POST)
     @ResponseBody
-    public String addArg(HttpServletResponse response,HttpServletRequest request){
+    public String addArg(HttpServletResponse response, HttpServletRequest request) {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("task_id",request.getParameter("task_id"));
-        jsonObject.put("arg_id",request.getParameter("arg_id"));
-        jsonObject.put("domain_id",request.getParameter("domain_id"));
-        jsonObject.put("arg_value",request.getParameter("arg_value"));
-        jsonObject.put("sort_id",request.getParameter("sort_id"));
-        if (1 != taskDefineService.addArg(jsonObject)){
-            return Hret.error(500,"新增任务参数失败",JSONObject.NULL);
+        jsonObject.put("task_id", request.getParameter("task_id"));
+        jsonObject.put("arg_id", request.getParameter("arg_id"));
+        jsonObject.put("domain_id", request.getParameter("domain_id"));
+        jsonObject.put("arg_value", request.getParameter("arg_value"));
+        jsonObject.put("sort_id", request.getParameter("sort_id"));
+        if (1 != taskDefineService.addArg(jsonObject)) {
+            return Hret.error(500, "新增任务参数失败", JSONObject.NULL);
         }
-        return Hret.success(200,"success",JSONObject.NULL);
+        return Hret.success(200, "success", JSONObject.NULL);
     }
 
     private TaskDefineModel parse(HttpServletRequest request) {

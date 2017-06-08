@@ -89,13 +89,13 @@ public class TaskDependencyDaoImpl implements TaskDependencyDao {
 
     @Override
     public int addTaskDependency(JSONArray jsonArray) {
-        for (int i=0; i < jsonArray.length(); i++){
+        for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject = (JSONObject) jsonArray.get(i);
 
-            if ( 1 != jdbcTemplate.update(SqlDefine.sys_rdbms_151,
+            if (1 != jdbcTemplate.update(SqlDefine.sys_rdbms_151,
                     jsonObject.getString("id"),
                     jsonObject.getString("up_id"),
-                    jsonObject.getString("domain_id"))){
+                    jsonObject.getString("domain_id"))) {
                 return -1;
             }
         }
@@ -105,6 +105,6 @@ public class TaskDependencyDaoImpl implements TaskDependencyDao {
 
     @Override
     public int deleteTaskDependency(String uuid) {
-        return jdbcTemplate.update(SqlDefine.sys_rdbms_152,uuid);
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_152, uuid);
     }
 }

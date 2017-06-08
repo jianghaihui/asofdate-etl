@@ -38,7 +38,8 @@ public class ArgumentDefineDaoImpl implements ArgumentDefineDao {
                 m.getCreate_user(),
                 m.getModify_user(),
                 m.getDomain_id(),
-                m.getArg_desc());
+                m.getArg_desc(),
+                m.getBind_as_of_date());
     }
 
     @Override

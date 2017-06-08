@@ -140,6 +140,11 @@ public class ArgumentServiceImpl implements ArgumentService {
         return batchArgumentDao.getBatchArg(batchId);
     }
 
+    @Override
+    public int addBatchArg(JSONArray jsonArray) {
+        return batchArgumentDao.addBatchArg(jsonArray);
+    }
+
     private void initArgDefineMap() {
         /*
         * 修改参数定义中的参数类型为批次参数的值

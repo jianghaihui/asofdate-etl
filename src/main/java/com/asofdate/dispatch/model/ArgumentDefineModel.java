@@ -15,6 +15,15 @@ public class ArgumentDefineModel {
     public String modify_date;
     public String domain_id;
     public String arg_desc;
+    public String bind_as_of_date;
+
+    public String getBind_as_of_date() {
+        return bind_as_of_date;
+    }
+
+    public void setBind_as_of_date(String bind_as_of_date) {
+        this.bind_as_of_date = bind_as_of_date;
+    }
 
     public String getArg_desc() {
         return arg_desc;
