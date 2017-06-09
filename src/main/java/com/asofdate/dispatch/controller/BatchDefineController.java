@@ -41,22 +41,25 @@ public class BatchDefineController {
     @Autowired
     private ArgumentService argumentService;
 
-    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public List<BatchDefineModel> getAll(HttpServletRequest request) {
-        String domainId = JwtService.getConnectUser(request).get("DomainId").toString();
+        String domainId = request.getParameter("domain_id");
+        if (domainId == null){
+            JSONObject jsonObject = JwtService.getConnectUser(request);
+            domainId = jsonObject.getString("DomainId");
+        }
         return batchDefineService.findAll(domainId);
     }
 
-
-    /*
-    * 新增任务组
-    * */
+    // 新增任务组
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public String add(HttpServletRequest request) {
-        if (1 != batchDefineService.add(parse(request))) {
-            return Hret.error(500, "新增任务组信息失败,任务组编码重复", JSONObject.NULL);
+    public String add(HttpServletResponse response,HttpServletRequest request) {
+        int size = batchDefineService.add(parse(request));
+        if (1 != size) {
+            response.setStatus(421);
+            return Hret.error(421, "新增任务组信息失败,任务组编码重复", JSONObject.NULL);
         }
         return Hret.success(200, "success", JSONObject.NULL);
     }
@@ -78,15 +81,16 @@ public class BatchDefineController {
                 return Hret.error(500, "批次正在运行中,无法被删除", JSONObject.NULL);
             }
             BatchDefineModel batchDefineModel = new BatchDefineModel();
-            batchDefineModel.setBatch_id(batchId);
-            batchDefineModel.setDomain_id(jsonObject.getString("domain_id"));
+            batchDefineModel.setBatchId(batchId);
+            batchDefineModel.setDomainId(jsonObject.getString("domain_id"));
             args.add(batchDefineModel);
         }
         String msg = batchDefineService.delete(args);
         if ("success".equals(msg)) {
             return Hret.success(200, "success", JSONObject.NULL);
         }
-        return Hret.error(500, msg, JSONObject.NULL);
+        response.setStatus(421);
+        return Hret.error(421, msg, JSONObject.stringToValue(msg));
     }
 
 
@@ -97,9 +101,9 @@ public class BatchDefineController {
     @ResponseBody
     public String update(HttpServletResponse response, HttpServletRequest request) {
         BatchDefineModel m = parse(request);
-        if (batchDefineService.getStatus(m.getBatch_id()) == BatchStatus.BATCH_STATUS_RUNNING) {
+        if (batchDefineService.getStatus(m.getBatchId()) == BatchStatus.BATCH_STATUS_RUNNING) {
             response.setStatus(421);
-            return Hret.error(500, "批次正在运行中,无法编辑", JSONObject.NULL);
+            return Hret.error(421, "批次正在运行中,无法编辑", JSONObject.NULL);
         }
         if (1 != batchDefineService.update(m)) {
             return Hret.error(500, "新增批次信息失败,批次编码重复", JSONObject.NULL);
@@ -114,14 +118,14 @@ public class BatchDefineController {
         return batchGroupService.getGroup(batchId).toString();
     }
 
-    @RequestMapping(value = "/stop",method = RequestMethod.POST)
+    @RequestMapping(value = "/stop", method = RequestMethod.POST)
     @ResponseBody
-    public String stop(HttpServletRequest request){
+    public String stop(HttpServletRequest request) {
         String batchId = request.getParameter("batch_id");
-        if (1 != batchDefineService.setStatus(batchId,4)){
-            return Hret.error(421,"停止批次失败",JSONObject.NULL);
+        if (1 != batchDefineService.setStatus(batchId, 4)) {
+            return Hret.error(421, "停止批次失败", JSONObject.NULL);
         }
-        return Hret.success(200,"停止批次成功",JSONObject.NULL);
+        return Hret.success(200, "停止批次成功", JSONObject.NULL);
     }
 
     @RequestMapping(value = "/group", method = RequestMethod.POST)
@@ -191,50 +195,49 @@ public class BatchDefineController {
         return Hret.success(200, "success", JSONObject.NULL);
     }
 
-
     @RequestMapping(value = "/argument", method = RequestMethod.GET)
     @ResponseBody
     public String getBatchArg(HttpServletRequest request) {
         String id = request.getParameter("batch_id");
-        return argumentService.getBatchArg(id).toString();
+        return batchDefineService.getBatchArg(id).toString();
     }
 
     @RequestMapping(value = "/argument", method = RequestMethod.POST)
     @ResponseBody
-    public String addBatchArg(HttpServletRequest request){
+    public String addBatchArg(HttpServletRequest request) {
         JSONArray jsonArray = new JSONArray(request.getParameter("JSON"));
-        if (1 != argumentService.addBatchArg(jsonArray)){
-            return Hret.error(421,"添加批次参数失败",JSONObject.NULL);
+        if (1 != batchDefineService.addBatchArg(jsonArray)) {
+            return Hret.error(421, "添加批次参数失败", JSONObject.NULL);
         }
-        return Hret.success(200,"success",JSONObject.NULL);
+        return Hret.success(200, "success", JSONObject.NULL);
     }
 
-    @RequestMapping(value = "/asofdate",method = RequestMethod.PUT)
+    @RequestMapping(value = "/asofdate", method = RequestMethod.PUT)
     @ResponseBody
-    public String updateAsofdate(HttpServletResponse response,HttpServletRequest request){
+    public String updateAsofdate(HttpServletResponse response, HttpServletRequest request) {
         String batchId = request.getParameter("batch_id");
         String asofdate = request.getParameter("as_of_date");
-        logger.info("batch id is :"+ batchId+",as of date is :" + asofdate);
-        if (1 != batchDefineService.updateAsofdate(asofdate,batchId)){
+        logger.info("batch id is :" + batchId + ",as of date is :" + asofdate);
+        if (1 != batchDefineService.updateAsofdate(asofdate, batchId)) {
             response.setStatus(421);
-            return Hret.error(421,"更新批次日期失败",JSONObject.NULL);
+            return Hret.error(421, "更新批次日期失败", JSONObject.NULL);
         }
 
-        return Hret.success(200,"success",JSONObject.NULL);
+        return Hret.success(200, "success", JSONObject.NULL);
     }
 
     private BatchDefineModel parse(HttpServletRequest request) {
         String userId = JwtService.getConnectUser(request).get("UserId").toString();
         BatchDefineModel batchDefineModel = new BatchDefineModel();
         String batchId = JoinCode.join(request.getParameter("domain_id"), request.getParameter("batch_id"));
-        batchDefineModel.setBatch_id(batchId);
-        batchDefineModel.setCode_number(request.getParameter("batch_id"));
-        batchDefineModel.setCreate_user(userId);
-        batchDefineModel.setModify_user(userId);
-        batchDefineModel.setDomain_id(request.getParameter("domain_id"));
-        batchDefineModel.setBatch_desc(request.getParameter("batch_desc"));
-        batchDefineModel.setBatch_status(request.getParameter("batch_status"));
-        batchDefineModel.setAs_of_date(request.getParameter("as_of_date"));
+        batchDefineModel.setBatchId(batchId);
+        batchDefineModel.setCodeNumber(request.getParameter("batch_id"));
+        batchDefineModel.setCreateUser(userId);
+        batchDefineModel.setModifyUser(userId);
+        batchDefineModel.setDomainId(request.getParameter("domain_id"));
+        batchDefineModel.setBatchDesc(request.getParameter("batch_desc"));
+        batchDefineModel.setBatchStatus(request.getParameter("batch_status"));
+        batchDefineModel.setAsOfDate(request.getParameter("as_of_date"));
         return batchDefineModel;
     }
 }

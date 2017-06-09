@@ -1,3 +1,4 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
 <div class="row subsystem-header">
     <div class="pull-left">
         <span style="font-size: 16px;">参数定义</span>
@@ -196,28 +197,32 @@
                     $("#h-dispatch-argument-define-form").find("select[name='arg_type']").Hselect({
                         value: row[0].arg_type,
                         height: "30px",
-                        onclick:function () {
-                            var argType = $("#h-dispatch-argument-define-form").find("select[name='arg_type']").val();
-                            switch (argType){
-                                case "1":
-                                    $("#h-dispatch-argument-define-form").find("input[name='arg_value']").attr("readonly",false);
-                                    break;
-                                case "2":
-                                case "3":
-                                case "4":
-                                    $("#h-dispatch-argument-define-form").find("input[name='arg_value']").attr("readonly","readonly").val("");
-                                    break
-                            }
-                        }
+                        disabled:true,
                     });
-                    var argType = $("#h-dispatch-argument-define-form").find("select[name='arg_type']").val();
-                    switch (argType){
+
+                    switch (row[0].arg_type){
                         case "1":
+                            var $bind = $("#h-dispatch-argument-define-form").find("select[name='bind_as_of_date']");
+                            $bind.parent().hide();
                             $("#h-dispatch-argument-define-form").find("input[name='arg_value']").attr("readonly",false);
                             break;
                         case "2":
+                            var $bind = $("#h-dispatch-argument-define-form").find("select[name='bind_as_of_date']");
+                            $bind.parent().hide();
+                            $("#h-dispatch-argument-define-form").find("input[name='arg_value']").attr("readonly","readonly").val("");
+                            break;
                         case "3":
+                            var $bind = $("#h-dispatch-argument-define-form").find("select[name='bind_as_of_date']");
+                            $bind.parent().hide();
+                            $("#h-dispatch-argument-define-form").find("input[name='arg_value']").attr("readonly","readonly").val("");
+                            break;
                         case "4":
+                            var $bind = $("#h-dispatch-argument-define-form").find("select[name='bind_as_of_date']");
+                            $bind.parent().show();
+                            $bind.Hselect({
+                                height:"30px",
+                                value:row[0].bind_as_of_date,
+                            });
                             $("#h-dispatch-argument-define-form").find("input[name='arg_value']").attr("readonly","readonly").val("");
                             break
                     }
@@ -272,14 +277,6 @@
     };
     $(document).ready(function () {
         var hwindow = document.documentElement.clientHeight;
-        $("#h-dispatch-argument-define-info-table-details").bootstrapTable({
-            height: hwindow - 130,
-            queryParams: function (params) {
-                params.domain_id = $("#h-dispatch-argument-define-domain-list").val();
-                return params;
-            }
-        });
-
         $("#h-dispatch-argument-define-table-info").height(hwindow - 130);
 
         $.getJSON("/v1/auth/domain/self/owner", function (data) {
@@ -299,6 +296,14 @@
                 onclick: function () {
                     $("#h-dispatch-argument-define-info-table-details").bootstrapTable('refresh');
                 },
+            });
+
+            $("#h-dispatch-argument-define-info-table-details").bootstrapTable({
+                height: hwindow - 130,
+                queryParams: function (params) {
+                    params.domain_id = $("#h-dispatch-argument-define-domain-list").val();
+                    return params;
+                }
             });
         });
     });
@@ -342,3 +347,4 @@
         <input name="domain_id" style="display: none;"/>
     </form>
 </script>
+</html>

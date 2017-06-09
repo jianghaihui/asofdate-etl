@@ -43,13 +43,13 @@ public class GroupTaskServiceImpl implements GroupTaskService {
         List<BatchGroupModel> batchGroupModelList = batchGroupService.findByBatchId(domainId, batchId);
         Map<String, BatchGroupModel> map = new HashMap<String, BatchGroupModel>();
         for (BatchGroupModel m : batchGroupModelList) {
-            if (!map.containsKey(m.getGroup_id())) {
-                map.put(m.getGroup_id(), m);
+            if (!map.containsKey(m.getGroupId())) {
+                map.put(m.getGroupId(), m);
             }
         }
 
         for (int i = 0; i < list.size(); i++) {
-            if (!map.containsKey(list.get(i).getGroup_id())) {
+            if (!map.containsKey(list.get(i).getGroupId())) {
                 list.remove(i);
                 i--;
             }

@@ -45,10 +45,10 @@ public class TaskDependencyServiceImpl implements TaskDependencyService {
             for (TaskDependencyModel m : taskList) {
                 String id = JoinCode.join(gt.getUuid(), m.getId());
                 if (this.taskMap.containsKey(id)) {
-                    this.taskMap.get(id).add(JoinCode.join(gt.getUuid(), m.getUp_id()));
+                    this.taskMap.get(id).add(JoinCode.join(gt.getUuid(), m.getUpId()));
                 } else {
                     Set<String> set = new HashSet<>();
-                    set.add(JoinCode.join(gt.getUuid(), m.getUp_id()));
+                    set.add(JoinCode.join(gt.getUuid(), m.getUpId()));
                     this.taskMap.put(id, set);
                 }
             }

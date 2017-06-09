@@ -125,9 +125,8 @@ public class QuartzJobLauncher extends QuartzJobBean {
     public JobParameters getJobParameters() {
         JobParametersBuilder builder = new JobParametersBuilder();
 
-
         String jobId = JoinCode.getTaskCode(jobName);
-        List<TaskArgumentModel> list = argumentService.getArgument(jobId);
+        List<TaskArgumentModel> list = argumentService.queryArgument(jobId);
         if (list == null) {
             builder.addLong("timestamp", System.currentTimeMillis());
             return builder.toJobParameters();
@@ -136,13 +135,13 @@ public class QuartzJobLauncher extends QuartzJobBean {
         Collections.sort(list, new Comparator<TaskArgumentModel>() {
             @Override
             public int compare(TaskArgumentModel o1, TaskArgumentModel o2) {
-                return Integer.parseInt(o1.getSort_id()) - Integer.parseInt(o2.getSort_id());
+                return Integer.parseInt(o1.getSortId()) - Integer.parseInt(o2.getSortId());
             }
         });
 
         String JobParameters = "";
         for (TaskArgumentModel m : list) {
-            JobParameters += " " + m.getArg_value();
+            JobParameters += " " + m.getArgValue();
         }
         builder.addString("JobParameters", JobParameters.trim());
         builder.addLong("timestamp", System.currentTimeMillis());

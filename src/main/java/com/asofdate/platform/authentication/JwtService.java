@@ -122,11 +122,13 @@ public class JwtService {
                     // 去掉 Bearer
                     .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
                     .getBody();
-            return new JSONObject() {{
-                put("UserId", claims.get("UserId"));
-                put("DomainId", claims.get("DomainId"));
-                put("OrgUnitId", claims.get("OrgUnitId"));
-            }};
+
+            JSONObject ret = new JSONObject();
+            ret.put("UserId",claims.get("UserId"));
+            ret.put("DomainId",claims.get("DomainId"));
+            ret.put("OrgUnitId",claims.get("OrgUnitId"));
+
+            return ret;
         }
         return null;
     }

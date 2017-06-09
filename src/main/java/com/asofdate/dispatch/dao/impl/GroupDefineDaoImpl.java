@@ -29,20 +29,20 @@ public class GroupDefineDaoImpl implements GroupDefineDao {
     @Override
     public int add(GroupDefineModel m) {
         return jdbcTemplate.update(SqlDefine.sys_rdbms_124,
-                m.getGroup_id(),
-                m.getCode_number(),
-                m.getGroup_desc(),
-                m.getCreate_user(),
-                m.getModify_user(),
-                m.getDomain_id());
+                m.getGroupId(),
+                m.getCodeNumber(),
+                m.getGroupDesc(),
+                m.getCreateUser(),
+                m.getModifyUser(),
+                m.getDomainId());
     }
 
     @Override
     public String delete(List<GroupDefineModel> m) {
         for (GroupDefineModel l : m) {
-            int i = jdbcTemplate.update(SqlDefine.sys_rdbms_122, l.getGroup_id(), l.getDomain_id());
+            int i = jdbcTemplate.update(SqlDefine.sys_rdbms_122, l.getGroupId(), l.getDomainId());
             if (i == 0) {
-                return "删除[" + l.getCode_number() + "]失败,任务组已经被引用,请先解除引用.";
+                return "删除[" + l.getCodeNumber() + "]失败,任务组已经被引用,请先解除引用.";
             }
         }
         return "success";
@@ -51,8 +51,8 @@ public class GroupDefineDaoImpl implements GroupDefineDao {
     @Override
     public int update(GroupDefineModel m) {
         return jdbcTemplate.update(SqlDefine.sys_rdbms_123,
-                m.getGroup_desc(),
-                m.getGroup_id(),
-                m.getDomain_id());
+                m.getGroupDesc(),
+                m.getGroupId(),
+                m.getDomainId());
     }
 }

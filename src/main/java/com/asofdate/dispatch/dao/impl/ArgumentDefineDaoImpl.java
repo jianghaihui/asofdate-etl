@@ -4,11 +4,14 @@ import com.asofdate.dispatch.dao.ArgumentDefineDao;
 import com.asofdate.dispatch.model.ArgumentDefineModel;
 import com.asofdate.sql.SqlDefine;
 import com.asofdate.utils.JoinCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,6 +20,7 @@ import java.util.List;
  */
 @Repository
 public class ArgumentDefineDaoImpl implements ArgumentDefineDao {
+    private final Logger logger = LoggerFactory.getLogger(ArgumentDefineDaoImpl.class);
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -29,39 +33,42 @@ public class ArgumentDefineDaoImpl implements ArgumentDefineDao {
 
     @Override
     public int add(ArgumentDefineModel m) {
-        String id = JoinCode.join(m.getDomain_id(), m.getArg_id());
+        String id = JoinCode.join(m.getDomainId(), m.getArgId());
         return jdbcTemplate.update(SqlDefine.sys_rdbms_119,
                 id,
-                m.getArg_type(),
-                m.getArg_value(),
-                m.getArg_id(),
-                m.getCreate_user(),
-                m.getModify_user(),
-                m.getDomain_id(),
-                m.getArg_desc(),
-                m.getBind_as_of_date());
+                m.getArgType(),
+                m.getArgValue(),
+                m.getArgId(),
+                m.getCreateUser(),
+                m.getModifyUser(),
+                m.getDomainId(),
+                m.getArgDesc(),
+                m.getBindAsOfDate());
     }
 
+    @Transactional
     @Override
     public String delete(List<ArgumentDefineModel> m) {
-        int row = 0;
-        for (ArgumentDefineModel l : m) {
-            row = jdbcTemplate.update(SqlDefine.sys_rdbms_120, l.getArg_id(), l.getDomain_id());
-            if (row == 0) {
-                return "删除[" + l.getCode_number() + "]参数失败";
+        try {
+            for (ArgumentDefineModel l : m) {
+                jdbcTemplate.update(SqlDefine.sys_rdbms_120, l.getArgId(), l.getDomainId());
             }
+            return "success";
+        } catch (Exception e) {
+            return e.getMessage();
         }
-        return "success";
     }
 
     @Override
     public int update(ArgumentDefineModel m) {
-        String id = JoinCode.join(m.getDomain_id(), m.getArg_id());
+        String id = JoinCode.join(m.getDomainId(), m.getArgId());
         return jdbcTemplate.update(SqlDefine.sys_rdbms_121,
-                m.getArg_desc(),
-                m.getArg_type(),
-                m.getArg_value(),
+                m.getModifyUser(),
+                m.getBindAsOfDate(),
+                m.getArgDesc(),
+                m.getArgValue(),
                 id,
-                m.getDomain_id());
+                m.getDomainId());
+
     }
 }

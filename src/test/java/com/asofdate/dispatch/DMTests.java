@@ -60,7 +60,7 @@ public class DMTests {
     public void testArgumentDefineDao(){
         List<ArgumentDefineModel> list = argumentDefineDao.findAll("mas");
         for (ArgumentDefineModel m:list){
-            System.out.println("argument id is :" + m.getArg_id());
+            System.out.println("argument id is :" + m.getArgId());
         }
     }
 
@@ -68,7 +68,7 @@ public class DMTests {
     public void testBatchArgumentDao(){
         List<BatchArgumentModel> list = batchArgumentDao.findAll("mas");
         for (BatchArgumentModel m : list){
-            System.out.println("batch id is :" + m.getBatch_id()+", argument is :" + m.getArg_id());
+            System.out.println("batch id is :" + m.getBatchId()+", argument is :" + m.getArgId());
         }
     }
 
@@ -76,7 +76,7 @@ public class DMTests {
     public void testBatchGroupDao(){
         List<BatchGroupModel> list = batchGroupDao.findAll("mas");
         for (BatchGroupModel m:list){
-            System.out.println("Batch is :" + m.getBatch_id()+", group id is :" + m.getGroup_id());
+            System.out.println("Batch is :" + m.getBatchId()+", group id is :" + m.getGroupId());
         }
     }
 
@@ -84,7 +84,7 @@ public class DMTests {
     public void testGroupDefineDao(){
         List<GroupDefineModel> list = groupDefineDao.findAll("mas");
         for (GroupDefineModel m:list){
-            System.out.println("Group id is: "+m.getGroup_id());
+            System.out.println("Group id is: "+m.getGroupId());
         }
     }
 
@@ -92,7 +92,7 @@ public class DMTests {
     public void testGroupTaskDao(){
         List<GroupTaskModel> list = groupTaskDao.findAll("mas");
         for (GroupTaskModel m:list){
-            System.out.println("group id is:" + m.getGroup_id()+",task id is:" + m.getTask_id());
+            System.out.println("group id is:" + m.getGroupId()+",task id is:" + m.getTaskId());
         }
     }
 
@@ -100,7 +100,7 @@ public class DMTests {
     public void testTaskArgumentDao(){
         List<TaskArgumentModel> list = taskArgumentDao.findAll("mas");
         for (TaskArgumentModel m: list){
-            System.out.println("task id is :" + m.getTask_id()+",argument id is:"+m.getArg_id());
+            System.out.println("task id is :" + m.getTaskId()+",argument id is:"+m.getArgId());
         }
     }
 
@@ -108,7 +108,7 @@ public class DMTests {
     public void testBatchDefineDao(){
         List<BatchDefineModel> list = batchDefineDao.findAll("mas");
         for (BatchDefineModel m:list){
-            System.out.println("batch id is:" + m.getBatch_desc());
+            System.out.println("batch id is:" + m.getBatchDesc());
         }
     }
 

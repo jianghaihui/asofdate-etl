@@ -132,7 +132,7 @@ public class GroupStatusServiceImpl implements GroupStatusService {
             return true;
         }
         for (GroupDependencyModel gp : groupDependencyModels) {
-            switch (getGroupStatus(gp.getUp_id())) {
+            switch (getGroupStatus(gp.getUpId())) {
                 case 0:
                     return false;
                 case 1:

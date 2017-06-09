@@ -36,8 +36,8 @@ public class TaskDefineServiceImpl implements TaskDefineService {
         Map<String, GroupTaskModel> map = new HashMap<String, GroupTaskModel>();
 
         for (GroupTaskModel m : groupTaskModelList) {
-            if (!map.containsKey(m.getTask_id())) {
-                map.put(m.getTask_id(), m);
+            if (!map.containsKey(m.getTaskId())) {
+                map.put(m.getTaskId(), m);
             }
         }
 

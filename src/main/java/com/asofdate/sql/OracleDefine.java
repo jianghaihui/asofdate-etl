@@ -1,11 +1,16 @@
 package com.asofdate.sql;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Created by hzwy23 on 2017/6/8.
  */
 public class OracleDefine {
-    public static void oracleInit(){
-        System.out.println("init oracle sql");
+    private static final Logger logger = LoggerFactory.getLogger(OracleDefine.class);
+
+    public static void oracleInit() {
+        logger.info("default database is oracle, init oracle sql");
         SqlDefine.sys_rdbms_001 = "select user_id,user_passwd,status_id,continue_error_cnt from sys_sec_user where user_id = ?";
         SqlDefine.sys_rdbms_002 = "select t.domain_id from sys_org_info t where t.org_unit_id  = ?";
         SqlDefine.sys_rdbms_003 = "select i.domain_id from sys_user_info t inner join sys_org_info i on t.org_unit_id = i.org_unit_id where t.user_id = ?";
@@ -102,7 +107,7 @@ public class OracleDefine {
         SqlDefine.sys_rdbms_118 = "select t.domain_id,t.domain_name as domain_desc,t.domain_status_id,a.domain_status_name as domain_status_desc from sys_domain_info t inner join sys_domain_status_attr a on t.domain_status_id = a.domain_status_id";
         SqlDefine.sys_rdbms_119 = "insert into dispatch_argument_define(arg_id,arg_type,arg_value,code_number,create_user,create_date,modify_user,modify_date,domain_id,arg_desc,bind_as_of_date) values(?,?,?,?,?,sysdate,?,sysdate,?,?,?)";
         SqlDefine.sys_rdbms_120 = "delete from dispatch_argument_define where arg_id = ? and domain_id = ?";
-        SqlDefine.sys_rdbms_121 = "update dispatch_argument_define set arg_desc = ?, arg_type = ?,arg_value = ? where arg_id = ? and domain_id = ?";
+        SqlDefine.sys_rdbms_121 = "update dispatch_argument_define set modify_user = ?, modify_date = sysdate, bind_as_of_date = ?, arg_desc = ?, arg_value = ? where arg_id = ? and domain_id = ?";
         SqlDefine.sys_rdbms_122 = "delete from dispatch_group_define where group_id = ? and domain_id = ?";
         SqlDefine.sys_rdbms_123 = "update dispatch_group_define set group_desc = ? where group_id = ? and domain_id = ?";
         SqlDefine.sys_rdbms_124 = "insert into dispatch_group_define(group_id,code_number,group_desc,create_user,create_date,modify_user,modify_date,domain_id) values(?,?,?,?,sysdate,?,sysdate,?)";
@@ -140,5 +145,8 @@ public class OracleDefine {
         SqlDefine.sys_rdbms_156 = "insert into dispatch_group_dependency(uuid,id,up_id,domain_id) values(sys_guid(),?,?,?)";
         SqlDefine.sys_rdbms_157 = "select to_char(as_of_date,'YYYY-MM-DD') as as_of_date from dispatch_batch_define where batch_id = ?";
         SqlDefine.sys_rdbms_158 = "insert into dispatch_batch_argument_rel(uuid,batch_id,arg_id,arg_value,domain_id) values(sys_guid(),?,?,?,?)";
+        SqlDefine.sys_rdbms_161 = "update dispatch_batch_define set as_of_date = to_date(?,'YYYY-MM-DD') where batch_id = ?";
+        SqlDefine.sys_rdbms_162 = "select distinct sys_guid() as uuid,r.batch_id,d.arg_id,a.arg_value,r.domain_id from dispatch_batch_group_relation r inner join dispatch_group_task_relation g on r.group_id=g.group_id inner join dispatch_task_argument_rel t on g.task_id = t.task_id inner join dispatch_argument_define d on t.arg_id = d.arg_id left join dispatch_batch_argument_rel a on a.batch_id = r.batch_id where d.arg_type = '4' and r.domain_id = ?";
+
     }
 }

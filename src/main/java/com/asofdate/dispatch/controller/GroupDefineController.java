@@ -67,8 +67,8 @@ public class GroupDefineController {
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject = (JSONObject) jsonArray.get(i);
             GroupDefineModel groupDefineModel = new GroupDefineModel();
-            groupDefineModel.setGroup_id(jsonObject.getString("group_id"));
-            groupDefineModel.setDomain_id(jsonObject.getString("domain_id"));
+            groupDefineModel.setGroupId(jsonObject.getString("group_id"));
+            groupDefineModel.setDomainId(jsonObject.getString("domain_id"));
             args.add(groupDefineModel);
         }
         String msg = groupDefineService.delete(args);
@@ -205,12 +205,12 @@ public class GroupDefineController {
         String userId = JwtService.getConnectUser(request).get("UserId").toString();
         GroupDefineModel groupDefineModel = new GroupDefineModel();
         String groupId = JoinCode.join(request.getParameter("domain_id"), request.getParameter("group_id"));
-        groupDefineModel.setGroup_id(groupId);
-        groupDefineModel.setCode_number(request.getParameter("group_id"));
-        groupDefineModel.setCreate_user(userId);
-        groupDefineModel.setModify_user(userId);
-        groupDefineModel.setDomain_id(request.getParameter("domain_id"));
-        groupDefineModel.setGroup_desc(request.getParameter("group_desc"));
+        groupDefineModel.setGroupId(groupId);
+        groupDefineModel.setCodeNumber(request.getParameter("group_id"));
+        groupDefineModel.setCreateUser(userId);
+        groupDefineModel.setModifyUser(userId);
+        groupDefineModel.setDomainId(request.getParameter("domain_id"));
+        groupDefineModel.setGroupDesc(request.getParameter("group_desc"));
         return groupDefineModel;
     }
 }

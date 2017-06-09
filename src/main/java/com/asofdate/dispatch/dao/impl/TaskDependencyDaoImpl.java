@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -46,6 +47,7 @@ public class TaskDependencyDaoImpl implements TaskDependencyDao {
         return list;
     }
 
+    @Transactional
     @Override
     public JSONArray getTaskDependency(String id) {
         JSONArray jsonArray = new JSONArray();

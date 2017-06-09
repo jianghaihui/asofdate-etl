@@ -1,8 +1,10 @@
 package com.asofdate.dispatch.service.impl;
 
+import com.asofdate.dispatch.dao.BatchArgumentDao;
 import com.asofdate.dispatch.dao.BatchDefineDao;
 import com.asofdate.dispatch.model.BatchDefineModel;
 import com.asofdate.dispatch.service.BatchDefineService;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,9 @@ import java.util.List;
 public class BatchDefineServiceImpl implements BatchDefineService {
     @Autowired
     private BatchDefineDao batchDefineDao;
+
+    @Autowired
+    private BatchArgumentDao batchArgumentDao;
 
     @Override
     public List<BatchDefineModel> findAll(String domainId) {
@@ -48,6 +53,18 @@ public class BatchDefineServiceImpl implements BatchDefineService {
 
     @Override
     public int updateAsofdate(String asofdate, String batchId) {
-        return batchDefineDao.updateAsofdate(asofdate,batchId);
+        return batchDefineDao.updateAsofdate(asofdate, batchId);
     }
+
+
+    @Override
+    public JSONArray getBatchArg(String batchId) {
+        return batchArgumentDao.getBatchArg(batchId);
+    }
+
+    @Override
+    public int addBatchArg(JSONArray jsonArray) {
+        return batchArgumentDao.addBatchArg(jsonArray);
+    }
+
 }

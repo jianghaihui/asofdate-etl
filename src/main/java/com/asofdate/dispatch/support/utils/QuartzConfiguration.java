@@ -75,7 +75,7 @@ public class QuartzConfiguration extends DefaultBatchConfigurer {
         jobDetailFactoryBean.setName(jobName);
         JobRepository jobRepository = batchConfiguration.createJobRepository();
         JobLauncher jobLauncher = batchConfiguration.createJobLauncher(jobRepository);
-        String taskId = this.groupTaskMap.get(JoinCode.getTaskCode(jobName)).getTask_id();
+        String taskId = this.groupTaskMap.get(JoinCode.getTaskCode(jobName)).getTaskId();
 
         TaskDefineModel tm = this.taskDefineMap.get(taskId);
         String typeId = tm.getTaskType();

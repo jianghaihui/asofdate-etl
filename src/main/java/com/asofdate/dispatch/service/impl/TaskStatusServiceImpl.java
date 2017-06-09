@@ -65,7 +65,7 @@ public class TaskStatusServiceImpl implements TaskStatusService {
         * */
         for (BatchGroupModel gl : this.groupList) {
             for (GroupTaskModel tl : this.taskList) {
-                if (gl.getGroup_id().equals(tl.getGroup_id())) {
+                if (gl.getGroupId().equals(tl.getGroupId())) {
                     // 0 表示初始化
                     this.taskMap.put(JoinCode.join(gl.getUuid(), tl.getUuid()), 0);
                 }
@@ -83,7 +83,7 @@ public class TaskStatusServiceImpl implements TaskStatusService {
     @Override
     public boolean isGroupCompleted(String gid, String groupId) {
         for (GroupTaskModel m : taskList) {
-            if (groupId.equals(m.getGroup_id())) {
+            if (groupId.equals(m.getGroupId())) {
                 switch (getTaskStatus(gid, m.getUuid())) {
                     case 0:
                         return false;
@@ -184,7 +184,7 @@ public class TaskStatusServiceImpl implements TaskStatusService {
     public Map getRunnableTasks(String gid, String groupId) {
         Map<String, GroupTaskModel> map = new HashMap<>();
         for (GroupTaskModel m : taskList) {
-            if (!groupId.equals(m.getGroup_id())) {
+            if (!groupId.equals(m.getGroupId())) {
                 continue;
             }
             map.remove(m.getUuid());

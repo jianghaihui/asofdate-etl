@@ -67,7 +67,7 @@ public class JobScheduler extends Thread {
                             taskStatus,
                             groupStatus,
                             m.getUuid(),
-                            m.getGroup_id()).start();
+                            m.getGroupId()).start();
                 }
 
                 if (taskStatus.isBatchCompleted()) {
@@ -91,7 +91,7 @@ public class JobScheduler extends Thread {
                 }
                 logger.info("batch running. scanning runable group...");
                 Thread.sleep(100);
-                if (BatchStatus.BATCH_STATUS_RUNNING != batchDefineService.getStatus(batchId)){
+                if (BatchStatus.BATCH_STATUS_RUNNING != batchDefineService.getStatus(batchId)) {
                     logger.info("batch status is not running");
                     scheduler.stop();
                     scheduler.destroy();

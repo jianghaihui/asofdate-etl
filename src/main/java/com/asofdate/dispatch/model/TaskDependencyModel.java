@@ -25,19 +25,19 @@ public class TaskDependencyModel {
         this.id = id;
     }
 
-    public String getUp_id() {
+    public String getUpId() {
         return up_id;
     }
 
-    public void setUp_id(String up_id) {
+    public void setUpId(String up_id) {
         this.up_id = up_id;
     }
 
-    public String getDomain_id() {
+    public String getDomainId() {
         return domain_id;
     }
 
-    public void setDomain_id(String domain_id) {
+    public void setDomainId(String domain_id) {
         this.domain_id = domain_id;
     }
 }

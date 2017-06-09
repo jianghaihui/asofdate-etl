@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -29,34 +30,37 @@ public class BatchDefineDaoImpl implements BatchDefineDao {
     @Override
     public int add(BatchDefineModel m) {
         return jdbcTemplate.update(SqlDefine.sys_rdbms_128,
-                m.getBatch_id(),
-                m.getCode_number(),
-                m.getBatch_desc(),
-                m.getBatch_status(),
-                m.getAs_of_date(),
-                m.getCreate_user(),
-                m.getModify_user(),
-                m.getDomain_id());
+                m.getBatchId(),
+                m.getCodeNumber(),
+                m.getBatchDesc(),
+                m.getBatchStatus(),
+                m.getAsOfDate(),
+                m.getCreateUser(),
+                m.getModifyUser(),
+                m.getDomainId());
     }
 
+    @Transactional
     @Override
     public String delete(List<BatchDefineModel> m) {
-        for (BatchDefineModel l : m) {
-            if (1 != jdbcTemplate.update(SqlDefine.sys_rdbms_129, l.getBatch_id(), l.getDomain_id())) {
-                return "删除[" + l.getBatch_desc() + "]失败";
+        try {
+            for (BatchDefineModel l : m) {
+                jdbcTemplate.update(SqlDefine.sys_rdbms_129, l.getBatchId(), l.getDomainId());
             }
+            return "success";
+        } catch (Exception e){
+            return e.getMessage();
         }
-        return "success";
     }
 
     @Override
     public int update(BatchDefineModel m) {
         return jdbcTemplate.update(SqlDefine.sys_rdbms_130,
-                m.getBatch_desc(),
-                m.getBatch_status(),
-                m.getAs_of_date(),
-                m.getBatch_id(),
-                m.getDomain_id());
+                m.getBatchDesc(),
+                m.getBatchStatus(),
+                m.getAsOfDate(),
+                m.getBatchId(),
+                m.getDomainId());
     }
 
     @Override
@@ -71,6 +75,6 @@ public class BatchDefineDaoImpl implements BatchDefineDao {
 
     @Override
     public int updateAsofdate(String asofdate, String batchId) {
-        return jdbcTemplate.update(SqlDefine.sys_rdbms_161,asofdate,batchId);
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_161, asofdate, batchId);
     }
 }

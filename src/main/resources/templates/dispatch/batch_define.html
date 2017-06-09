@@ -105,7 +105,7 @@
             }
 
             $.Hmodal({
-                header:"["+rows[0].batch_desc + "]参数列表",
+                header:"["+rows[0].batch_desc + "] 设置批次启动参数",
                 height: "430px",
                 body:$("#h-dispatch-batch-argument-relation-src").html(),
                 submitDesc:"启动批次",
@@ -147,7 +147,6 @@
                     });
                 },
                 callback:function () {
-
                     $.HAjaxRequest({
                         url:"/v1/dispatch/start",
                         type:"get",
@@ -394,14 +393,6 @@
     };
     $(document).ready(function () {
         var hwindow = document.documentElement.clientHeight;
-        $("#h-dispatch-batch-manage-info-table-details").bootstrapTable({
-            height: hwindow - 130,
-            queryParams: function (params) {
-                params.domain_id = $("#h-dispatch-batch-domain-list").val();
-                return params;
-            }
-        });
-
         $("#h-dispatch-batch-manage-table-info").height(hwindow - 130);
 
         $.getJSON("/v1/auth/domain/self/owner", function (data) {
@@ -421,6 +412,14 @@
                 onclick: function () {
                     $("#h-dispatch-batch-manage-info-table-details").bootstrapTable('refresh');
                 },
+            });
+
+            $("#h-dispatch-batch-manage-info-table-details").bootstrapTable({
+                height: hwindow - 130,
+                queryParams: function (params) {
+                    params.domain_id = $("#h-dispatch-batch-domain-list").val();
+                    return params;
+                }
             });
         });
     });

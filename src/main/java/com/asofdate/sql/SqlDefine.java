@@ -100,7 +100,7 @@ public class SqlDefine {
     public static String sys_rdbms_118 = "select t.domain_id,t.domain_name as domain_desc,t.domain_status_id,a.domain_status_name as domain_status_desc from sys_domain_info t inner join sys_domain_status_attr a on t.domain_status_id = a.domain_status_id";
     public static String sys_rdbms_119 = "insert into dispatch_argument_define(arg_id,arg_type,arg_value,code_number,create_user,create_date,modify_user,modify_date,domain_id,arg_desc,bind_as_of_date) values(?,?,?,?,?,now(),?,now(),?,?,?)";
     public static String sys_rdbms_120 = "delete from dispatch_argument_define where arg_id = ? and domain_id = ?";
-    public static String sys_rdbms_121 = "update dispatch_argument_define set arg_desc = ?, arg_type = ?,arg_value = ? where arg_id = ? and domain_id = ?";
+    public static String sys_rdbms_121 = "update dispatch_argument_define set modify_user = ?, modify_date = now(), bind_as_of_date = ?, arg_desc = ?, arg_value = ? where arg_id = ? and domain_id = ?";
     public static String sys_rdbms_122 = "delete from dispatch_group_define where group_id = ? and domain_id = ?";
     public static String sys_rdbms_123 = "update dispatch_group_define set group_desc = ? where group_id = ? and domain_id = ?";
     public static String sys_rdbms_124 = "insert into dispatch_group_define(group_id,code_number,group_desc,create_user,create_date,modify_user,modify_date,domain_id) values(?,?,?,?,now(),?,now(),?)";

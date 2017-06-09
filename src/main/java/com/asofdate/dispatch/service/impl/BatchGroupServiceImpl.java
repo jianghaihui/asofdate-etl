@@ -21,7 +21,7 @@ public class BatchGroupServiceImpl implements BatchGroupService {
     public List<BatchGroupModel> findByBatchId(String domainId, String batchId) {
         List<BatchGroupModel> list = batchGroupDao.findAll(domainId);
         for (int i = 0; i < list.size(); i++) {
-            if (!batchId.equals(list.get(i).getBatch_id())) {
+            if (!batchId.equals(list.get(i).getBatchId())) {
                 list.remove(i);
                 i--;
             }

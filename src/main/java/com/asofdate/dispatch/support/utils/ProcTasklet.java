@@ -44,7 +44,7 @@ public class ProcTasklet implements Tasklet {
         }
         params += ")";
         try {
-            logger.info("program is :" + scriptFile +", argument is:" + params);
+            logger.info("program is :" + scriptFile + ", argument is:" + params);
             jdbcTemplate.execute("call " + scriptFile + params);
         } catch (Exception e) {
             chunkContext.getStepContext().getStepExecution().setExitStatus(ExitStatus.FAILED);

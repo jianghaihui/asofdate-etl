@@ -26,27 +26,27 @@ public class GroupArgumentModel {
         this.id = id;
     }
 
-    public String getArg_id() {
+    public String getArgId() {
         return arg_id;
     }
 
-    public void setArg_id(String arg_id) {
+    public void setArgId(String arg_id) {
         this.arg_id = arg_id;
     }
 
-    public String getArg_value() {
+    public String getArgValue() {
         return arg_value;
     }
 
-    public void setArg_value(String arg_value) {
+    public void setArgValue(String arg_value) {
         this.arg_value = arg_value;
     }
 
-    public String getDomain_id() {
+    public String getDomainId() {
         return domain_id;
     }
 
-    public void setDomain_id(String domain_id) {
+    public void setDomainId(String domain_id) {
         this.domain_id = domain_id;
     }
 }
