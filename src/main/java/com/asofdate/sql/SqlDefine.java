@@ -126,7 +126,7 @@ public class SqlDefine {
     public static String sys_rdbms_144 = "insert into dispatch_task_argument_rel(uuid,task_id,arg_id,domain_id,arg_value,sort_id) values(uuid(),?,?,?,?,?)";
     public static String sys_rdbms_145 = "update dispatch_task_argument_rel set arg_value = ? where uuid = ?";
     public static String sys_rdbms_146 = "update dispatch_group_argument_rel set arg_value = ? where id = ? and arg_id = ?";
-    public static String sys_rdbms_147 = "delete from  dispatch_group_task_relation where id = ?";
+    public static String sys_rdbms_147 = "delete from dispatch_group_task_relation where id = ?";
     public static String sys_rdbms_148 = "insert into dispatch_group_task_relation(id,group_id,task_id,domain_id) values(?,?,?,?)";
     public static String sys_rdbms_149 = "insert into dispatch_group_argument_rel(uuid,id,arg_id,arg_value,domain_id) values(uuid(),?,?,?,?)";
     public static String sys_rdbms_150 = "select t.id,t.group_id,t.task_id,d.task_desc,t.domain_id from dispatch_group_task_relation t inner join dispatch_task_define d on t.task_id = d.task_id where t.group_id = ?";

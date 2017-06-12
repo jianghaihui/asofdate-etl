@@ -1,44 +1,43 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <div class="row subsystem-header">
     <div class="pull-left">
-        <span style="font-size: 13px" class="label label-info" th:text="${groupDesc}"></span><span>&nbsp;任务配置管理</span>
+        <span style="font-size: 13px" class="label label-warning" th:text="${groupDesc}"></span><span>&nbsp;任务配置管理</span>
         <i id="h-group-task-group-id" style="display: none;" th:text="${groupId}"></i>
     </div>
 </div>
-<div class="row" style="margin-top:6px;">
-    <div class="col-sm-12 col-md-12 col-lg-12">
-        <div id="h-dispatch-group-task-table-info">
-            <div id="h-dispatch-group-task-toolbar-listt" class="pull-left">
-                <button onclick="DispatchGroupTaskObj.addTask()" class="btn btn-success btn-sm" title="新增任务">
-                    <span class="icon-plus"> 添加任务</span>
-                </button>
-            </div>
-            <table id="h-dispatch-group-task-relation-table"
-                   data-toolbar="#h-dispatch-group-task-toolbar-listt"
-                   data-toggle="table"
-                   data-striped="true"
-                   data-unique-id="taskId"
-                   data-url="/v1/dispatch/group/define/task"
-                   data-side-pagination="client"
-                   data-pagination="true"
-                   data-search="true">
-                <thead>
-                <tr>
-                    <th data-align="center" data-field="id">任务组内唯一任务ID号</th>
-                    <th data-align="center" data-field="code_number">任务编码</th>
-                    <th data-align="left" data-field="task_desc">任务名称</th>
-                    <th data-align="center" data-field="task_type_desc">任务类型</th>
-                    <th data-align="center" data-formatter="DispatchGroupDefineObj.formatterTask">操作</th>
-                </tr>
-                </thead>
-            </table>
-        </div>
+<div class="row subsystem-toolbar">
+    <div id="h-dispatch-group-task-toolbar-listt" class="pull-right">
+        <button onclick="DispatchGroupTaskObj.addTask()" class="btn btn-info btn-sm" title="新增配置任务">
+            <span class="icon-plus"> 添加任务</span>
+        </button>
+        <button onclick="DispatchGroupTaskObj.delete()" class="btn btn-danger btn-sm" title="删除配置任务">
+            <span class="icon-plus"> 删除</span>
+        </button>
     </div>
-    <!--<div class="col-sm-5 col-md-5 col-lg-5" style="padding-left:0px;">-->
-        <!--<div id="h-dispatch-group-task-dependency-info">-->
-
-        <!--</div>-->
-    <!--</div>-->
+</div>
+<div class="row" style="margin-top:6px;">
+    <div id="h-dispatch-group-task-table-info" class="col-sm-12 col-md-12 col-lg-12">
+        <table id="h-dispatch-group-task-relation-table"
+               data-toggle="table"
+               data-striped="true"
+               data-unique-id="taskId"
+               data-url="/v1/dispatch/group/define/task"
+               data-side-pagination="client"
+               data-pagination="true"
+               data-search="false">
+            <thead>
+            <tr>
+                <th data-field="state" data-checkbox="true"></th>
+                <th data-align="center" data-formatter="DispatchGroupTaskObj.formatterindex">序号</th>
+                <th data-align="center" data-field="id">任务组内唯一任务ID号</th>
+                <th data-align="center" data-field="code_number">任务编码</th>
+                <th data-align="left" data-field="task_desc">任务名称</th>
+                <th data-align="center" data-field="task_type_desc">任务类型</th>
+                <th data-align="center" data-formatter="DispatchGroupDefineObj.formatterTask">操作</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
 </div>
 
 <script type="text/javascript">
@@ -52,7 +51,6 @@
                 return params;
             }
         });
-
         $("#h-dispatch-group-task-dependency-table").bootstrapTable({
             height:hwindow-110,
         });
@@ -62,10 +60,37 @@
     });
 
     var DispatchGroupTaskObj = {
+        formatterindex:function (value, row, index) {
+            return index+1;
+        },
         addTask:function () {
             var groupId = $("#h-group-task-group-id").html();
             DispatchGroupDefineObj.addTask(groupId);
-        }
+        },
+        refresh:function () {
+            $("#h-dispatch-group-task-relation-table").bootstrapTable('refresh');
+        },
+        delete:function () {
+            var rows = $("#h-dispatch-group-task-relation-table").bootstrapTable('getSelections');
+            var arr = new Array();
+            $(rows).each(function (index, element) {
+                var e = {};
+                e.id = element.id;
+                arr.push(e);
+            })
+            $.HAjaxRequest({
+                url:"/v1/dispatch/group/define/task/list/delete",
+                type:"POST",
+                data:{JSON:JSON.stringify(arr)},
+                success:function () {
+                    $.Notify({
+                        message:"删除任务组中配置任务成功",
+                        type:"success",
+                    });
+                    DispatchGroupTaskObj.refresh();
+                }
+            });
+        },
     }
 </script>
 
@@ -80,6 +105,7 @@
            data-search="false">
         <thead>
         <tr>
+            <th data-align="center" data-formatter="DispatchGroupTaskObj.formatterindex">序号</th>
             <th data-align="center" data-field="up_id">任务组内上级唯一任务ID号</th>
             <th data-align="center" data-field="code_number">任务编码</th>
             <th data-align="left" data-field="task_desc">任务名称</th>

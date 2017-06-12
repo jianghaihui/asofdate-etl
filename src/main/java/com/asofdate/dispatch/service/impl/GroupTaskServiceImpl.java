@@ -123,4 +123,9 @@ public class GroupTaskServiceImpl implements GroupTaskService {
     public int addGroupArg(JSONArray jsonArray) {
         return groupTaskDao.addArg(jsonArray);
     }
+
+    @Override
+    public int deleteTask(List<String> args) {
+        return groupTaskDao.deleteTask(args);
+    }
 }

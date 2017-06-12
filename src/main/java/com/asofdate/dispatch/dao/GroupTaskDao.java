@@ -16,6 +16,8 @@ public interface GroupTaskDao {
 
     int deleteTask(String id);
 
+    int deleteTask(List<String> args);
+
     int addTask(String id, String groupId, String taskId, String domainId);
 
     int addArg(JSONArray jsonArray);

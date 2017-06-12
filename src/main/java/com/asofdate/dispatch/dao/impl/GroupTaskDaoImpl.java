@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -60,6 +61,18 @@ public class GroupTaskDaoImpl implements GroupTaskDao {
     @Override
     public int deleteTask(String id) {
         return jdbcTemplate.update(SqlDefine.sys_rdbms_147, id);
+    }
+
+    @Transactional
+    @Override
+    public int deleteTask(List<String> args) {
+        for(String id:args){
+            int size = jdbcTemplate.update(SqlDefine.sys_rdbms_147,id);
+            if (size != 1){
+                return -1;
+            }
+        }
+        return 1;
     }
 
     @Override

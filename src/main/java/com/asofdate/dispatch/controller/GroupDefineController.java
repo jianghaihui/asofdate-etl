@@ -158,6 +158,10 @@ public class GroupDefineController {
         return Hret.success(200, "success", JSONObject.NULL);
     }
 
+    /*
+    * 删除任务组中已经配置的任务信息
+    * @param id 是任务组中,任务的唯一id
+    * */
     @RequestMapping(value = "/task/delete", method = RequestMethod.POST)
     @ResponseBody
     public String deleteTask(HttpServletResponse response, HttpServletRequest request) {
@@ -167,6 +171,30 @@ public class GroupDefineController {
             return Hret.error(500, "删除任务组中的任务信息失败", JSONObject.NULL);
         }
         return Hret.success(200, "success", JSONObject.NULL);
+    }
+
+    @RequestMapping(value="/task/list/delete",method = RequestMethod.POST)
+    @ResponseBody
+    public String deleteTaskList(HttpServletResponse response,HttpServletRequest request){
+        JSONArray jsonArray = new JSONArray(request.getParameter("JSON"));
+        List<String> args = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++){
+            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+            args.add(jsonObject.getString("id"));
+            logger.info("delete job id is :{}",jsonObject.getString("id"));
+        }
+        try {
+            int size = groupTaskService.deleteTask(args);
+            if (1 != size){
+                response.setStatus(421);
+                return Hret.error(421,"删除任务组中的任务信息失败,任务已经被其他任务引用为上级依赖任务,请先删除依赖关系",JSONObject.NULL);
+            }
+            return Hret.success(200,"success",JSONObject.NULL);
+        } catch (Exception e){
+            logger.info("删除任务组中的任务信息失败,任务已经被其他任务引用为上级依赖任务,请先删除依赖关系");
+            response.setStatus(421);
+            return Hret.error(421,"删除任务组中的任务信息失败,任务已经被其他任务引用为上级依赖任务,请先删除依赖关系",JSONObject.NULL);
+        }
     }
 
     @RequestMapping(value = "/task/add", method = RequestMethod.POST)

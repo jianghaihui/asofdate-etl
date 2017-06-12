@@ -20,4 +20,6 @@ public interface GroupTaskService {
     int addTask(String id, String groupId, String taskId, String domainId);
 
     int addGroupArg(JSONArray jsonArray);
+
+    int deleteTask(List<String> args);
 }

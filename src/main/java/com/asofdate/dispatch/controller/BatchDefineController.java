@@ -162,6 +162,23 @@ public class BatchDefineController {
         return Hret.success(200, "success", JSONObject.NULL);
     }
 
+    @RequestMapping(value = "/group/list/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public String deleteGroupList(HttpServletResponse response,HttpServletRequest request) {
+        JSONArray jsonArray = new JSONArray(request.getParameter("JSON"));
+        try{
+            int size = batchGroupService.deleteGroup(jsonArray);
+            if (1 != size) {
+                response.setStatus(421);
+                return Hret.error(421, "删除任务组失败,任务组已经被当做上级任务依赖引用,请先删除引用关系", JSONObject.NULL);
+            }
+            return Hret.success(200, "success", JSONObject.NULL);
+        }catch (Exception e){
+            response.setStatus(421);
+            return Hret.error(421,"删除任务组失败,任务组已经被当做上级任务依赖引用,请先删除引用关系",e.getMessage());
+        }
+    }
+
 
     @RequestMapping(value = "/group/dependency", method = RequestMethod.GET)
     @ResponseBody
