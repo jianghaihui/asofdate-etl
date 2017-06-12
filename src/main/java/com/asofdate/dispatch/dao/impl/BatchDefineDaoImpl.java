@@ -48,7 +48,7 @@ public class BatchDefineDaoImpl implements BatchDefineDao {
                 jdbcTemplate.update(SqlDefine.sys_rdbms_129, l.getBatchId(), l.getDomainId());
             }
             return "success";
-        } catch (Exception e){
+        } catch (Exception e) {
             return e.getMessage();
         }
     }

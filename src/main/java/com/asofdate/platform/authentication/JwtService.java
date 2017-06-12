@@ -124,9 +124,9 @@ public class JwtService {
                     .getBody();
 
             JSONObject ret = new JSONObject();
-            ret.put("UserId",claims.get("UserId"));
-            ret.put("DomainId",claims.get("DomainId"));
-            ret.put("OrgUnitId",claims.get("OrgUnitId"));
+            ret.put("UserId", claims.get("UserId"));
+            ret.put("DomainId", claims.get("DomainId"));
+            ret.put("OrgUnitId", claims.get("OrgUnitId"));
 
             return ret;
         }

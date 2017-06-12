@@ -1,20 +1,35 @@
 package com.asofdate.dispatch.model;
 
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
+
+import javax.validation.constraints.NotNull;
+
 /**
  * Created by hzwy23 on 2017/5/24.
  */
 public class TaskDefineModel {
 
+    @NotEmpty(message = "任务编码必须由1-30位字母、数字组成")
     public String taskId;
+
     public String codeNumber;
+
+    @NotEmpty(message = "请输入任务详细描述信息")
     public String taskDesc;
+
+    @NotEmpty(message = "请选择任务类型")
     public String taskType;
     public String taskTypeDesc;
     public String createUser;
     public String createDate;
     public String modifyDate;
     public String modifyUser;
+
+    @NotEmpty(message = "域信息编码格式不正确，请联系管理员")
     public String domainId;
+
+    @NotEmpty(message = "请输入脚本路径及名称")
     public String scriptFile;
 
     public String getScriptFile() {

@@ -148,7 +148,7 @@
 .subsystem-header {
     height: 40px;
     line-height: 40px;
-    border-bottom: solid #598f56 1px;
+    border-bottom: solid #e6e6e6 1px;
     vertical-align: middle;
     margin: auto 0px;
 }
@@ -157,4 +157,7 @@
     min-height: 44px;
     line-height: 44px;
     vertical-align: middle;
+    /*border-bottom: solid #e6e6e6 1px;*/
+    margin: auto 0px;
+    background-color: #fcfcfc;
 }

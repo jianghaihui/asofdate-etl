@@ -45,7 +45,7 @@ public class BatchDefineController {
     @ResponseBody
     public List<BatchDefineModel> getAll(HttpServletRequest request) {
         String domainId = request.getParameter("domain_id");
-        if (domainId == null){
+        if (domainId == null) {
             JSONObject jsonObject = JwtService.getConnectUser(request);
             domainId = jsonObject.getString("DomainId");
         }
@@ -55,7 +55,7 @@ public class BatchDefineController {
     // 新增任务组
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public String add(HttpServletResponse response,HttpServletRequest request) {
+    public String add(HttpServletResponse response, HttpServletRequest request) {
         int size = batchDefineService.add(parse(request));
         if (1 != size) {
             response.setStatus(421);

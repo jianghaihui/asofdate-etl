@@ -1,71 +1,55 @@
 <div class="row subsystem-header">
     <div class="pull-left">
-        <span style="font-size: 16px;">任务定义</span>
+        <span style="font-size: 14px;">任务定义</span>
     </div>
 </div>
 <div class="row subsystem-toolbar">
-    <div class="col-sm-12 col-md-12 col-lg-12">
-        <div class="pull-left">
-            <button onclick="DispatchTaskDefineObj.add()" class="btn btn-success btn-sm" title="新增机构信息">
-                <i class="icon-plus"> 新增</i>
-            </button>
-            <!--<button onclick="DispatchTaskDefineObj.upload()" class="btn btn-success btn-sm" title="导入机构信息">-->
-                <!--<span class="icon-edit"> 导入</span>-->
-            <!--</button>-->
-            <!--<button onclick="DispatchTaskDefineObj.download()" class="btn btn-success btn-sm" title="导出机构信息">-->
-                <!--<span class="icon-trash"> 导出</span>-->
-            <!--</button>-->
-            <button onclick="DispatchTaskDefineObj.edit()" class="btn btn-success btn-sm" title="编辑机构信息">
-                <span class="icon-edit"> 编辑</span>
-            </button>
-            <button onclick="DispatchTaskDefineObj.delete()" class="btn btn-danger btn-sm" title="删除机构信息">
-                <span class="icon-trash"> 删除</span>
-            </button>
-        </div>
-        <div class="pull-right" style="height: 44px; line-height: 44px; width: 260px;">
-            <span style="text-align:right;width:80px;height: 30px; line-height: 30px; margin-top: 7px;display: inline"
-                  class="pull-left">&nbsp;&nbsp;所属域：</span>
-            <select id="h-dispatch-task-define-domain-list" class="form-control pull-right"
-                    style="width: 180px;height: 24px; line-height: 24px; margin-top: 10px;padding: 0px;">
-            </select>
-        </div>
+    <div style="height: 44px; line-height: 44px;display: inline">
+        <span style="height: 30px; line-height: 30px; margin-top: 7px;display: inline"
+              class="pull-left">&nbsp;所属域：</span>
+        <select id="h-dispatch-task-define-domain-list" class="form-control pull-left"
+                style="width: 180px;height: 24px; line-height: 24px; margin-top: 10px;padding: 0px;">
+        </select>
+    </div>
+    <div id="h-dispatch-task-define-toolbar-list" class="pull-right">
+        <button onclick="DispatchTaskDefineObj.add()" class="btn btn-info btn-sm" title="新增机构信息">
+            <i class="icon-plus"> 新增</i>
+        </button>
+        <button onclick="DispatchTaskDefineObj.edit()" class="btn btn-info btn-sm" title="编辑机构信息">
+            <span class="icon-edit"> 编辑</span>
+        </button>
+        <button onclick="DispatchTaskDefineObj.delete()" class="btn btn-danger btn-sm" title="删除机构信息">
+            <span class="icon-trash"> 删除</span>
+        </button>
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-12 col-md-12 col-lg-12">
-        <div id="h-dispatch-task-define-table-info" style="border: #598f56 solid 1px;">
-            <div id="h-dispatch-task-define-toolbar-list" class="pull-left">
-                <span>任务定义详细信息</span>
-            </div>
-            <div class="col-sm-12 col-md-12 col-lg-12">
-                <table id="h-dispatch-task-define-info-table-details"
-                       data-toggle="table"
-                       data-striped="true"
-                       data-page-size="30"
-                       data-unique-id="taskId"
-                       data-toolbar="#h-dispatch-task-define-toolbar-list"
-                       data-url="/v1/dispatch/task/define"
-                       data-side-pagination="client"
-                       data-pagination="true"
-                       data-page-list="[20,,30, 50, 100, 200,1000]"
-                       data-search="refresh">
-                    <thead>
-                    <tr>
-                        <th data-field="state" data-checkbox="true"></th>
-                        <th data-sortable="true" data-align="center" data-field="codeNumber">任务编码</th>
-                        <th data-sortable="true" data-field="taskDesc">任务描述</th>
-                        <th data-sortable="true" data-field="taskTypeDesc">任务类型</th>
-                        <th data-sortable="true" data-field="scriptFile">任务路径</th>
-                        <th data-sortable="true" data-field="createUser">创建人</th>
-                        <th data-sortable="true" data-field="createDate">创建时间</th>
-                        <th data-sortable="true" data-field="modifyUser">修改人</th>
-                        <th data-sortable="true" data-field="modifyDate">修改时间</th>
-                        <th data-align="center" data-formatter="DispatchTaskDefineObj.formatter">任务参数管理</th>
-                    </tr>
-                    </thead>
-                </table>
-            </div>
-        </div>
+    <div id="h-dispatch-task-define-table-info" class="col-sm-12 col-md-12 col-lg-12">
+        <table id="h-dispatch-task-define-info-table-details"
+               data-toggle="table"
+               data-striped="true"
+               data-page-size="30"
+               data-unique-id="taskId"
+               data-url="/v1/dispatch/task/define"
+               data-side-pagination="client"
+               data-pagination="true"
+               data-page-list="[20,,30, 50, 100, 200,1000]"
+               data-search="false">
+            <thead>
+            <tr>
+                <th data-field="state" data-checkbox="true"></th>
+                <th data-sortable="true" data-align="center" data-field="codeNumber">任务编码</th>
+                <th data-sortable="true" data-field="taskDesc">任务描述</th>
+                <th data-sortable="true" data-field="taskTypeDesc">任务类型</th>
+                <th data-sortable="true" data-field="scriptFile">任务路径</th>
+                <th data-sortable="true" data-field="createUser">创建人</th>
+                <th data-sortable="true" data-field="createDate">创建时间</th>
+                <th data-sortable="true" data-field="modifyUser">修改人</th>
+                <th data-sortable="true" data-field="modifyDate">修改时间</th>
+                <th data-align="center" data-formatter="DispatchTaskDefineObj.formatter">任务参数管理</th>
+            </tr>
+            </thead>
+        </table>
     </div>
 </div>
 
@@ -135,13 +119,39 @@
                     });
                 },
                 callback:function (newArg) {
+
+
                     $.HAjaxRequest({
                         url:"/v1/dispatch/task/define/argument/add",
                         type:"POST",
                         data:$("#h-dispatch-task-argument-add-form").serialize(),
                         success:function () {
                             $(newArg).remove();
-                            $("#h-dispatch-task-argument-relation-table").bootstrapTable('refresh')
+                            $.getJSON("/v1/dispatch/task/define/argument",{task_id:taskId},function (data) {
+                                $("#h-dispatch-task-argument-relation-table").bootstrapTable('load',data);
+                                $("#h-dispatch-task-argument-relation-table").find("tbody tr").each(function (index, element) {
+                                    var typeId = "1";
+                                    switch ($(element).find("td:eq(4)").html()){
+                                        case "固定参数":
+                                            break;
+                                        case "任务参数":
+                                            typeId = "2";
+                                            break;
+                                        case "任务组参数":
+                                            typeId = "3";
+                                            break;
+                                        case "批次参数":
+                                            typeId = "4";
+                                            break;
+                                    };
+                                    if (typeId == "1"){
+                                        var argValue = $(element).find("td:eq(2) a").attr("data-value");
+                                        $(element).find("td:eq(2)").html(argValue);
+                                    } else if (typeId == "4" || typeId == "3"){
+                                        $(element).find("td:eq(2)").html("---");
+                                    }
+                                });
+                            });
                         },
                     });
                 },
@@ -159,14 +169,33 @@
                     DispatchTaskDefineObj.addArgument(taskId,taskDesc);
                 },
                 preprocess:function () {
-                    $("#h-dispatch-task-argument-relation-table").bootstrapTable({
-                        height:290,
-                        queryParams:function (params) {
-                            params.task_id = taskId;
-                            return params;
-                        }
+                    $("#h-dispatch-task-argument-relation-table").bootstrapTable();
+                    $.getJSON("/v1/dispatch/task/define/argument",{task_id:taskId},function (data) {
+                        $("#h-dispatch-task-argument-relation-table").bootstrapTable('load',data);
+                        $("#h-dispatch-task-argument-relation-table").find("tbody tr").each(function (index, element) {
+                            var typeId = "1";
+                            switch ($(element).find("td:eq(4)").html()){
+                                case "固定参数":
+                                    break;
+                                case "任务参数":
+                                    typeId = "2";
+                                    break;
+                                case "任务组参数":
+                                    typeId = "3";
+                                    break;
+                                case "批次参数":
+                                    typeId = "4";
+                                    break;
+                            };
+                            if (typeId == "1"){
+                                var argValue = $(element).find("td:eq(2) a").attr("data-value");
+                                $(element).find("td:eq(2)").html(argValue);
+                            } else if (typeId == "4" || typeId == "3"){
+                                $(element).find("td:eq(2)").html("---");
+                            }
+                        });
                     });
-                    
+
                     $("#h-dispatch-task-argument-relation-table").on("editable-save.bs.table",function (editable, field, row, oldValue, $el) {
                         if ( "sort_id" == field) {
                             var sort_id = row.sort_id;
@@ -393,8 +422,8 @@
            data-toggle="table"
            data-striped="true"
            data-unique-id="uuid"
-           data-url="/v1/dispatch/task/define/argument"
            data-side-pagination="client"
+           data-height="290"
            data-pagination="false"
            data-search="false">
         <thead>

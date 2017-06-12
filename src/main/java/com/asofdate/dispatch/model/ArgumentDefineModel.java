@@ -8,9 +8,7 @@ import javax.validation.constraints.NotNull;
  * Created by hzwy23 on 2017/5/24.
  */
 public class ArgumentDefineModel {
-    @NotEmpty(message = "参数不能为空")
     public String arg_id;
-    @NotNull
     public String arg_type;
     public String arg_type_desc;
     public String arg_value;

@@ -10,6 +10,9 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,21 +33,37 @@ public class TaskDefineController {
     @Autowired
     private TaskDefineService taskDefineService;
 
+    /*
+    * http GET /v1/dispatch/task/define
+    * 查询指定域中的所有任务定义信息
+    * 如果指定域为空,则返回请求用户所属域的任务定义信息
+    * */
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public List<TaskDefineModel> getAll(HttpServletRequest request) {
-        String domainId = JwtService.getConnectUser(request).get("DomainId").toString();
+        String domainId = request.getParameter("domain_id");
+        if (domainId == null || domainId.isEmpty()) {
+            domainId = JwtService.getConnectUser(request).get("DomainId").toString();
+        }
         return taskDefineService.getAll(domainId);
     }
-
 
     /*
     * 新增任务组
     * */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public String add(HttpServletRequest request) {
-        if (1 != taskDefineService.add(parse(request))) {
+    public String add(@Validated TaskDefineModel taskDefineModel, BindingResult bindingResult,HttpServletResponse response, HttpServletRequest request) {
+        if (bindingResult.hasErrors()){
+            for (ObjectError m:bindingResult.getAllErrors()){
+                response.setStatus(421);
+                return Hret.error(421, m.getDefaultMessage(), JSONObject.NULL);
+            }
+        }
+
+        int size = taskDefineService.add(parse(request));
+        if (1 != size) {
+            response.setStatus(421);
             return Hret.error(500, "新增任务信息失败,任务组编码重复", JSONObject.NULL);
         }
         return Hret.success(200, "success", JSONObject.NULL);
@@ -55,7 +74,7 @@ public class TaskDefineController {
     * */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
-    public String delete(HttpServletRequest request) {
+    public String delete(HttpServletResponse response,HttpServletRequest request) {
         List<TaskDefineModel> args = new ArrayList<>();
         JSONArray jsonArray = new JSONArray(request.getParameter("JSON"));
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -69,7 +88,8 @@ public class TaskDefineController {
         if ("success".equals(msg)) {
             return Hret.success(200, "success", JSONObject.NULL);
         }
-        return Hret.error(500, msg, JSONObject.NULL);
+        response.setStatus(421);
+        return Hret.error(421, msg, JSONObject.NULL);
     }
 
 
@@ -78,9 +98,18 @@ public class TaskDefineController {
     * */
     @RequestMapping(method = RequestMethod.PUT)
     @ResponseBody
-    public String update(HttpServletRequest request) {
-        if (1 != taskDefineService.update(parse(request))) {
-            return Hret.error(500, "新增任务组信息失败,任务组编码重复", JSONObject.NULL);
+    public String update(@Validated TaskDefineModel taskDefineModel, BindingResult bindingResult,HttpServletResponse response,HttpServletRequest request) {
+        if (bindingResult.hasErrors()){
+            for (ObjectError m:bindingResult.getAllErrors()){
+                response.setStatus(421);
+                return Hret.error(421, m.getDefaultMessage(), JSONObject.NULL);
+            }
+        }
+
+        int size = taskDefineService.update(parse(request));
+        if (1 != size) {
+            response.setStatus(421);
+            return Hret.error(500, "更新任务组信息失败,任务组编码重复", JSONObject.NULL);
         }
         return Hret.success(200, "success", JSONObject.NULL);
     }
@@ -98,8 +127,11 @@ public class TaskDefineController {
     public String updateSort(HttpServletResponse response, HttpServletRequest request) {
         String sortId = request.getParameter("sort_id");
         String uuid = request.getParameter("uuid");
-        logger.info("uuid is:" + sortId);
-        if (1 != taskDefineService.updateArgumentSort(sortId, uuid)) {
+        logger.info("sort is:{},uuid is:{}",sortId, uuid);
+        int size = taskDefineService.updateArgumentSort(sortId, uuid);
+
+        if (1 != size) {
+            response.setStatus(421);
             return Hret.error(421, "更新参数序号信息失败", JSONObject.NULL);
         }
         return Hret.success(200, "success", JSONObject.NULL);
@@ -109,7 +141,9 @@ public class TaskDefineController {
     @ResponseBody
     public String deleteArg(HttpServletResponse response, HttpServletRequest request) {
         String uuid = request.getParameter("uuid");
-        if (1 != taskDefineService.deleteArg(uuid)) {
+        int size = taskDefineService.deleteArg(uuid);
+        if (1 != size) {
+            response.setStatus(421);
             return Hret.error(421, "删除参数信息失败", JSONObject.NULL);
         }
         return Hret.success(200, "success", JSONObject.NULL);
@@ -122,13 +156,22 @@ public class TaskDefineController {
         return taskDefineService.getArgType(argId).toString();
     }
 
+    /*
+    * 更新任务参数的值，在任务定义过程中，只能更新参数类型为任务类型的参数
+    *
+    * */
     @RequestMapping(value = "/argument/value", method = RequestMethod.POST)
     @ResponseBody
     public String updateArgValue(HttpServletResponse response, HttpServletRequest request) {
         String argValue = request.getParameter("arg_value");
         String uuid = request.getParameter("uuid");
-        if (1 != taskDefineService.updateArgValue(argValue, uuid)) {
-            return Hret.error(500, "更新任务参数信息值失败,请联系管理员", JSONObject.NULL);
+        if (argValue == null || argValue.isEmpty()){
+
+        }
+        int size = taskDefineService.updateArgValue(argValue, uuid);
+        if (1 != size) {
+            response.setStatus(421);
+            return Hret.error(421, "更新任务参数信息值失败,请联系管理员", JSONObject.NULL);
         }
         return Hret.success(200, "success", JSONObject.NULL);
     }
@@ -138,13 +181,35 @@ public class TaskDefineController {
     @ResponseBody
     public String addArg(HttpServletResponse response, HttpServletRequest request) {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("task_id", request.getParameter("task_id"));
-        jsonObject.put("arg_id", request.getParameter("arg_id"));
+        String taskId = request.getParameter("task_id");
+        if(taskId == null || taskId.isEmpty()){
+            response.setStatus(421);
+            return Hret.error(421,"任务参数为空,请联系管理员",JSONObject.NULL);
+        }
+        jsonObject.put("task_id", taskId);
+
+        String argId = request.getParameter("arg_id");
+        if (argId == null || argId.isEmpty()){
+            response.setStatus(421);
+            return Hret.error(421,"请选择参数",JSONObject.NULL);
+        }
+        jsonObject.put("arg_id", argId);
+
+        String sortId = request.getParameter("sort_id");
+        if (sortId == null || sortId.isEmpty()){
+            response.setStatus(421);
+            return Hret.error(421,"参数排序号不能为空",JSONObject.NULL);
+        }
+        jsonObject.put("sort_id",sortId);
+
         jsonObject.put("domain_id", request.getParameter("domain_id"));
+
         jsonObject.put("arg_value", request.getParameter("arg_value"));
-        jsonObject.put("sort_id", request.getParameter("sort_id"));
-        if (1 != taskDefineService.addArg(jsonObject)) {
-            return Hret.error(500, "新增任务参数失败", JSONObject.NULL);
+
+        int size = taskDefineService.addArg(jsonObject);
+        if (1 != size) {
+            response.setStatus(421);
+            return Hret.error(421, "新增任务参数失败", JSONObject.NULL);
         }
         return Hret.success(200, "success", JSONObject.NULL);
     }
