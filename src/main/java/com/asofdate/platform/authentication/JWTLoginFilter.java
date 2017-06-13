@@ -1,7 +1,10 @@
 package com.asofdate.platform.authentication;
 
+import com.asofdate.utils.Hret;
 import com.asofdate.utils.JSONResult;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,6 +25,8 @@ import static com.asofdate.utils.CryptoAES.aesEncrypt;
  */
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
+    private final Logger logger = LoggerFactory.getLogger(JWTLoginFilter.class);
+
     public JWTLoginFilter(String url, AuthenticationManager authManager) {
         super(new AntPathRequestMatcher(url));
         setAuthenticationManager(authManager);
@@ -34,9 +39,11 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
         String username = req.getParameter("username");
         String password = req.getParameter("password");
+
         if (password != null) {
             password = aesEncrypt(password);
         }
+
         // 返回一个验证令牌
         return getAuthenticationManager().authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -54,7 +61,6 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
             HttpServletRequest req,
             HttpServletResponse res, FilterChain chain,
             Authentication auth) throws IOException, ServletException {
-
         JwtService.addAuthentication(res, auth.getName());
     }
 
@@ -67,7 +73,9 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
             HttpServletResponse response,
             AuthenticationException failed) throws IOException, ServletException {
         response.setContentType("application/json");
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.getOutputStream().println(JSONResult.fillResultString(403, failed.getMessage(), JSONObject.NULL));
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        JSONObject jsonObject = new JSONObject(failed.getMessage());
+        String retMsg = Hret.error(jsonObject.getInt("retCode"),jsonObject.getString("message"),jsonObject);
+        response.getOutputStream().println(retMsg);
     }
 }

@@ -1,9 +1,5 @@
 package com.asofdate.dispatch.model;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.validation.constraints.NotNull;
-
 /**
  * Created by hzwy23 on 2017/5/24.
  */

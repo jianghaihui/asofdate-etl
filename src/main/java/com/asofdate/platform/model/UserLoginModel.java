@@ -1,5 +1,7 @@
 package com.asofdate.platform.model;
 
+import java.io.Serializable;
+
 /**
  * Created by hzwy23 on 2017/5/14.
  */
@@ -16,6 +18,16 @@ public class UserLoginModel {
     public boolean flag = false;
 
     public String message = "success";
+
+    public String retCode = "403";
+
+    public String getRetCode() {
+        return retCode;
+    }
+
+    public void setRetCode(String retCode) {
+        this.retCode = retCode;
+    }
 
     public String getUsername() {
         return username;

@@ -95,14 +95,7 @@
             data: {username: user, password: psd},
             dataType: 'json',
             success: function (data) {
-                if (data.status == "0") {
-                    window.location.href = "/HomePage";
-                } else {
-                    $.Notify({
-                        message: data.message,
-                        type: "warning",
-                    })
-                }
+                window.location.href = "/HomePage";
             },
             error: function (msg) {
                 var imsg = JSON.parse(msg.responseText);
@@ -116,7 +109,7 @@
                 } else if (imsg.error_code == 402) {
                     $.Notify({
                         title: "温馨提示",
-                        message: "用户名不存在,系统中无法获取用户密码信息",
+                        message: "存在多个用户,用户管理出现异常情况,禁止登陆,请联系管理员",
                         type: "warning",
                         placement: {from: "bottom", align: "right"},
                     })

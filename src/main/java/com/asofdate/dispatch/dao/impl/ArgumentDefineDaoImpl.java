@@ -24,6 +24,11 @@ public class ArgumentDefineDaoImpl implements ArgumentDefineDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    /*
+    * 查询所有参数
+    * @param domainId 所属域编码
+    * 返回参数定义表中,所以参数,如果参数类型是固定参数,则返回固定参数的值
+    * */
     @Override
     public List findAll(String domainId) {
         RowMapper<ArgumentDefineModel> rowMapper = new BeanPropertyRowMapper<ArgumentDefineModel>(ArgumentDefineModel.class);

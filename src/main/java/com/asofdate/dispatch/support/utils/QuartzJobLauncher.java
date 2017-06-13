@@ -101,12 +101,12 @@ public class QuartzJobLauncher extends QuartzJobBean {
             Job job = jobRegistry.getJob(jobName);
             JobExecution jobExecution = jobLauncher.run(job, getJobParameters());
             if (ExitStatus.COMPLETED.getExitCode().equals(jobExecution.getExitStatus().getExitCode())) {
-                logger.info(jobName + " 任务已经完成.");
+                logger.info("{} 任务已经完成.", jobName);
                 taskStatusService.setTaskCompleted(jobName);
                 jobRegistry.unregister(jobName);
             } else {
                 taskStatusService.setTaskError(jobName);
-                System.out.println("error");
+                logger.info("{} 任务执行失败", jobName);
             }
 
         } catch (NoSuchJobException e) {
@@ -139,11 +139,13 @@ public class QuartzJobLauncher extends QuartzJobBean {
             }
         });
 
-        String JobParameters = "";
+        String jobParameters = "";
         for (TaskArgumentModel m : list) {
-            JobParameters += " " + m.getArgValue();
+            jobParameters += " " + m.getArgValue();
         }
-        builder.addString("JobParameters", JobParameters.trim());
+
+        logger.info("job is :{},jobParameters is:{}", jobName, jobParameters.trim());
+        builder.addString("JobParameters", jobParameters.trim());
         builder.addLong("timestamp", System.currentTimeMillis());
 
         return builder.toJobParameters();

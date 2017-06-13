@@ -53,9 +53,9 @@ public class TaskDefineController {
     * */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public String add(@Validated TaskDefineModel taskDefineModel, BindingResult bindingResult,HttpServletResponse response, HttpServletRequest request) {
-        if (bindingResult.hasErrors()){
-            for (ObjectError m:bindingResult.getAllErrors()){
+    public String add(@Validated TaskDefineModel taskDefineModel, BindingResult bindingResult, HttpServletResponse response, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            for (ObjectError m : bindingResult.getAllErrors()) {
                 response.setStatus(421);
                 return Hret.error(421, m.getDefaultMessage(), JSONObject.NULL);
             }
@@ -74,7 +74,7 @@ public class TaskDefineController {
     * */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
-    public String delete(HttpServletResponse response,HttpServletRequest request) {
+    public String delete(HttpServletResponse response, HttpServletRequest request) {
         List<TaskDefineModel> args = new ArrayList<>();
         JSONArray jsonArray = new JSONArray(request.getParameter("JSON"));
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -98,9 +98,9 @@ public class TaskDefineController {
     * */
     @RequestMapping(method = RequestMethod.PUT)
     @ResponseBody
-    public String update(@Validated TaskDefineModel taskDefineModel, BindingResult bindingResult,HttpServletResponse response,HttpServletRequest request) {
-        if (bindingResult.hasErrors()){
-            for (ObjectError m:bindingResult.getAllErrors()){
+    public String update(@Validated TaskDefineModel taskDefineModel, BindingResult bindingResult, HttpServletResponse response, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            for (ObjectError m : bindingResult.getAllErrors()) {
                 response.setStatus(421);
                 return Hret.error(421, m.getDefaultMessage(), JSONObject.NULL);
             }
@@ -127,7 +127,7 @@ public class TaskDefineController {
     public String updateSort(HttpServletResponse response, HttpServletRequest request) {
         String sortId = request.getParameter("sort_id");
         String uuid = request.getParameter("uuid");
-        logger.info("sort is:{},uuid is:{}",sortId, uuid);
+        logger.info("sort is:{},uuid is:{}", sortId, uuid);
         int size = taskDefineService.updateArgumentSort(sortId, uuid);
 
         if (1 != size) {
@@ -165,7 +165,7 @@ public class TaskDefineController {
     public String updateArgValue(HttpServletResponse response, HttpServletRequest request) {
         String argValue = request.getParameter("arg_value");
         String uuid = request.getParameter("uuid");
-        if (argValue == null || argValue.isEmpty()){
+        if (argValue == null || argValue.isEmpty()) {
 
         }
         int size = taskDefineService.updateArgValue(argValue, uuid);
@@ -182,25 +182,25 @@ public class TaskDefineController {
     public String addArg(HttpServletResponse response, HttpServletRequest request) {
         JSONObject jsonObject = new JSONObject();
         String taskId = request.getParameter("task_id");
-        if(taskId == null || taskId.isEmpty()){
+        if (taskId == null || taskId.isEmpty()) {
             response.setStatus(421);
-            return Hret.error(421,"任务参数为空,请联系管理员",JSONObject.NULL);
+            return Hret.error(421, "任务参数为空,请联系管理员", JSONObject.NULL);
         }
         jsonObject.put("task_id", taskId);
 
         String argId = request.getParameter("arg_id");
-        if (argId == null || argId.isEmpty()){
+        if (argId == null || argId.isEmpty()) {
             response.setStatus(421);
-            return Hret.error(421,"请选择参数",JSONObject.NULL);
+            return Hret.error(421, "请选择参数", JSONObject.NULL);
         }
         jsonObject.put("arg_id", argId);
 
         String sortId = request.getParameter("sort_id");
-        if (sortId == null || sortId.isEmpty()){
+        if (sortId == null || sortId.isEmpty()) {
             response.setStatus(421);
-            return Hret.error(421,"参数排序号不能为空",JSONObject.NULL);
+            return Hret.error(421, "参数排序号不能为空", JSONObject.NULL);
         }
-        jsonObject.put("sort_id",sortId);
+        jsonObject.put("sort_id", sortId);
 
         jsonObject.put("domain_id", request.getParameter("domain_id"));
 

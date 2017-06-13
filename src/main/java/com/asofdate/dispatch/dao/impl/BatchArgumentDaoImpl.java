@@ -29,16 +29,46 @@ public class BatchArgumentDaoImpl implements BatchArgumentDao {
         RowMapper<BatchArgumentModel> rowMapper = new BeanPropertyRowMapper<BatchArgumentModel>(BatchArgumentModel.class);
 
         // 获取固定参数,任务参数,任务组参数
-        List list = jdbcTemplate.query(SqlDefine.sys_rdbms_105, rowMapper, domainId);
+        List<BatchArgumentModel> list = jdbcTemplate.query(SqlDefine.sys_rdbms_105, rowMapper, domainId);
 
         //获取批次类型参数
-        List list2 = jdbcTemplate.query(SqlDefine.sys_rdbms_162, rowMapper, domainId);
+        List<BatchArgumentModel> list2 = jdbcTemplate.query(SqlDefine.sys_rdbms_162, rowMapper, domainId);
 
-        list.addAll(list2);
-
-        return list;
+        return bindAsofdate(list,list2);
     }
 
+    /*
+    * 查询指定批次的参数
+    * @param domainId
+    * @param batchId
+    * 返回指定批次的参数信息
+    * */
+    @Override
+    public List findAll(String domainId, String batchId) {
+        RowMapper<BatchArgumentModel> rowMapper = new BeanPropertyRowMapper<BatchArgumentModel>(BatchArgumentModel.class);
+
+        // 获取固定参数,任务参数,任务组参数
+        List<BatchArgumentModel> list = jdbcTemplate.query(SqlDefine.sys_rdbms_163, rowMapper, domainId,batchId);
+
+        //获取批次类型参数
+        List<BatchArgumentModel> list2 = jdbcTemplate.query(SqlDefine.sys_rdbms_164, rowMapper, domainId,batchId);
+
+        return bindAsofdate(list,list2);
+    }
+
+    private List<BatchArgumentModel> bindAsofdate(List<BatchArgumentModel> ret, List<BatchArgumentModel> source){
+        for (BatchArgumentModel m : source) {
+            // 绑定批次日期
+            if ("1".equals(m.getBindAsOfDate())) {
+                String asOfDate = jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_157,
+                        String.class,
+                        m.getBatchId());
+                m.setArgValue(asOfDate);
+            }
+            ret.add(m);
+        }
+        return ret;
+    }
 
     @Override
     public JSONArray getBatchArg(String batchId) {

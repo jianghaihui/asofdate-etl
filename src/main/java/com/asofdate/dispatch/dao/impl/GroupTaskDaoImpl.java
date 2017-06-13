@@ -66,9 +66,9 @@ public class GroupTaskDaoImpl implements GroupTaskDao {
     @Transactional
     @Override
     public int deleteTask(List<String> args) {
-        for(String id:args){
-            int size = jdbcTemplate.update(SqlDefine.sys_rdbms_147,id);
-            if (size != 1){
+        for (String id : args) {
+            int size = jdbcTemplate.update(SqlDefine.sys_rdbms_147, id);
+            if (size != 1) {
                 return -1;
             }
         }

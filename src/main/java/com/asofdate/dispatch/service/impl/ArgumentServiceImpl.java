@@ -91,14 +91,14 @@ public class ArgumentServiceImpl implements ArgumentService {
         this.groupTaskMap = new HashMap<>();
         this.domainId = domainId;
         this.batchId = batchId;
-        this.argDefineList = this.argumentDefineDao.findAll(domainId);
-        this.batchArgList = this.batchArgumentDao.findAll(domainId);
+        this.argDefineList = argumentDefineDao.findAll(domainId);
+        this.batchArgList = batchArgumentDao.findAll(domainId,batchId);
         this.groupArgumentMap = new HashMap<>();
 
         // 这个id是任务组中配置任务时生成的id号,
         // 这个id号具有唯一性,一个id绑定一个具体的任务
         String id = null;
-        for (GroupArgumentModel m : this.groupArgumentDao.findAll(domainId)) {
+        for (GroupArgumentModel m : groupArgumentDao.findAll(domainId)) {
             id = m.getId();
             if (this.groupArgumentMap.containsKey(id)) {
                 this.groupArgumentMap.get(id).add(m);
@@ -109,17 +109,9 @@ public class ArgumentServiceImpl implements ArgumentService {
             }
         }
 
-        List<GroupTaskModel> list = this.groupTaskService.findByBatchId(domainId, batchId);
+        List<GroupTaskModel> list = groupTaskService.findByBatchId(domainId, batchId);
         for (GroupTaskModel m : list) {
-            this.groupTaskMap.put(m.getUuid(), m);
-        }
-
-        // 删除不是这个批次中的参数信息
-        for (int i = 0; i < this.batchArgList.size(); i++) {
-            if (!batchId.equals(this.batchArgList.get(i).getBatchId())) {
-                this.batchArgList.remove(i);
-                i--;
-            }
+            groupTaskMap.put(m.getUuid(), m);
         }
 
         // 初始化域中所有的任务定义信息
@@ -158,18 +150,21 @@ public class ArgumentServiceImpl implements ArgumentService {
     * */
     @Override
     public List<TaskArgumentModel> queryArgument(String id) {
-        String taskId = this.groupTaskMap.get(id).getTaskId();
+        String taskId = groupTaskMap.get(id).getTaskId();
         if (taskId == null) {
             return null;
         }
+
         List<TaskArgumentModel> list = taskArgMap.get(taskId);
         if (list == null) {
             return null;
         }
+
         for (TaskArgumentModel m : list) {
-            switch (argDefineMap.get(m.getArgId()).getArgType()) {
+            String argType = argDefineMap.get(m.getArgId()).getArgType();
+            switch (argType) {
                 case GROUP_ARGUMENT:
-                    for (GroupArgumentModel g : this.groupArgumentMap.get(id)) {
+                    for (GroupArgumentModel g : groupArgumentMap.get(id)) {
                         if (g.getArgId().equals(m.getArgId())) {
                             m.setArgValue(g.getArgValue());
                             break;
@@ -178,7 +173,8 @@ public class ArgumentServiceImpl implements ArgumentService {
                     break;
                 case FIXED_ARGUMENT:
                 case BATCH_ARGUMENT:
-                    m.setArgValue(this.argDefineMap.get(m.getArgId()).getArgValue());
+                    String argValue = argDefineMap.get(m.getArgId()).getArgValue();
+                    m.setArgValue(argValue);
                     break;
             }
         }
@@ -197,12 +193,9 @@ public class ArgumentServiceImpl implements ArgumentService {
         * value : BatchArgumentModel
         * 同一个域中,批次编码唯一, 批次参数在这个批次中的值也是唯一
         * */
-
         Map<String, BatchArgumentModel> map = new HashMap<>();
         for (BatchArgumentModel m : batchArgList) {
-            if (this.batchId.equals(m.getBatchId())) {
-                map.put(m.getArgId(), m);
-            }
+            map.put(m.getArgId(), m);
         }
 
         // argDefineMap 变量中存放的是整个批次中所有的参数信息, 包括固定参数,任务参数,任务组参数,批次参数

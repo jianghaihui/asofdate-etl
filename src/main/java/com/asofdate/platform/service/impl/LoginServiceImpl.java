@@ -17,9 +17,10 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private UserCheckDao userCheckDao;
 
-    private UserLoginModel setEmpty(UserLoginModel userCheck) {
+    private UserLoginModel setEmpty(UserLoginModel userCheck,String userId) {
         userCheck.setFlag(false);
-        userCheck.setMessage("用户不存在");
+        userCheck.setUsername(userId);
+        userCheck.setMessage("The user does not exist");
         userCheck.setPassword("");
         return userCheck;
     }
@@ -29,26 +30,33 @@ public class LoginServiceImpl implements LoginService {
         List<UserLoginModel> list = userCheckDao.findByUserId(userId);
         UserLoginModel userCheck = new UserLoginModel();
         if (list.size() == 0) {
-            return setEmpty(userCheck);
+            userCheck.setRetCode("401");
+            return setEmpty(userCheck,userId);
         }
 
         userCheck = list.get(0);
         if (list.size() > 1) {
+            userCheck.setRetCode("402");
             userCheck.setFlag(false);
-            userCheck.setMessage("存在多个用户,用户管理出现异常情况,禁止登陆,请联系管理员");
+            userCheck.setUsername(userId);
+            userCheck.setMessage("There are multiple users, user management has abnormal situation, no login, please contact management");
             userCheck.setPassword("");
             return userCheck;
         }
 
         if (userCheck.getContinueErrorCnt() > 7) {
-            userCheck.setMessage("账号连续错误登陆超过7次,已经被锁定,请联系管理员");
+            userCheck.setRetCode("403");
+            userCheck.setUsername(userId);
+            userCheck.setMessage("The id has been logged more than 7 times and has been locked. Please contact the administrator");
             userCheck.setFlag(false);
             userCheck.setPassword("");
             return userCheck;
         }
 
         if (!userCheck.getStatusId().equals("0")) {
-            userCheck.setMessage("账号被锁定,请联系管理员");
+            userCheck.setRetCode("406");
+            userCheck.setUsername(userId);
+            userCheck.setMessage("The account is locked, please contact the administrator");
             userCheck.setPassword("");
             userCheck.setFlag(false);
             return userCheck;
@@ -57,9 +65,11 @@ public class LoginServiceImpl implements LoginService {
         if (password.equals(userCheck.getPassword())) {
             userCheck.setFlag(true);
         } else {
+            userCheck.setRetCode("405");
             userCheck.setFlag(false);
-            userCheck.setMessage("密码错误,请重新输入");
+            userCheck.setMessage("Password error, please re-enter");
         }
+        userCheck.setUsername(userId);
         userCheck.setPassword("");
         return userCheck;
     }
@@ -69,7 +79,7 @@ public class LoginServiceImpl implements LoginService {
         List<UserLoginModel> list = userCheckDao.findByUserId(userId);
         if (list.size() == 0) {
             UserLoginModel userCheck = new UserLoginModel();
-            return setEmpty(userCheck);
+            return setEmpty(userCheck,userId);
         }
         return list.get(0);
     }

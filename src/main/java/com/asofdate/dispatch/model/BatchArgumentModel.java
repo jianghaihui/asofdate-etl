@@ -9,6 +9,15 @@ public class BatchArgumentModel {
     public String arg_id;
     public String arg_value;
     public String domain_id;
+    public String bind_as_of_date;
+
+    public String getBindAsOfDate() {
+        return bind_as_of_date;
+    }
+
+    public void setBindAsOfDate(String bind_as_of_date) {
+        this.bind_as_of_date = bind_as_of_date;
+    }
 
     public String getDomainId() {
         return domain_id;
