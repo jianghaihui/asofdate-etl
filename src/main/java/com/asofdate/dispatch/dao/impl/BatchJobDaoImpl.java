@@ -1,23 +1,49 @@
 package com.asofdate.dispatch.dao.impl;
 
-import com.asofdate.dispatch.dao.BatchTaskDao;
+import com.asofdate.dispatch.dao.BatchJobDao;
+import com.asofdate.sql.SqlDefine;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
 
 /**
  * Created by hzwy23 on 2017/6/14.
  */
-public class BatchTaskDaoImpl implements BatchTaskDao {
+@Repository
+public class BatchJobDaoImpl implements BatchJobDao {
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @Transactional
     @Override
-    public int init(String batchId) {
-        return 0;
+    public int init(String batchId, Map<String, Integer> map) {
+        jdbcTemplate.update(SqlDefine.sys_rdbms_166, batchId);
+        for (Map.Entry<String, Integer> m : map.entrySet()) {
+            jdbcTemplate.update(SqlDefine.sys_rdbms_167, batchId, m.getKey(), m.getValue());
+        }
+        return 1;
     }
 
     @Override
-    public int setTaskStatus(String batchId, String jobId, String status) {
-        return 0;
+    public int setTaskStatus(String batchId, String jobId, int status) {
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_168, status, batchId, jobId);
     }
 
     @Override
     public int getTaskStatus(String batchId, String jobId) {
-        return 0;
+        return jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_169, Integer.class, batchId, jobId);
+    }
+
+    @Override
+    public int getCompletedCnt(String batchId) {
+        return jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_171, Integer.class, batchId);
+    }
+
+    @Override
+    public int getTotalCnt(String batchId) {
+        return jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_170, Integer.class, batchId);
     }
 }

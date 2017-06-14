@@ -34,7 +34,7 @@ public class BatchArgumentDaoImpl implements BatchArgumentDao {
         //获取批次类型参数
         List<BatchArgumentModel> list2 = jdbcTemplate.query(SqlDefine.sys_rdbms_162, rowMapper, domainId);
 
-        return bindAsofdate(list,list2);
+        return bindAsofdate(list, list2);
     }
 
     /*
@@ -48,15 +48,15 @@ public class BatchArgumentDaoImpl implements BatchArgumentDao {
         RowMapper<BatchArgumentModel> rowMapper = new BeanPropertyRowMapper<BatchArgumentModel>(BatchArgumentModel.class);
 
         // 获取固定参数,任务参数,任务组参数
-        List<BatchArgumentModel> list = jdbcTemplate.query(SqlDefine.sys_rdbms_163, rowMapper, domainId,batchId);
+        List<BatchArgumentModel> list = jdbcTemplate.query(SqlDefine.sys_rdbms_163, rowMapper, domainId, batchId);
 
         //获取批次类型参数
-        List<BatchArgumentModel> list2 = jdbcTemplate.query(SqlDefine.sys_rdbms_164, rowMapper, domainId,batchId);
+        List<BatchArgumentModel> list2 = jdbcTemplate.query(SqlDefine.sys_rdbms_164, rowMapper, domainId, batchId);
 
-        return bindAsofdate(list,list2);
+        return bindAsofdate(list, list2);
     }
 
-    private List<BatchArgumentModel> bindAsofdate(List<BatchArgumentModel> ret, List<BatchArgumentModel> source){
+    private List<BatchArgumentModel> bindAsofdate(List<BatchArgumentModel> ret, List<BatchArgumentModel> source) {
         for (BatchArgumentModel m : source) {
             // 绑定批次日期
             if ("1".equals(m.getBindAsOfDate())) {

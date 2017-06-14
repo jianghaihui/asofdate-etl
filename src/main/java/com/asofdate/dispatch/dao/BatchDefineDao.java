@@ -10,6 +10,8 @@ import java.util.List;
 public interface BatchDefineDao {
     List findAll(String domainId);
 
+    List<BatchDefineModel> getRunning(String domainId);
+
     int add(BatchDefineModel m);
 
     String delete(List<BatchDefineModel> m);

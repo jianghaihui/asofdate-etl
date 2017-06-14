@@ -9,7 +9,8 @@ import java.util.List;
  */
 public interface BatchArgumentDao {
     List findAll(String domainId);
-    List findAll(String domainId,String batchId);
+
+    List findAll(String domainId, String batchId);
 
     JSONArray getBatchArg(String batchId);
 

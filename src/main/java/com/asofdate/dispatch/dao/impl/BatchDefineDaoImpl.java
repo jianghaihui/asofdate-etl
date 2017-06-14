@@ -28,6 +28,13 @@ public class BatchDefineDaoImpl implements BatchDefineDao {
     }
 
     @Override
+    public List<BatchDefineModel> getRunning(String domainId) {
+        RowMapper<BatchDefineModel> rowMapper = new BeanPropertyRowMapper<BatchDefineModel>(BatchDefineModel.class);
+        List list = jdbcTemplate.query(SqlDefine.sys_rdbms_165, rowMapper, domainId);
+        return list;
+    }
+
+    @Override
     public int add(BatchDefineModel m) {
         return jdbcTemplate.update(SqlDefine.sys_rdbms_128,
                 m.getBatchId(),
