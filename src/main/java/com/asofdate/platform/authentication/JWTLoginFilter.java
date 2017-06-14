@@ -1,7 +1,6 @@
 package com.asofdate.platform.authentication;
 
 import com.asofdate.utils.Hret;
-import com.asofdate.utils.JSONResult;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,7 +74,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         JSONObject jsonObject = new JSONObject(failed.getMessage());
-        String retMsg = Hret.error(jsonObject.getInt("retCode"),jsonObject.getString("message"),jsonObject);
+        String retMsg = Hret.error(jsonObject.getInt("retCode"), jsonObject.getString("message"), jsonObject);
         response.getOutputStream().println(retMsg);
     }
 }

@@ -3,7 +3,6 @@ package com.asofdate.platform.authentication;
 import com.asofdate.platform.model.UserDetailsModel;
 import com.asofdate.platform.service.UserDetailsService;
 import com.asofdate.utils.Hret;
-import com.asofdate.utils.JSONResult;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -30,11 +29,11 @@ import java.util.List;
  */
 @Component
 public class JwtService {
-    private static final Logger logger = LoggerFactory.getLogger(JwtService.class);
     static final long EXPIRATIONTIME = 432_000_000;     // 5天
     static final String SECRET = "hzwy23@163.com-jwt";  // JWT密码
     static final String TOKEN_PREFIX = "hzwy23";        // Token前缀
     static final String HEADER_STRING = "Authorization";// 存放Token的Header Key
+    private static final Logger logger = LoggerFactory.getLogger(JwtService.class);
     private static JwtService jwtService;
 
     private static String JWT_ROLES = "ROLE_ADMIN,AUTH_WRITE,ACTUATOR";
@@ -58,14 +57,14 @@ public class JwtService {
         UserDetailsModel userDetailsModel = jwtService.userDetailsService.findById(username);
 
         if (userDetailsModel == null) {
-            logger.info("用户{}不存在:",username);
+            logger.info("用户{}不存在:", username);
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
         // 生成JWT
         String JWT = Jwts.builder()
                 // 保存权限（角色）
-                .claim("authorities",JWT_ROLES)
+                .claim("authorities", JWT_ROLES)
                 .claim("DomainId", userDetailsModel.getDomain_id())
                 .claim("OrgUnitId", userDetailsModel.getOrg_unit_id())
                 .claim("UserId", userDetailsModel.getUser_id())
@@ -85,7 +84,7 @@ public class JwtService {
             response.setStatus(HttpServletResponse.SC_OK);
             response.setHeader(HEADER_STRING, JWT);
             response.addCookie(new Cookie(HEADER_STRING, JWT));
-            response.getOutputStream().println(Hret.success(200,"success",JWT));
+            response.getOutputStream().println(Hret.success(200, "success", JWT));
         } catch (IOException e) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             e.printStackTrace();

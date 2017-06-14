@@ -31,8 +31,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         // 获取认证的用户名 & 密码
         String name = authentication.getName();
         Object pd = authentication.getCredentials();
-        if (pd == null){
-            return  new UsernamePasswordAuthenticationToken(name, "", new ArrayList<>());
+        if (pd == null) {
+            return new UsernamePasswordAuthenticationToken(name, "", new ArrayList<>());
         }
 
         String password = pd.toString();
@@ -51,7 +51,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             Authentication auth = new UsernamePasswordAuthenticationToken(name, password, authorities);
             return auth;
         } else {
-            logger.info("登录失败,原因是:账号 {}: {}",userLoginModel.getUsername(),userLoginModel.getMessage());
+            logger.info("登录失败,原因是:账号 {}: {}", userLoginModel.getUsername(), userLoginModel.getMessage());
             throw new BadCredentialsException(JSONObject.wrap(userLoginModel).toString());
         }
     }

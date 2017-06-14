@@ -30,7 +30,7 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 
         try {
 
-            logger.debug("URI is:{}",r.getRequestURI());
+            logger.debug("URI is:{}", r.getRequestURI());
 
             Authentication authentication = JwtService.getAuthentication(r);
 
@@ -38,13 +38,13 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 
             filterChain.doFilter(request, response);
 
-        } catch (Exception e){
+        } catch (Exception e) {
 
-            HttpServletResponse w = (HttpServletResponse)response;
+            HttpServletResponse w = (HttpServletResponse) response;
 
             logger.debug("clear Cookie that the name is Authorization");
 
-            w.addCookie(new Cookie("Authorization",""));
+            w.addCookie(new Cookie("Authorization", ""));
 
             w.sendRedirect("/");
 
