@@ -92,7 +92,7 @@ public class ArgumentServiceImpl implements ArgumentService {
         this.domainId = domainId;
         this.batchId = batchId;
         this.argDefineList = argumentDefineDao.findAll(domainId);
-        this.batchArgList = batchArgumentDao.findAll(domainId,batchId);
+        this.batchArgList = batchArgumentDao.findAll(domainId, batchId);
         this.groupArgumentMap = new HashMap<>();
 
         // 这个id是任务组中配置任务时生成的id号,

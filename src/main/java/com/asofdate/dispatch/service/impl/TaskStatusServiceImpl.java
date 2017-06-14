@@ -1,7 +1,9 @@
 package com.asofdate.dispatch.service.impl;
 
+import com.asofdate.dispatch.dao.BatchJobDao;
 import com.asofdate.dispatch.model.BatchGroupModel;
 import com.asofdate.dispatch.model.GroupTaskModel;
+import com.asofdate.dispatch.model.JobStatus;
 import com.asofdate.dispatch.service.BatchGroupService;
 import com.asofdate.dispatch.service.GroupTaskService;
 import com.asofdate.dispatch.service.TaskDependencyService;
@@ -28,6 +30,8 @@ public class TaskStatusServiceImpl implements TaskStatusService {
     private GroupTaskService taskService;
     @Autowired
     private TaskDependencyService taskDependencyService;
+    @Autowired
+    private BatchJobDao batchJobDao;
 
     private String domainId;
     private String batchId;
@@ -67,35 +71,36 @@ public class TaskStatusServiceImpl implements TaskStatusService {
             for (GroupTaskModel tl : this.taskList) {
                 if (gl.getGroupId().equals(tl.getGroupId())) {
                     // 0 表示初始化
-                    this.taskMap.put(JoinCode.join(gl.getUuid(), tl.getUuid()), 0);
+                    this.taskMap.put(JoinCode.join(gl.getUuid(), tl.getUuid()), JobStatus.Job_STATUS_INIT);
                 }
             }
         }
 
+        initBatchJobStatus(batchId, this.taskMap);
         this.taskDependencyService.afterPropertiesSet(domainId, batchId);
     }
+
+    private void initBatchJobStatus(String batchId, Map<String, Integer> map) {
+        batchJobDao.init(batchId, map);
+    }
+
 
     /*
     * 判断任务组中所有的任务是否执行完成
     * 如果任务组中所有的任务都执行完成
     * 则表示这个任务组执行完成
+    * gid 表示 任务组中任务的id
+    * groupId 表示任务组的编码
     * */
     @Override
     public boolean isGroupCompleted(String gid, String groupId) {
         for (GroupTaskModel m : taskList) {
             if (groupId.equals(m.getGroupId())) {
-                switch (getTaskStatus(gid, m.getUuid())) {
-                    case 0:
-                        return false;
-                    case 1:
-                        return false;
-                    case 2:
-                        break;
-                    case 3:
-                        return false;
-                    default:
-                        return false;
+                int statusCd = getTaskStatus(gid, m.getUuid());
+                if (statusCd == JobStatus.Job_STATUS_COMPLETED) {
+                    continue;
                 }
+                return false;
             }
         }
         return true;
@@ -107,10 +112,10 @@ public class TaskStatusServiceImpl implements TaskStatusService {
     * @param String id  表示任务id;
     * */
     public int getTaskStatus(String gid, String id) {
-        if (this.taskMap.containsKey(JoinCode.join(gid, id))) {
-            return this.taskMap.get(JoinCode.join(gid, id));
+        if (taskMap.containsKey(JoinCode.join(gid, id))) {
+            return taskMap.get(JoinCode.join(gid, id));
         }
-        return 3;
+        return JobStatus.Job_STATUS_ERROR;
     }
 
 
@@ -118,10 +123,10 @@ public class TaskStatusServiceImpl implements TaskStatusService {
     * @param String uid 表示任务组id与任务id的组合,简称uid
     * */
     private int getTaskStatus2(String uid) {
-        if (this.taskMap.containsKey(uid)) {
-            return this.taskMap.get(uid);
+        if (taskMap.containsKey(uid)) {
+            return taskMap.get(uid);
         }
-        return 3;
+        return JobStatus.Job_STATUS_ERROR;
     }
 
 
@@ -132,23 +137,15 @@ public class TaskStatusServiceImpl implements TaskStatusService {
     * */
     @Override
     public boolean isTaskRunnable(String gid, String id) {
-        Set<String> taskDependencyModelSet = this.taskDependencyService.getTaskDependency(gid, id);
+        Set<String> taskDependencyModelSet = taskDependencyService.getTaskDependency(gid, id);
         if (taskDependencyModelSet == null) {
             return true;
         }
         for (String m : taskDependencyModelSet) {
-            switch (getTaskStatus2(m)) {
-                case 0:
-                    return false;
-                case 1:
-                    return false;
-                case 2:
-                    break;
-                case 3:
-                    return false;
-                default:
-                    return false;
+            if (JobStatus.Job_STATUS_COMPLETED == getTaskStatus2(m)) {
+                continue;
             }
+            return false;
         }
         return true;
     }
@@ -161,17 +158,20 @@ public class TaskStatusServiceImpl implements TaskStatusService {
     * */
     @Override
     public void setTaskCompleted(String uid) {
-        this.taskMap.put(uid, 2);
+        this.taskMap.put(uid, JobStatus.Job_STATUS_COMPLETED);
+        batchJobDao.setTaskStatus(batchId, uid, JobStatus.Job_STATUS_COMPLETED);
     }
 
     @Override
     public void setTaskRunning(String uid) {
-        this.taskMap.put(uid, 1);
+        this.taskMap.put(uid, JobStatus.Job_STATUS_RUNNING);
+        batchJobDao.setTaskStatus(batchId, uid, JobStatus.Job_STATUS_RUNNING);
     }
 
     @Override
     public void setTaskError(String uid) {
-        this.taskMap.put(uid, 3);
+        this.taskMap.put(uid, JobStatus.Job_STATUS_ERROR);
+        batchJobDao.setTaskStatus(batchId, uid, JobStatus.Job_STATUS_ERROR);
     }
 
 
@@ -188,7 +188,7 @@ public class TaskStatusServiceImpl implements TaskStatusService {
                 continue;
             }
             map.remove(m.getUuid());
-            if (getTaskStatus(gid, m.getUuid()) != 0) {
+            if (getTaskStatus(gid, m.getUuid()) != JobStatus.Job_STATUS_INIT) {
                 continue;
             }
             if (isTaskRunnable(gid, m.getUuid())) {
@@ -201,7 +201,7 @@ public class TaskStatusServiceImpl implements TaskStatusService {
     @Override
     public boolean isBatchCompleted() {
         for (Map.Entry<String, Integer> entry : taskMap.entrySet()) {
-            if (entry.getValue() != 2) {
+            if (entry.getValue() != JobStatus.Job_STATUS_COMPLETED) {
                 return false;
             }
         }
@@ -210,7 +210,7 @@ public class TaskStatusServiceImpl implements TaskStatusService {
 
     @Override
     public boolean isError() {
-        return this.taskMap.containsValue(3);
+        return this.taskMap.containsValue(JobStatus.Job_STATUS_ERROR);
     }
 
 }

@@ -11,6 +11,8 @@ import java.util.List;
 public interface BatchDefineService {
     List<BatchDefineModel> findAll(String domainId);
 
+    List<BatchDefineModel> getRunning(String domainId);
+
     int add(BatchDefineModel m);
 
     String delete(List<BatchDefineModel> m);
@@ -28,4 +30,6 @@ public interface BatchDefineService {
 
     // 根据批次号,向这个批次中,给批次参数赋值
     int addBatchArg(JSONArray jsonArray);
+
+    float getBatchCompletedRadio(String batchId);
 }
