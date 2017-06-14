@@ -130,7 +130,7 @@
                         $("#h-dispatch-batch-argument-relation-table").bootstrapTable('refresh')
                     });
                 },
-                callback:function () {
+                callback:function (hmode) {
                     $.HAjaxRequest({
                         url:"/v1/dispatch/start",
                         type:"get",
@@ -139,8 +139,9 @@
                             $.Notify({
                                 message:"批次启动成功",
                                 type:"success",
-                            })
+                            });
                             DispatchBatchDefineObj.refresh();
+                            $(hmode).remove();
                         }
                     })
                 }

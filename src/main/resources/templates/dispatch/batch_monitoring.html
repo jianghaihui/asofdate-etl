@@ -14,18 +14,165 @@
     </div>
     <div id="h-dispatch-batch-monitoring-toolbar-list" class="pull-right">
         <button onclick="" class="btn btn-info btn-sm" title="编辑批次信息">
-            <span class="icon-edit"> 刷新</span>
+            <span class="icon-dashboard"> 历史记录</span>
         </button>
         <button onclick="" class="btn btn-warning btn-sm" title="启动批次">
-            <span class="icon-stop"> 停止</span>
+            <span class="icon-stop"> 全部停止</span>
         </button>
     </div>
 </div>
-<div class="row" id="h-dispatch-batch-monitoring-content">
-    <div id="main" style="width: 600px;height:400px;">
-    </div>
+<div class="row col-sm-12 col-md-12 col-lg-12" id="h-dispatch-batch-monitoring-content">
 </div>
 <script type="text/javascript">
+
+    var BatchMonitoringObj = {
+        scan:function (element) {
+            if (!$("[data-id='0503020000']").hasClass("active")){
+                return;
+            }
+            var div = document.createElement("div");
+            div.style.border = "#fcfcfc solid 1px";
+            div.className += " col-sm-6 col-md-4 col-lg-3";
+            div.style.height = "400px";
+            div.id = element.batch_id;
+            var divchart = document.createElement("div");
+            divchart.style.height = "280px";
+            divchart.style.minWidth = "300px";
+            div.append(divchart);
+            $("#h-dispatch-batch-monitoring-content").append(div);
+            BatchMonitoringObj.initChart(divchart,element.batch_id,element.batch_desc);
+            var div1 = BatchMonitoringObj.addSpan("批次编码:",element.code_number);
+            var div2 = BatchMonitoringObj.addSpan("批次名称:",element.batch_desc);
+            var div3 = BatchMonitoringObj.addSpan("批次日期:",element.as_of_date);
+            div.append(div1);
+            div.append(div2);
+            div.append(div3);
+
+            var btn1 = document.createElement("button");
+            var btn2 = document.createElement("button");
+            btn1.className = "btn btn-info btn-sm";
+            btn1.innerHTML = "详情";
+
+            btn2.className = "btn btn-warning btn-sm";
+            btn2.style.marginLeft = "12px";
+            btn2.innerHTML = "暂停";
+
+            var btndiv = document.createElement("div");
+            btndiv.className += " col-sm-12 col-md-12 col-lg-12";
+            btndiv.style.textAlign = "center";
+            btndiv.style.backgroundColor = "#f7f7f7";
+            btndiv.style.paddingTop = "6px";
+            btndiv.style.paddingBottom = "6px";
+            btndiv.append(btn1);
+            btndiv.append(btn2);
+            div.append(btndiv);
+        },
+        getRunning:function () {
+            $("#h-dispatch-batch-monitoring-content").html("");
+            var domain_id = $("#h-dispatch-batch-monitoring-domain-list").val();
+            var timer = setInterval(function () {
+                if(document.getElementById("h-dispatch-batch-monitoring-content") == null){
+                    clearInterval(timer);
+                };
+                $.HAjaxRequest({
+                    url:"/v1/dispatch/monitoring",
+                    type:"GET",
+                    data:{domain_id:domain_id},
+                    success:function (data) {
+                        $(data).each(function (index, element) {
+                            if (!$("[data-id='0503020000']").hasClass("active")){
+                                return false;
+                            }
+                            if(document.getElementById(element.batch_id) == null){
+                                BatchMonitoringObj.scan(element);
+                            }
+                        });
+                    }
+                });
+            },1000);
+        },
+        addSpan:function (label,value) {
+            var div = document.createElement("div");
+            div.className += "col-sm-12 col-md-12 col-lg-12";
+
+            var key = document.createElement("label");
+            key.className += " col-sm-5 col-md-5 col-lg-5";
+            key.style.textAlign = "right";
+            key.innerHTML = label;
+
+            var span = document.createElement("span");
+            span.className += " col-sm-7 col-md-7 col-lg-7";
+            span.style.fontWeight = 600;
+            span.style.paddingLeft = "2px";
+            span.style.textAlign = "left";
+            span.innerHTML = value;
+            div.append(key);
+            div.append(span);
+            return div;
+        },
+        initChart:function (dom,batchId,batchDesc) {
+            /*<![CDATA[*/
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(dom);
+//            myChart.showLoading();
+            // 指定图表的配置项和数据
+            $.getJSON("/v1/dispatch/monitoring/radio",{batch_id:batchId}).done(function (data) {
+                if (!$("[data-id='0503020000']").hasClass("active")){
+                    return false;
+                }
+                var batchIdExists = document.getElementById(batchId);
+                if (batchIdExists != null){
+                    myChart.setOption({
+                        series: [{
+                            type: 'liquidFill',
+                            data: [data],
+                            name:"运行中的批次...",
+                        }],
+                        tooltip: {
+                            show: true
+                        }});
+                }
+            });
+            var timer = setInterval(function () {
+                $.getJSON("/v1/dispatch/monitoring/radio",{batch_id:batchId},function (data) {
+                    if (!$("[data-id='0503020000']").hasClass("active")){
+                        return false;
+                    }
+
+                    var batchIdExists = document.getElementById(batchId);
+                    if (batchIdExists == null){
+                        clearInterval(timer)
+                    } else {
+                        myChart.setOption({
+                            series: [{
+                                type: 'liquidFill',
+                                data: [data.toFixed(2)],
+                                name:batchDesc+" 运行中...",
+                            }],
+                            tooltip: {
+                                show: true
+                            }});
+                    }
+                    if (data == 1){
+                        clearInterval(timer);
+                        $.Notify({
+                            message:batchDesc+" 运行完成",
+                            type:"success",
+                        });
+                        $("#"+batchId).remove();
+                    }
+                });
+            },3000);
+            // 使用刚指定的配置项和数据显示图表。
+
+//            myChart.on('click', function(params) {
+//                console.log(arguments)
+//                console.log(params)
+//                // do something useful here
+//            });
+            /*]]>*/
+        },
+    }
 
     $(document).ready(function () {
         var hwindow = document.documentElement.clientHeight;
@@ -49,31 +196,7 @@
                     //todo
                 },
             });
+            BatchMonitoringObj.getRunning();
         });
     });
-
-    /*<![CDATA[*/
-    // 基于准备好的dom，初始化echarts实例
-    var myChart = echarts.init(document.getElementById('main'));
-
-    // 指定图表的配置项和数据
-    var option = {
-        series: [{
-            type: 'liquidFill',
-            data: [0.6, 0.5, 0.4, 0.3],
-            name:"运行中的批次...",
-        }],
-        tooltip: {
-            show: true
-        }
-    };
-
-    // 使用刚指定的配置项和数据显示图表。
-    myChart.setOption(option);
-
-    myChart.on('click', function() {
-        console.log(arguments)
-        // do something useful here
-    });
-    /*]]>*/
 </script>
