@@ -1,7 +1,5 @@
 package com.asofdate.platform.model;
 
-import java.io.Serializable;
-
 /**
  * Created by hzwy23 on 2017/5/14.
  */

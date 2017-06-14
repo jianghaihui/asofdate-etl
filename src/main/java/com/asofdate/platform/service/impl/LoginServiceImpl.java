@@ -17,7 +17,7 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private UserCheckDao userCheckDao;
 
-    private UserLoginModel setEmpty(UserLoginModel userCheck,String userId) {
+    private UserLoginModel setEmpty(UserLoginModel userCheck, String userId) {
         userCheck.setFlag(false);
         userCheck.setUsername(userId);
         userCheck.setMessage("The user does not exist");
@@ -31,7 +31,7 @@ public class LoginServiceImpl implements LoginService {
         UserLoginModel userCheck = new UserLoginModel();
         if (list.size() == 0) {
             userCheck.setRetCode("401");
-            return setEmpty(userCheck,userId);
+            return setEmpty(userCheck, userId);
         }
 
         userCheck = list.get(0);
@@ -79,7 +79,7 @@ public class LoginServiceImpl implements LoginService {
         List<UserLoginModel> list = userCheckDao.findByUserId(userId);
         if (list.size() == 0) {
             UserLoginModel userCheck = new UserLoginModel();
-            return setEmpty(userCheck,userId);
+            return setEmpty(userCheck, userId);
         }
         return list.get(0);
     }
