@@ -149,5 +149,12 @@ public class OracleDefine {
         SqlDefine.sys_rdbms_162 = "select distinct sys_guid() as uuid,r.batch_id,d.arg_id,a.arg_value,r.domain_id,d.bind_as_of_date from dispatch_batch_group_relation r inner join dispatch_group_task_relation g on r.group_id=g.group_id inner join dispatch_task_argument_rel t on g.task_id = t.task_id inner join dispatch_argument_define d on t.arg_id = d.arg_id left join dispatch_batch_argument_rel a on a.batch_id = r.batch_id and a.arg_id = t.arg_id  where d.arg_type = '4' and r.domain_id = ?";
         SqlDefine.sys_rdbms_163 = "select t.uuid,t.batch_id,t.arg_id,t.arg_value,t.domain_id from dispatch_batch_argument_rel t where t.domain_id = ? and t.batch_id = ?";
         SqlDefine.sys_rdbms_164 = "select distinct sys_guid() as uuid,r.batch_id,d.arg_id,a.arg_value,r.domain_id,d.bind_as_of_date from dispatch_batch_group_relation r inner join dispatch_group_task_relation g on r.group_id=g.group_id inner join dispatch_task_argument_rel t on g.task_id = t.task_id inner join dispatch_argument_define d on t.arg_id = d.arg_id left join dispatch_batch_argument_rel a on a.batch_id = r.batch_id and a.arg_id = t.arg_id where d.arg_type = '4' and r.domain_id = ? and r.batch_id = ?";
+        SqlDefine.sys_rdbms_165 = "select batch_id,code_number,batch_desc,batch_status,to_char(as_of_date,'YYYY-MM-DD') as as_of_date,domain_id,create_user,create_date,modify_user,modify_date from dispatch_batch_define where domain_id = ? and batch_status = '1'";
+        SqlDefine.sys_rdbms_166 = "delete from dispatch_batch_job_status t where t.batch_id = ?";
+        SqlDefine.sys_rdbms_167 = "insert into dispatch_batch_job_status(batch_id,job_id,status) values(?,?,?)";
+        SqlDefine.sys_rdbms_168 = "update DISPATCH_BATCH_JOB_STATUS t set status = ? where batch_id = ? and job_id = ?";
+        SqlDefine.sys_rdbms_169 = "select status from dispatch_batch_job_status t where batch_id = ? and job_id = ?";
+        SqlDefine.sys_rdbms_170 = "select count(*) from dispatch_batch_job_status t where batch_id = ?";
+        SqlDefine.sys_rdbms_171 = "select count(*) from dispatch_batch_job_status t where batch_id = ? and status = '2'";
     }
 }
