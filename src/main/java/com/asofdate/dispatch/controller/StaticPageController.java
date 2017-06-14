@@ -13,8 +13,8 @@ import java.util.Map;
  */
 @Controller
 public class StaticPageController {
-    @RequestMapping(value = "/v1/dispatch/monitoring/page",method = RequestMethod.GET)
-    public String getBatchMonitoringPage(){
+    @RequestMapping(value = "/v1/dispatch/monitoring/page", method = RequestMethod.GET)
+    public String getBatchMonitoringPage() {
         return "dispatch/batch_monitoring";
     }
 
