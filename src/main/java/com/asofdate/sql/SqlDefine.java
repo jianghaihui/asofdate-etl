@@ -160,4 +160,5 @@ public class SqlDefine {
     public static String sys_rdbms_178 = "update dispatch_batch_define set batch_status = '1',start_date = now(), ret_msg = null, end_date = null where batch_id = ?";
     public static String sys_rdbms_179 = "update dispatch_batch_define set ret_msg = ? , end_date = now(), batch_status = ? where batch_id = ?";
     public static String sys_rdbms_180 = "update dispatch_batch_define set batch_status = '4' where batch_status = '1'";
+    public static String sys_rdbms_181 = "select config_id,config_desc,config_value,image,details from dispatch_batch_system_config";
 }

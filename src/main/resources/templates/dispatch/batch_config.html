@@ -11,21 +11,87 @@
                 style="width: 180px;height: 24px; line-height: 24px; margin-top: 10px;padding: 0px;">
         </select>
     </div>
-    <div id="h-dispatch-batch-config-toolbar-list" class="pull-right">
-        <button onclick="" class="btn btn-info btn-sm" title="编辑批次信息">
-            <span class="icon-edit"> 修改</span>
-        </button>
-        <button onclick="" class="btn btn-warning btn-sm" title="启动批次">
-            <span class="icon-refresh"> 刷新</span>
-        </button>
-    </div>
+    <!--<div id="h-dispatch-batch-config-toolbar-list" class="pull-right">-->
+        <!--<button onclick="" class="btn btn-info btn-sm" title="编辑批次信息">-->
+            <!--<span class="icon-edit"> 修改</span>-->
+        <!--</button>-->
+        <!--<button onclick="" class="btn btn-warning btn-sm" title="启动批次">-->
+            <!--<span class="icon-refresh"> 刷新</span>-->
+        <!--</button>-->
+    <!--</div>-->
 </div>
-<div class="row col-sm-12 col-md-12 col-lg-12" id="h-dispatch-batch-config-content">
+<div class="row"
+     id="h-dispatch-batch-config-content"
+     style="margin-top: 6px;overflow-y: auto">
 </div>
 <script type="text/javascript">
+    var BatchSysConfigObj = {
+        onclick:function (configId,configVal,domainId) {
+            console.log(configId,configVal,domainId);
+        },
+        init:function (domainId) {
+          $.getJSON("/v1/dispatch/config/sys",{domain_id:domainId},function (data) {
+               $(data).each(function (index, element) {
+                   var pdiv = document.createElement("div");
+                   pdiv.className = "col-sm-6 col-md-3";
+
+                   var pdiv2 = document.createElement("div");
+                   pdiv2.className = "thumbnail";
+
+                   var pimg = document.createElement("img");
+                   pimg.setAttribute("src",element.image);
+                   pimg.style.height = "128px";
+                   pimg.style.width = "128px";
+
+                   var pdiv3 = document.createElement("div");
+                   pdiv3.className = "caption";
+
+
+                   var ph3 = document.createElement("h3");
+                   ph3.innerHTML = element.configDesc;
+
+                   var pp = document.createElement("p");
+                   pp.innerHTML = element.details;
+                   pp.style.minHeight = "60px";
+                   pp.style.marginTop = "6px";
+
+                   var pval = document.createElement("span");
+                   pval.innerHTML = element.configValue;
+                   pval.style.minHeight = "60px";
+                   pval.className = "col-sm-12";
+                   pval.style.textAlign = "left";
+                   pval.style.fontSize = "16px";
+                   pval.style.color = "#ff1e02";
+                   pval.style.fontWeight = "600";
+                   pval.style.verticalAlign = "middle";
+                   pval.style.marginBottom = "6px";
+                   pval.style.marginTop = "6px";
+                   pval.style.border = "#fcfcfc solid 1px";
+
+                   var pbtn = document.createElement("button");
+                   pbtn.className = "btn btn-info";
+                   pbtn.setAttribute("role","button");
+                   pbtn.innerHTML = "编辑";
+                   pbtn.setAttribute("onclick","BatchSysConfigObj.onclick('"+element.configId+"','"+element.configValue+"','"+domainId+"')");
+
+                   pdiv3.append(ph3);
+                   pdiv3.append(pp);
+                   pdiv3.append(pval);
+                   pdiv3.append(pbtn);
+
+                   pdiv2.append(pimg);
+                   pdiv2.append(pdiv3);
+
+                   pdiv.append(pdiv2);
+
+                   document.getElementById("h-dispatch-batch-config-content").append(pdiv);
+               })
+          })
+        },
+    }
     $(document).ready(function () {
         var hwindow = document.documentElement.clientHeight;
-        $("#h-dispatch-batch-config-content").height(hwindow - 130);
+        $("#h-dispatch-batch-config-content").height(hwindow - 139);
 
         $.getJSON("/v1/auth/domain/self/owner", function (data) {
             var arr = new Array()
@@ -36,6 +102,7 @@
                 ijs.upId = "####hzwy23###"
                 arr.push(ijs)
             });
+
             $("#h-dispatch-batch-config-domain-list").Hselect({
                 data: arr,
                 height: "24px",
@@ -45,6 +112,8 @@
                     //todo
                 },
             });
+
+            BatchSysConfigObj.init(data.domain_id);
         });
     });
 </script>

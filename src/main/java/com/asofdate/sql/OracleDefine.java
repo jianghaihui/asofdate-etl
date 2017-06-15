@@ -165,5 +165,6 @@ public class OracleDefine {
         SqlDefine.sys_rdbms_178 = "update dispatch_batch_define set batch_status = '1',start_date = sysdate, ret_msg = '',end_date = '' where batch_id = ?";
         SqlDefine.sys_rdbms_179 = "update dispatch_batch_define set ret_msg = ? , end_date = sysdate, batch_status = ? where batch_id = ?";
         SqlDefine.sys_rdbms_180 = "update dispatch_batch_define set batch_status = '4' where batch_status = '1'";
+        SqlDefine.sys_rdbms_181 = "select config_id,config_desc,config_value,image,details from dispatch_batch_system_config";
     }
 }
