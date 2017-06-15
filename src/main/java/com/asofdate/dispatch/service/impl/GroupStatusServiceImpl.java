@@ -1,7 +1,9 @@
 package com.asofdate.dispatch.service.impl;
 
+import com.asofdate.dispatch.dao.BatchGroupStatusDao;
 import com.asofdate.dispatch.model.BatchGroupModel;
 import com.asofdate.dispatch.model.GroupDependencyModel;
+import com.asofdate.dispatch.model.GroupStatus;
 import com.asofdate.dispatch.service.BatchGroupService;
 import com.asofdate.dispatch.service.GroupDependencyService;
 import com.asofdate.dispatch.service.GroupStatusService;
@@ -24,6 +26,8 @@ public class GroupStatusServiceImpl implements GroupStatusService {
     private BatchGroupService groupService;
     @Autowired
     private GroupDependencyService groupDependencyService;
+    @Autowired
+    private BatchGroupStatusDao batchGroupStatusDao;
 
     private String domainId;
     private String batchId;
@@ -37,9 +41,9 @@ public class GroupStatusServiceImpl implements GroupStatusService {
     *      1: 运行中
     *      2: 已完成
     *      3: 错误
+    *      4: 停止
     * */
     private Map<String, Integer> groupMap = new HashMap<String, Integer>();
-
 
     // 初始化两个变量
     public void afterPropertiesSet(String domainId, String batchId) {
@@ -52,11 +56,15 @@ public class GroupStatusServiceImpl implements GroupStatusService {
         * */
         for (BatchGroupModel m : this.groupList) {
             // 0 表示初始化
-            this.groupMap.put(m.getUuid(), 0);
+            groupMap.put(m.getUuid(), GroupStatus.Gid_STATUS_INIT);
         }
+
+        // 初始化任务组,状态信息表
+        batchGroupStatusDao.init(batchId, groupMap);
 
         /*
         * 初始化注入对象
+        * 任务组依赖关系初始化
         * */
         groupDependencyService.afterPropertiesSet(domainId, batchId);
     }
@@ -71,12 +79,11 @@ public class GroupStatusServiceImpl implements GroupStatusService {
         Map<String, BatchGroupModel> map = new HashMap<String, BatchGroupModel>();
         for (BatchGroupModel m : groupList) {
             map.remove(m.getUuid());
-
             /*
             * 如果任务组状态不是初始化值
             * 表示任务组已经被启动, 则不允许在此加入预备运行状态中.
             * */
-            if (getGroupStatus(m.getUuid()) != 0) {
+            if (getGroupStatus(m.getUuid()) != GroupStatus.Gid_STATUS_INIT) {
                 continue;
             }
 
@@ -92,7 +99,8 @@ public class GroupStatusServiceImpl implements GroupStatusService {
     * @param String gid 表示任务组id
     * */
     public void setGroupRunning(String gid) {
-        this.groupMap.put(gid, 1);
+        groupMap.put(gid, GroupStatus.Gid_STATUS_RUNNING);
+        batchGroupStatusDao.setGidStatus(batchId, gid, GroupStatus.Gid_STATUS_RUNNING);
     }
 
     /*
@@ -100,12 +108,14 @@ public class GroupStatusServiceImpl implements GroupStatusService {
     * @param String gid 表示任务组id
     * */
     public void setGroupCompleted(String gid) {
-        groupMap.put(gid, 2);
+        groupMap.put(gid, GroupStatus.Gid_STATUS_COMPLETED);
+        batchGroupStatusDao.setGidStatus(batchId, gid, GroupStatus.Gid_STATUS_COMPLETED);
     }
 
     @Override
     public void setGroupError(String gid) {
-        groupMap.put(gid, 3);
+        groupMap.put(gid, GroupStatus.Gid_STATUS_ERROR);
+        batchGroupStatusDao.setGidStatus(batchId, gid, GroupStatus.Gid_STATUS_ERROR);
     }
 
 
@@ -114,10 +124,10 @@ public class GroupStatusServiceImpl implements GroupStatusService {
     * @param String gid 表示任务组gid
     * */
     public int getGroupStatus(String gid) {
-        if (this.groupMap.containsKey(gid)) {
-            return this.groupMap.get(gid).intValue();
+        if (groupMap.containsKey(gid)) {
+            return groupMap.get(gid).intValue();
         }
-        return 3;
+        return GroupStatus.Gid_STATUS_ERROR;
     }
 
     /*
@@ -127,23 +137,16 @@ public class GroupStatusServiceImpl implements GroupStatusService {
    * @param String id 表示任务组的id
    * */
     public boolean isGroupRunable(String gid) {
-        Set<GroupDependencyModel> groupDependencyModels = this.groupDependencyService.getGroupDependency(gid);
+        Set<GroupDependencyModel> groupDependencyModels = groupDependencyService.getGroupDependency(gid);
         if (groupDependencyModels == null) {
             return true;
         }
         for (GroupDependencyModel gp : groupDependencyModels) {
-            switch (getGroupStatus(gp.getUpId())) {
-                case 0:
-                    return false;
-                case 1:
-                    return false;
-                case 2:
-                    break;
-                case 3:
-                    return false;
-                default:
-                    return false;
+            int statusCd = getGroupStatus(gp.getUpId());
+            if (GroupStatus.Gid_STATUS_COMPLETED == statusCd) {
+                continue;
             }
+            return false;
         }
         return true;
     }

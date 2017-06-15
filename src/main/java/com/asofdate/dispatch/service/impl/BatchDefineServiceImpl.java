@@ -2,7 +2,7 @@ package com.asofdate.dispatch.service.impl;
 
 import com.asofdate.dispatch.dao.BatchArgumentDao;
 import com.asofdate.dispatch.dao.BatchDefineDao;
-import com.asofdate.dispatch.dao.BatchJobDao;
+import com.asofdate.dispatch.dao.BatchJobStatusDao;
 import com.asofdate.dispatch.model.BatchDefineModel;
 import com.asofdate.dispatch.service.BatchDefineService;
 import org.json.JSONArray;
@@ -23,7 +23,7 @@ public class BatchDefineServiceImpl implements BatchDefineService {
     private BatchArgumentDao batchArgumentDao;
 
     @Autowired
-    private BatchJobDao batchJobDao;
+    private BatchJobStatusDao batchJobStatusDao;
 
     @Override
     public List<BatchDefineModel> findAll(String domainId) {
@@ -61,6 +61,11 @@ public class BatchDefineServiceImpl implements BatchDefineService {
     }
 
     @Override
+    public int runBatchInit(String batchId) {
+        return batchDefineDao.runBatchInit(batchId);
+    }
+
+    @Override
     public int updateAsofdate(String asofdate, String batchId) {
         return batchDefineDao.updateAsofdate(asofdate, batchId);
     }
@@ -78,12 +83,17 @@ public class BatchDefineServiceImpl implements BatchDefineService {
 
     @Override
     public float getBatchCompletedRadio(String batchId) {
-        int completedCnt = batchJobDao.getCompletedCnt(batchId);
-        int totalCnt = batchJobDao.getTotalCnt(batchId);
+        int completedCnt = batchJobStatusDao.getCompletedCnt(batchId);
+        int totalCnt = batchJobStatusDao.getTotalCnt(batchId);
         if (totalCnt == 0) {
             return 0;
         }
         return (float) completedCnt / (float) totalCnt;
 
+    }
+
+    @Override
+    public int destoryBatch(String batchId, String retMsg, int status) {
+        return batchDefineDao.destoryBatch(batchId,retMsg,status);
     }
 }

@@ -3,7 +3,7 @@ package com.asofdate.dispatch.model;
 /**
  * Created by hzwy23 on 2017/6/14.
  */
-public class BatchTaskModel {
+public class BatchJobStatusModel {
     public String batchId;
     public String jobId;
     public String status;

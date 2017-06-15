@@ -1,6 +1,8 @@
 package com.asofdate;
 
+import com.asofdate.dispatch.InitBatch;
 import com.asofdate.utils.Adaptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,6 +18,6 @@ public class Main {
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
         Adaptor.initDb();
+        InitBatch.initBatchInfo();
     }
-
 }

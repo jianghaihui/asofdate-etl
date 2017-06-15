@@ -21,6 +21,9 @@ import java.util.Map;
 @Component
 @Scope("prototype")
 public class JobScheduler extends Thread {
+    private final String BATCH_SUCCESS_MSG = "success";
+    private final String BATCH_ERROR_MSG = "Running error";
+    private final String BATCH_STOPPED_MSG = "stopped";
 
     private final Logger logger = LoggerFactory.getLogger(JobScheduler.class);
     // 批次运行对象
@@ -74,7 +77,8 @@ public class JobScheduler extends Thread {
                     logger.info("batch completed.");
                     logger.info("stop scheduler.");
                     scheduler.stop();
-                    batchDefineService.setStatus(batchId, BatchStatus.BATCH_STATUS_COMPLETED);
+                    scheduler.destroy();
+                    batchDefineService.destoryBatch(batchId,BATCH_SUCCESS_MSG,BatchStatus.BATCH_STATUS_COMPLETED);
                     return;
                 }
 
@@ -87,19 +91,23 @@ public class JobScheduler extends Thread {
                     logger.info("task error, 销毁批次");
                     scheduler.stop();
                     scheduler.destroy();
-                    batchDefineService.setStatus(batchId, BatchStatus.BATCH_STATUS_ERROR);
+                    batchDefineService.destoryBatch(batchId,BATCH_ERROR_MSG,BatchStatus.BATCH_STATUS_ERROR);
                 }
-                logger.info("batch running. scanning runable group...");
                 Thread.sleep(100);
                 if (BatchStatus.BATCH_STATUS_RUNNING != batchDefineService.getStatus(batchId)) {
-                    logger.info("batch status is not running");
+                    logger.info("batch status is not running,batchid is:{},stauts is : {}",batchId, batchDefineService.getStatus(batchId));
                     scheduler.stop();
                     scheduler.destroy();
+                    batchDefineService.destoryBatch(batchId,BATCH_STOPPED_MSG,BatchStatus.BATCH_STATUS_STOPPED);
                 }
             }
         } catch (InterruptedException e) {
+            batchDefineService.destoryBatch(batchId,e.getMessage(),BatchStatus.BATCH_STATUS_ERROR);
+            scheduler.stop();
             e.printStackTrace();
         } catch (SchedulerException e) {
+            batchDefineService.destoryBatch(batchId,e.getMessage(),BatchStatus.BATCH_STATUS_ERROR);
+            scheduler.stop();
             e.printStackTrace();
         }
     }

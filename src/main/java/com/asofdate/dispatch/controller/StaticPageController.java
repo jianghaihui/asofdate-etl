@@ -18,6 +18,11 @@ public class StaticPageController {
         return "dispatch/batch_monitoring";
     }
 
+    @RequestMapping(value = "/v1/dispatch/system/config/page",method = RequestMethod.GET)
+    public String getBatchConfigPage(){
+        return "dispatch/batch_config";
+    }
+
     @RequestMapping(value = "/v1/dispatch/argument/page", method = RequestMethod.GET)
     public String getPage() {
         return "dispatch/argument_define";

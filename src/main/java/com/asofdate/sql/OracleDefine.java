@@ -93,7 +93,7 @@ public class OracleDefine {
         SqlDefine.sys_rdbms_104 = "select t.arg_id, t.arg_type,a.arg_type_desc,t.arg_value,t.code_number,t.create_user,t.create_date,t.modify_user,t.modify_date,t.domain_id,t.arg_desc,t.bind_as_of_date from dispatch_argument_define t left join dispatch_argument_type_attr a on t.arg_type = a.arg_type where t.domain_id = ?";
         SqlDefine.sys_rdbms_105 = "select t.uuid,t.batch_id,t.arg_id,t.arg_value,t.domain_id from dispatch_batch_argument_rel t where t.domain_id = ?";
         SqlDefine.sys_rdbms_106 = "select t.id as uuid,t.batch_id,t.group_id,t.domain_id from dispatch_batch_group_relation t where t.domain_id = ?";
-        SqlDefine.sys_rdbms_107 = "select t.batch_id,t.code_number,t.batch_desc,t.batch_status,to_char(t.as_of_date,'YYYY-MM-DD') as as_of_date,t.create_date,t.create_user,t.modify_date,t.modify_user,t.domain_id,a.batch_status_desc from dispatch_batch_define t inner join dispatch_batch_status_attr a on t.batch_status = a.batch_status where t.domain_id = ?";
+        SqlDefine.sys_rdbms_107 = "select t.batch_id,t.code_number,t.batch_desc,t.batch_status,to_char(t.as_of_date,'YYYY-MM-DD') as as_of_date,to_char(t.start_date,'YYYY-MM-DD HH24:MI:SS') as start_date,t.ret_msg,to_char(t.complete_date,'YYYY-MM-DD') as complete_date,to_char(t.end_date,'YYYY-MM-DD HH24:MI:SS') as end_date,t.domain_id,a.batch_status_desc from dispatch_batch_define t inner join dispatch_batch_status_attr a on t.batch_status = a.batch_status where t.domain_id = ?";
         SqlDefine.sys_rdbms_108 = "select t.group_id,t.code_number,t.group_desc,t.create_user,t.create_date,t.modify_user,t.modify_date,t.domain_id from dispatch_group_define t where t.domain_id = ?";
         SqlDefine.sys_rdbms_109 = "select t.id as uuid,t.group_id,t.task_id,t.domain_id from dispatch_group_task_relation t where t.domain_id = ?";
         SqlDefine.sys_rdbms_110 = "select t.uuid,t.task_id,t.arg_id,t.arg_value,t.domain_id,t.sort_id from dispatch_task_argument_rel t where t.domain_id = ?";
@@ -114,9 +114,9 @@ public class OracleDefine {
         SqlDefine.sys_rdbms_125 = "insert into dispatch_task_define(task_id,code_number,task_desc,task_type,create_user,create_date,modify_date,modify_user,domain_id,script_file) values(?,?,?,?,?,sysdate,sysdate,?,?,?)";
         SqlDefine.sys_rdbms_126 = "update dispatch_task_define set task_desc = ?, task_type = ?,script_file = ? where task_id = ? and domain_id = ?";
         SqlDefine.sys_rdbms_127 = "delete from dispatch_task_define where task_id = ? and domain_id = ?";
-        SqlDefine.sys_rdbms_128 = "insert into dispatch_batch_define(batch_id,code_number,batch_desc,batch_status,as_of_date,create_date,create_user,modify_date,modify_user,domain_id) values(?,?,?,?,to_date(?,'YYYY-MM-DD'),sysdate,?,sysdate,?,?)";
+        SqlDefine.sys_rdbms_128 = "insert into dispatch_batch_define(batch_id,code_number,batch_desc,batch_status,as_of_date,ret_msg,complete_date,domain_id) values(?,?,?,?,to_date(?,'YYYY-MM-DD'),?,to_date(?,'YYYY-MM-DD'),?)";
         SqlDefine.sys_rdbms_129 = "delete from dispatch_batch_define where batch_id = ? and domain_id = ?";
-        SqlDefine.sys_rdbms_130 = "update dispatch_batch_define set batch_desc = ?, batch_status = ?,as_of_date = to_date(?,'YYYY-MM-DD') where batch_id = ? and domain_id = ?";
+        SqlDefine.sys_rdbms_130 = "update dispatch_batch_define set batch_desc = ?, batch_status = ?,as_of_date = to_date(?,'YYYY-MM-DD'), complete_date = to_date(?,'YYYY-MM-DD') where batch_id = ? and domain_id = ?";
         SqlDefine.sys_rdbms_131 = "select batch_status from dispatch_batch_define where batch_id = ?";
         SqlDefine.sys_rdbms_132 = "select t.uuid,t.task_id,t.arg_id,t.arg_value,t.sort_id,t.domain_id,d.arg_type,a.arg_type_desc,d.arg_desc,d.code_number,d.arg_value as fixed_arg_value from dispatch_task_argument_rel t inner join dispatch_argument_define d on t.arg_id = d.arg_id inner join dispatch_argument_type_attr a on d.arg_type = a.arg_type where t.task_id = ? order by sort_id asc";
         SqlDefine.sys_rdbms_133 = "select t.id,t.group_id,t.task_id,t.domain_id,d.task_desc,d.task_type,a.task_type_desc,d.code_number from dispatch_group_task_relation t inner join dispatch_task_define d on t.task_id = d.task_id inner join dispatch_task_type_attr a on d.task_type = a.task_type where t.group_id = ?";
@@ -149,12 +149,21 @@ public class OracleDefine {
         SqlDefine.sys_rdbms_162 = "select distinct sys_guid() as uuid,r.batch_id,d.arg_id,a.arg_value,r.domain_id,d.bind_as_of_date from dispatch_batch_group_relation r inner join dispatch_group_task_relation g on r.group_id=g.group_id inner join dispatch_task_argument_rel t on g.task_id = t.task_id inner join dispatch_argument_define d on t.arg_id = d.arg_id left join dispatch_batch_argument_rel a on a.batch_id = r.batch_id and a.arg_id = t.arg_id  where d.arg_type = '4' and r.domain_id = ?";
         SqlDefine.sys_rdbms_163 = "select t.uuid,t.batch_id,t.arg_id,t.arg_value,t.domain_id from dispatch_batch_argument_rel t where t.domain_id = ? and t.batch_id = ?";
         SqlDefine.sys_rdbms_164 = "select distinct sys_guid() as uuid,r.batch_id,d.arg_id,a.arg_value,r.domain_id,d.bind_as_of_date from dispatch_batch_group_relation r inner join dispatch_group_task_relation g on r.group_id=g.group_id inner join dispatch_task_argument_rel t on g.task_id = t.task_id inner join dispatch_argument_define d on t.arg_id = d.arg_id left join dispatch_batch_argument_rel a on a.batch_id = r.batch_id and a.arg_id = t.arg_id where d.arg_type = '4' and r.domain_id = ? and r.batch_id = ?";
-        SqlDefine.sys_rdbms_165 = "select batch_id,code_number,batch_desc,batch_status,to_char(as_of_date,'YYYY-MM-DD') as as_of_date,domain_id,create_user,create_date,modify_user,modify_date from dispatch_batch_define where domain_id = ? and batch_status = '1'";
+        SqlDefine.sys_rdbms_165 = "select batch_id,code_number,batch_desc,batch_status,to_char(as_of_date,'YYYY-MM-DD') as as_of_date,domain_id,ret_msg, to_char(start_date,'YYYY-MM-DD HH24:MI:SS') as start_date,to_char(complete_date,'YYYY-MM-DD') as complete_date, to_char(end_date,'YYYY-MM-DD HH24:MI:SS') as end_date from dispatch_batch_define where domain_id = ? and batch_status = '1'";
         SqlDefine.sys_rdbms_166 = "delete from dispatch_batch_job_status t where t.batch_id = ?";
         SqlDefine.sys_rdbms_167 = "insert into dispatch_batch_job_status(batch_id,job_id,status) values(?,?,?)";
         SqlDefine.sys_rdbms_168 = "update DISPATCH_BATCH_JOB_STATUS t set status = ? where batch_id = ? and job_id = ?";
         SqlDefine.sys_rdbms_169 = "select status from dispatch_batch_job_status t where batch_id = ? and job_id = ?";
         SqlDefine.sys_rdbms_170 = "select count(*) from dispatch_batch_job_status t where batch_id = ?";
         SqlDefine.sys_rdbms_171 = "select count(*) from dispatch_batch_job_status t where batch_id = ? and status = '2'";
+        SqlDefine.sys_rdbms_172 = "delete from dispatch_batch_group_status where batch_id = ?";
+        SqlDefine.sys_rdbms_173 = "insert into dispatch_batch_group_status(batch_id,gid,status) values(?,?,?)";
+        SqlDefine.sys_rdbms_174 = "update dispatch_batch_group_status set status = ? where batch_id = ? and gid = ?";
+        SqlDefine.sys_rdbms_175 = "select status from dispatch_batch_group_status where batch_id = ? and gid = ?";
+        SqlDefine.sys_rdbms_176 = "select count(*) from dispatch_batch_group_status where batch_id = ?";
+        SqlDefine.sys_rdbms_177 = "select count(*) from dispatch_batch_group_status where batch_id = ? and status = '2'";
+        SqlDefine.sys_rdbms_178 = "update dispatch_batch_define set batch_status = '1',start_date = sysdate, ret_msg = '',end_date = '' where batch_id = ?";
+        SqlDefine.sys_rdbms_179 = "update dispatch_batch_define set ret_msg = ? , end_date = sysdate, batch_status = ? where batch_id = ?";
+        SqlDefine.sys_rdbms_180 = "update dispatch_batch_define set batch_status = '4' where batch_status = '1'";
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -112,6 +113,7 @@ public class BatchArgumentDaoImpl implements BatchArgumentDao {
         return false;
     }
 
+    @Transactional
     @Override
     public int addBatchArg(JSONArray jsonArray) {
         for (int i = 0; i < jsonArray.length(); i++) {

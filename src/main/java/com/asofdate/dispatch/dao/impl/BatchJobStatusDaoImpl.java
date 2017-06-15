@@ -1,6 +1,6 @@
 package com.asofdate.dispatch.dao.impl;
 
-import com.asofdate.dispatch.dao.BatchJobDao;
+import com.asofdate.dispatch.dao.BatchJobStatusDao;
 import com.asofdate.sql.SqlDefine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,7 +13,7 @@ import java.util.Map;
  * Created by hzwy23 on 2017/6/14.
  */
 @Repository
-public class BatchJobDaoImpl implements BatchJobDao {
+public class BatchJobStatusDaoImpl implements BatchJobStatusDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -28,12 +28,12 @@ public class BatchJobDaoImpl implements BatchJobDao {
     }
 
     @Override
-    public int setTaskStatus(String batchId, String jobId, int status) {
+    public int setJobStatus(String batchId, String jobId, int status) {
         return jdbcTemplate.update(SqlDefine.sys_rdbms_168, status, batchId, jobId);
     }
 
     @Override
-    public int getTaskStatus(String batchId, String jobId) {
+    public int getJobStatus(String batchId, String jobId) {
         return jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_169, Integer.class, batchId, jobId);
     }
 

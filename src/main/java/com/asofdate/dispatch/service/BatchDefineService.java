@@ -23,6 +23,8 @@ public interface BatchDefineService {
 
     int setStatus(String batchId, int status);
 
+    int runBatchInit(String batchId);
+
     int updateAsofdate(String asofdate, String batchId);
 
     // 根据批次号,查询这个批次中的批次参数信息
@@ -32,4 +34,6 @@ public interface BatchDefineService {
     int addBatchArg(JSONArray jsonArray);
 
     float getBatchCompletedRadio(String batchId);
+
+    int destoryBatch(String batchId,String retMsg, int Status);
 }

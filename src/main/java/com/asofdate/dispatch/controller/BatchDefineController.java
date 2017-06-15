@@ -249,8 +249,8 @@ public class BatchDefineController {
         String batchId = JoinCode.join(request.getParameter("domain_id"), request.getParameter("batch_id"));
         batchDefineModel.setBatchId(batchId);
         batchDefineModel.setCodeNumber(request.getParameter("batch_id"));
-        batchDefineModel.setCreateUser(userId);
-        batchDefineModel.setModifyUser(userId);
+        batchDefineModel.setRetMsg("");
+        batchDefineModel.setCompleteDate(request.getParameter("complete_date"));
         batchDefineModel.setDomainId(request.getParameter("domain_id"));
         batchDefineModel.setBatchDesc(request.getParameter("batch_desc"));
         batchDefineModel.setBatchStatus(request.getParameter("batch_status"));

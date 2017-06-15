@@ -42,8 +42,8 @@ public class BatchDefineDaoImpl implements BatchDefineDao {
                 m.getBatchDesc(),
                 m.getBatchStatus(),
                 m.getAsOfDate(),
-                m.getCreateUser(),
-                m.getModifyUser(),
+                m.getRetMsg(),
+                m.getCompleteDate(),
                 m.getDomainId());
     }
 
@@ -66,6 +66,7 @@ public class BatchDefineDaoImpl implements BatchDefineDao {
                 m.getBatchDesc(),
                 m.getBatchStatus(),
                 m.getAsOfDate(),
+                m.getCompleteDate(),
                 m.getBatchId(),
                 m.getDomainId());
     }
@@ -83,5 +84,15 @@ public class BatchDefineDaoImpl implements BatchDefineDao {
     @Override
     public int updateAsofdate(String asofdate, String batchId) {
         return jdbcTemplate.update(SqlDefine.sys_rdbms_161, asofdate, batchId);
+    }
+
+    @Override
+    public int runBatchInit(String batchId) {
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_178,batchId);
+    }
+
+    @Override
+    public int destoryBatch(String batchId, String retMsg, int status) {
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_179,retMsg,status,batchId);
     }
 }

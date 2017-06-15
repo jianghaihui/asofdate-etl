@@ -9,10 +9,10 @@ public class BatchDefineModel {
     public String batch_desc;
     public String batch_status;
     public String as_of_date;
-    public String create_date;
-    public String create_user;
-    public String modify_date;
-    public String modify_user;
+    public String start_date;
+    public String ret_msg;
+    public String complete_date;
+    public String end_date;
     public String domain_id;
     public String batch_status_desc;
 
@@ -64,36 +64,36 @@ public class BatchDefineModel {
         this.as_of_date = as_of_date;
     }
 
-    public String getCreateDate() {
-        return create_date;
+    public String getStartDate() {
+        return start_date;
     }
 
-    public void setCreateDate(String create_date) {
-        this.create_date = create_date;
+    public void setStartDate(String start_date) {
+        this.start_date = start_date;
     }
 
-    public String getCreateUser() {
-        return create_user;
+    public String getRetMsg() {
+        return ret_msg;
     }
 
-    public void setCreateUser(String create_user) {
-        this.create_user = create_user;
+    public void setRetMsg(String ret_msg) {
+        this.ret_msg = ret_msg;
     }
 
-    public String getModifyDate() {
-        return modify_date;
+    public String getCompleteDate() {
+        return complete_date;
     }
 
-    public void setModifyDate(String modify_date) {
-        this.modify_date = modify_date;
+    public void setCompleteDate(String complete_date) {
+        this.complete_date = complete_date;
     }
 
-    public String getModifyUser() {
-        return modify_user;
+    public String getEndDate() {
+        return end_date;
     }
 
-    public void setModifyUser(String modify_user) {
-        this.modify_user = modify_user;
+    public void setEndDate(String end_date) {
+        this.end_date = end_date;
     }
 
     public String getDomainId() {

@@ -41,7 +41,6 @@ public class RunGroupThread extends Thread {
         * */
         while (true) {
             Map<String, GroupTaskModel> taskMap = taskStatus.getRunnableTasks(gid, groupId);
-
             for (GroupTaskModel mt : taskMap.values()) {
                 try {
                     taskStatus.setTaskRunning(JoinCode.join(gid, mt.getUuid()));

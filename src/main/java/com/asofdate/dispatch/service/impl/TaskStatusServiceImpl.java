@@ -1,6 +1,6 @@
 package com.asofdate.dispatch.service.impl;
 
-import com.asofdate.dispatch.dao.BatchJobDao;
+import com.asofdate.dispatch.dao.BatchJobStatusDao;
 import com.asofdate.dispatch.model.BatchGroupModel;
 import com.asofdate.dispatch.model.GroupTaskModel;
 import com.asofdate.dispatch.model.JobStatus;
@@ -31,7 +31,7 @@ public class TaskStatusServiceImpl implements TaskStatusService {
     @Autowired
     private TaskDependencyService taskDependencyService;
     @Autowired
-    private BatchJobDao batchJobDao;
+    private BatchJobStatusDao batchJobStatusDao;
 
     private String domainId;
     private String batchId;
@@ -75,15 +75,9 @@ public class TaskStatusServiceImpl implements TaskStatusService {
                 }
             }
         }
-
-        initBatchJobStatus(batchId, this.taskMap);
+        batchJobStatusDao.init(batchId, this.taskMap);
         this.taskDependencyService.afterPropertiesSet(domainId, batchId);
     }
-
-    private void initBatchJobStatus(String batchId, Map<String, Integer> map) {
-        batchJobDao.init(batchId, map);
-    }
-
 
     /*
     * 判断任务组中所有的任务是否执行完成
@@ -159,19 +153,19 @@ public class TaskStatusServiceImpl implements TaskStatusService {
     @Override
     public void setTaskCompleted(String uid) {
         this.taskMap.put(uid, JobStatus.Job_STATUS_COMPLETED);
-        batchJobDao.setTaskStatus(batchId, uid, JobStatus.Job_STATUS_COMPLETED);
+        batchJobStatusDao.setJobStatus(batchId, uid, JobStatus.Job_STATUS_COMPLETED);
     }
 
     @Override
     public void setTaskRunning(String uid) {
         this.taskMap.put(uid, JobStatus.Job_STATUS_RUNNING);
-        batchJobDao.setTaskStatus(batchId, uid, JobStatus.Job_STATUS_RUNNING);
+        batchJobStatusDao.setJobStatus(batchId, uid, JobStatus.Job_STATUS_RUNNING);
     }
 
     @Override
     public void setTaskError(String uid) {
         this.taskMap.put(uid, JobStatus.Job_STATUS_ERROR);
-        batchJobDao.setTaskStatus(batchId, uid, JobStatus.Job_STATUS_ERROR);
+        batchJobStatusDao.setJobStatus(batchId, uid, JobStatus.Job_STATUS_ERROR);
     }
 
 
@@ -210,7 +204,7 @@ public class TaskStatusServiceImpl implements TaskStatusService {
 
     @Override
     public boolean isError() {
-        return this.taskMap.containsValue(JobStatus.Job_STATUS_ERROR);
+        return taskMap.containsValue(JobStatus.Job_STATUS_ERROR);
     }
 
 }

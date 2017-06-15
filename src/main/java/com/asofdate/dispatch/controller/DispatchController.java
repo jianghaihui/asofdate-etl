@@ -55,7 +55,7 @@ public class DispatchController {
             return Hret.error(421, "批次正在运行中", JSONObject.NULL);
         }
 
-        batchDefineService.setStatus(batchId, BatchStatus.BATCH_STATUS_RUNNING);
+        batchDefineService.runBatchInit(batchId);
 
         groupStatus.afterPropertiesSet(domainId, batchId);
         taskStatus.afterPropertiesSet(domainId, batchId);

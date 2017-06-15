@@ -21,14 +21,36 @@
         </button>
     </div>
 </div>
-<div class="row col-sm-12 col-md-12 col-lg-12" id="h-dispatch-batch-monitoring-content">
-</div>
+<div class="row col-sm-12 col-md-12 col-lg-12" id="h-dispatch-batch-monitoring-content"></div>
 <script type="text/javascript">
 
     var BatchMonitoringObj = {
+        noBatch:function () {
+            if (document.getElementById("h-dispatch-batch-monitoring-no-batch") == null){
+                var imgdiv = document.createElement("div");
+                imgdiv.id = "h-dispatch-batch-monitoring-no-batch";
+                imgdiv.className = "col-sm-12 col-md-12 col-lg-12";
+                imgdiv.style.textAlign = "center";
+
+                var mimg = document.createElement("img");
+                mimg.setAttribute("src","/images/dispatch_icon/no_batch.gif");
+
+                var span = document.createElement("div");
+                span.style.fontSize = "16px";
+                span.style.fontWeight = "600";
+                span.style.marginTop = "12px";
+                span.innerHTML = "木有运行中的批次";
+                imgdiv.append(mimg);
+                imgdiv.append(span);
+                document.getElementById("h-dispatch-batch-monitoring-content").append(imgdiv);
+            }
+        },
         scan:function (element) {
             if (!$("[data-id='0503020000']").hasClass("active")){
                 return;
+            }
+            if (document.getElementById("h-dispatch-batch-monitoring-no-batch") != null){
+                $("#h-dispatch-batch-monitoring-no-batch").remove();
             }
             var div = document.createElement("div");
             div.style.border = "#fcfcfc solid 1px";
@@ -68,12 +90,13 @@
             div.append(btndiv);
         },
         getRunning:function () {
-            $("#h-dispatch-batch-monitoring-content").html("");
+            BatchMonitoringObj.noBatch();
             var domain_id = $("#h-dispatch-batch-monitoring-domain-list").val();
             var timer = setInterval(function () {
                 if(document.getElementById("h-dispatch-batch-monitoring-content") == null){
                     clearInterval(timer);
                 };
+
                 $.HAjaxRequest({
                     url:"/v1/dispatch/monitoring",
                     type:"GET",
@@ -89,6 +112,9 @@
                         });
                     }
                 });
+                if ($("#h-dispatch-batch-monitoring-content").html() == "") {
+                    BatchMonitoringObj.noBatch();
+                }
             },1000);
         },
         addSpan:function (label,value) {

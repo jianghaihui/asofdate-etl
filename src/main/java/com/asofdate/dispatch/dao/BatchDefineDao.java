@@ -23,4 +23,8 @@ public interface BatchDefineDao {
     int setStatus(String batchId, int status);
 
     int updateAsofdate(String asofdate, String batchId);
+
+    int runBatchInit(String batchId);
+
+    int destoryBatch(String batchId,String retMsg,int status);
 }
