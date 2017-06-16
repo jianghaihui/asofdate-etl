@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope("prototype")
 public class TaskletFactory {
+
     // shell 脚本
     private final String SHELL_TYPE = "1";
     // 存储过程
@@ -26,16 +27,16 @@ public class TaskletFactory {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public Tasklet getTasklet(String typeId, String scritpFile) {
+    public Tasklet getTasklet(String typeId, String scritpFile,String basePath) {
         switch (typeId) {
             case CMD_TYPE:
-                return new CmdTasklet(scritpFile);
+                return new CmdTasklet(scritpFile,basePath);
             case SHELL_TYPE:
-                return new ShellTasklet(scritpFile);
+                return new ShellTasklet(scritpFile,basePath);
             case JAR_TYPE:
-                return new JarTasklet(scritpFile);
+                return new JarTasklet(scritpFile,basePath);
             case BINARY_TYPE:
-                return new BinaryTasklet(scritpFile);
+                return new BinaryTasklet(scritpFile,basePath);
             case PROC_TYPE:
                 return new ProcTasklet(scritpFile, jdbcTemplate);
         }

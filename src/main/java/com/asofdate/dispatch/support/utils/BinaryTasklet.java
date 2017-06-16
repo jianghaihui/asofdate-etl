@@ -13,6 +13,7 @@ import org.springframework.core.io.Resource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Paths;
 
 /**
  * Created by hzwy23 on 2017/5/31.
@@ -22,10 +23,10 @@ public class BinaryTasklet implements Tasklet {
     private final Logger logger = LoggerFactory.getLogger(CmdTasklet.class);
     private String ExitCode = "ExitCode=";
     private String ExitMsg = "ExitMsg=";
-    private String scritpFile = "script/";
+    private String scritpFile;
 
-    public BinaryTasklet(String scriptFile) {
-        this.scritpFile += scriptFile.replaceFirst("^(/|./)", "");
+    public BinaryTasklet(String scriptFile,String basePath) {
+        this.scritpFile = Paths.get(basePath,scriptFile).toString();
     }
 
     @Override
@@ -37,13 +38,12 @@ public class BinaryTasklet implements Tasklet {
             jobParameters = parametersObj.toString();
         }
         String jobName = chunkContext.getStepContext().getJobName();
-        Resource resource = new ClassPathResource(this.scritpFile);
-        String cmd = resource.getURL().toString().substring(6);
+
         Process process = null;
         BufferedReader input = null;
-        try {
 
-            process = Runtime.getRuntime().exec(cmd + " " + jobParameters);
+        try {
+            process = Runtime.getRuntime().exec(this.scritpFile + " " + jobParameters);
             input = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line = "";
             while ((line = input.readLine()) != null) {

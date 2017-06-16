@@ -166,5 +166,11 @@ public class OracleDefine {
         SqlDefine.sys_rdbms_179 = "update dispatch_batch_define set ret_msg = ? , end_date = sysdate, batch_status = ? where batch_id = ?";
         SqlDefine.sys_rdbms_180 = "update dispatch_batch_define set batch_status = '4' where batch_status = '1'";
         SqlDefine.sys_rdbms_181 = "select config_id,config_desc,config_value,image,details from dispatch_batch_system_config";
+        SqlDefine.sys_rdbms_182 = "select t.config_value from dispatch_batch_system_config t where t.config_id = ?";
+        SqlDefine.sys_rdbms_183 = "select c.config_value from dispatch_batch_domain_config c where c.domain_id = ? and c.config_id = ?";
+        SqlDefine.sys_rdbms_184 = "select count(*) from dispatch_batch_domain_config where uuid = ?";
+        SqlDefine.sys_rdbms_185 = "update dispatch_batch_domain_config set config_value = ? where uuid = ?";
+        SqlDefine.sys_rdbms_186 = "insert into dispatch_batch_domain_config(config_id,config_value,domain_id,uuid) values(?,?,?,?)";
+        SqlDefine.sys_rdbms_187 = "select config_id,config_value,domain_id from dispatch_batch_domain_config where domain_id = ?";
     }
 }

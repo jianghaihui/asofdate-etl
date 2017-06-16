@@ -2,10 +2,7 @@ package com.asofdate.dispatch.support.utils;
 
 import com.asofdate.dispatch.model.GroupTaskModel;
 import com.asofdate.dispatch.model.TaskDefineModel;
-import com.asofdate.dispatch.service.ArgumentService;
-import com.asofdate.dispatch.service.GroupTaskService;
-import com.asofdate.dispatch.service.TaskDefineService;
-import com.asofdate.dispatch.service.TaskStatusService;
+import com.asofdate.dispatch.service.*;
 import com.asofdate.utils.JoinCode;
 import org.quartz.SimpleTrigger;
 import org.springframework.batch.core.configuration.JobRegistry;
@@ -22,6 +19,7 @@ import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,9 +35,12 @@ public class QuartzConfiguration extends DefaultBatchConfigurer {
     private TaskDefineService taskDefineService;
     @Autowired
     private GroupTaskService groupTaskService;
+    @Autowired
+    private SysConfigService sysConfigService;
 
     private String domainId;
     private String batchId;
+    private String baseScriptPath;
     private SchedulerFactoryBean schedulerFactoryBean;
     private TaskStatusService taskStatusService;
     private ArgumentService argumentService;
@@ -79,9 +80,8 @@ public class QuartzConfiguration extends DefaultBatchConfigurer {
 
         TaskDefineModel tm = this.taskDefineMap.get(taskId);
         String typeId = tm.getTaskType();
-        String scriptFile = tm.getScriptFile();
 
-        JobRegistry jobRegistry = batchConfiguration.createJobRegistry(jobName, typeId, scriptFile);
+        JobRegistry jobRegistry = batchConfiguration.createJobRegistry(jobName, typeId,tm.getScriptFile(), baseScriptPath);
         JobExplorer jobExplorer = batchConfiguration.createJobExplorer();
         JobOperator jobOperator = batchConfiguration.createJobOperator(jobLauncher, jobExplorer, jobRegistry, jobRepository);
 
@@ -115,6 +115,7 @@ public class QuartzConfiguration extends DefaultBatchConfigurer {
     public SchedulerFactoryBean createSchedulerFactoryBean(String domainId, String batchId, TaskStatusService taskStatusService, ArgumentService argumentService) throws Exception {
         setDomainId(domainId);
         setBatchId(batchId);
+        this.baseScriptPath = sysConfigService.getValue(domainId,"CONF0001");
         this.taskStatusService = taskStatusService;
         this.argumentService = argumentService;
         this.taskDefineMap = new HashMap<>();
