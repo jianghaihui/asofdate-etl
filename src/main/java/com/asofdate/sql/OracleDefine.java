@@ -172,5 +172,12 @@ public class OracleDefine {
         SqlDefine.sys_rdbms_185 = "update dispatch_batch_domain_config set config_value = ? where uuid = ?";
         SqlDefine.sys_rdbms_186 = "insert into dispatch_batch_domain_config(config_id,config_value,domain_id,uuid) values(?,?,?,?)";
         SqlDefine.sys_rdbms_187 = "select config_id,config_value,domain_id from dispatch_batch_domain_config where domain_id = ?";
+        SqlDefine.sys_rdbms_188 = "update dispatch_batch_group_status set start_time = sysdate, status = ? where gid = ? and batch_id = ?";
+        SqlDefine.sys_rdbms_189 = "update dispatch_batch_group_status set end_time = sysdate, status = ? where gid = ? and batch_id = ?";
+        SqlDefine.sys_rdbms_190 = "update dispatch_batch_job_status set start_time = now(), status = ? where batch_id = ? and job_id = ?";
+        SqlDefine.sys_rdbms_191 = "update dispatch_batch_job_status set end_time = now(), status = ? where batch_id = ? and job_id = ?";
+        SqlDefine.sys_rdbms_192 = "insert into dispatch_batch_history(uuid,batch_id,batch_status,as_of_date,start_time,end_time,ret_msg,domain_id) select uuid(),batch_id,batch_status,as_of_date,start_date,end_date,ret_msg,domain_id from dispatch_batch_define where batch_id = ?";
+        SqlDefine.sys_rdbms_193 = "select t.uuid,d.code_number,t.batch_id,d.batch_desc,t.batch_status,a.batch_status_desc,t.as_of_date,t.start_time,t.end_time,t.ret_msg,t.domain_id from dispatch_batch_history t inner join dispatch_batch_define d on t.batch_id = d.batch_id inner join dispatch_batch_status_attr a on t.batch_status = a.batch_status where t.domain_id = ?";
+        SqlDefine.sys_rdbms_194 = "delete from dispatch_batch_history where uuid = ?";
     }
 }

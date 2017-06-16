@@ -12,14 +12,6 @@
                 style="width: 180px;height: 24px; line-height: 24px; margin-top: 10px;padding: 0px;">
         </select>
     </div>
-    <div id="h-dispatch-batch-monitoring-toolbar-list" class="pull-right">
-        <button onclick="" class="btn btn-info btn-sm" title="编辑批次信息">
-            <span class="icon-dashboard"> 历史记录</span>
-        </button>
-        <button onclick="" class="btn btn-warning btn-sm" title="启动批次">
-            <span class="icon-stop"> 全部停止</span>
-        </button>
-    </div>
 </div>
 <div class="row col-sm-12 col-md-12 col-lg-12" id="h-dispatch-batch-monitoring-content"></div>
 <script type="text/javascript">
@@ -45,6 +37,19 @@
                 document.getElementById("h-dispatch-batch-monitoring-content").append(imgdiv);
             }
         },
+        stop:function (batchId) {
+            $.HAjaxRequest({
+                url:"/v1/dispatch/batch/define/stop",
+                type:"POST",
+                data:{batch_id:batchId},
+                success:function () {
+                    $.Notify({
+                        message:"停止批次成功",
+                        type:"success",
+                    });
+                }
+            })
+        },
         scan:function (element) {
             if (!$("[data-id='0503020000']").hasClass("active")){
                 return;
@@ -52,6 +57,7 @@
             if (document.getElementById("h-dispatch-batch-monitoring-no-batch") != null){
                 $("#h-dispatch-batch-monitoring-no-batch").remove();
             }
+
             var div = document.createElement("div");
             div.style.border = "#fcfcfc solid 1px";
             div.className += " col-sm-6 col-md-4 col-lg-3";
@@ -78,6 +84,7 @@
             btn2.className = "btn btn-warning btn-sm";
             btn2.style.marginLeft = "12px";
             btn2.innerHTML = "暂停";
+            btn2.setAttribute("onclick","BatchMonitoringObj.stop('"+element.batch_id+"')")
 
             var btndiv = document.createElement("div");
             btndiv.className += " col-sm-12 col-md-12 col-lg-12";
@@ -102,6 +109,12 @@
                     type:"GET",
                     data:{domain_id:domain_id},
                     success:function (data) {
+                        if (data.length == 0){
+                            if (document.getElementById("h-dispatch-batch-monitoring-no-batch") == null) {
+                                $("#h-dispatch-batch-monitoring-content").html("");
+                                return false;
+                            }
+                        }
                         $(data).each(function (index, element) {
                             if (!$("[data-id='0503020000']").hasClass("active")){
                                 return false;

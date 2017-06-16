@@ -46,4 +46,14 @@ public class BatchJobStatusDaoImpl implements BatchJobStatusDao {
     public int getTotalCnt(String batchId) {
         return jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_170, Integer.class, batchId);
     }
+
+    @Override
+    public int setJobRunning(String batchId, String jobId, int status) {
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_190,status,batchId,jobId);
+    }
+
+    @Override
+    public int setJobEnd(String batchId, String jobId, int status) {
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_191,status,batchId,jobId);
+    }
 }

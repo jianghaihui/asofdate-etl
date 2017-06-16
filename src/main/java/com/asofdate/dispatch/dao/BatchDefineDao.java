@@ -27,4 +27,6 @@ public interface BatchDefineDao {
     int runBatchInit(String batchId);
 
     int destoryBatch(String batchId,String retMsg,int status);
+
+    int saveHistory(String batchId);
 }

@@ -144,7 +144,6 @@ public class TaskStatusServiceImpl implements TaskStatusService {
         return true;
     }
 
-
     /*
     * 设置任务状态为已完成
     * @param String gid 表示任务组id
@@ -153,19 +152,19 @@ public class TaskStatusServiceImpl implements TaskStatusService {
     @Override
     public void setTaskCompleted(String uid) {
         this.taskMap.put(uid, JobStatus.Job_STATUS_COMPLETED);
-        batchJobStatusDao.setJobStatus(batchId, uid, JobStatus.Job_STATUS_COMPLETED);
+        batchJobStatusDao.setJobEnd(batchId, uid, JobStatus.Job_STATUS_COMPLETED);
     }
 
     @Override
     public void setTaskRunning(String uid) {
         this.taskMap.put(uid, JobStatus.Job_STATUS_RUNNING);
-        batchJobStatusDao.setJobStatus(batchId, uid, JobStatus.Job_STATUS_RUNNING);
+        batchJobStatusDao.setJobRunning(batchId, uid, JobStatus.Job_STATUS_RUNNING);
     }
 
     @Override
     public void setTaskError(String uid) {
         this.taskMap.put(uid, JobStatus.Job_STATUS_ERROR);
-        batchJobStatusDao.setJobStatus(batchId, uid, JobStatus.Job_STATUS_ERROR);
+        batchJobStatusDao.setJobEnd(batchId, uid, JobStatus.Job_STATUS_ERROR);
     }
 
 
@@ -206,5 +205,4 @@ public class TaskStatusServiceImpl implements TaskStatusService {
     public boolean isError() {
         return taskMap.containsValue(JobStatus.Job_STATUS_ERROR);
     }
-
 }

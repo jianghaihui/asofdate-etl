@@ -47,4 +47,14 @@ public class BatchGroupStatusDaoImp implements BatchGroupStatusDao {
     public int getTotalCnt(String batchId) {
         return jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_177, Integer.class, batchId);
     }
+
+    @Override
+    public int setGroupRunning(String batchId, String gid, int status) {
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_188,status,gid,batchId);
+    }
+
+    @Override
+    public int setGroupEnd(String batchId, String gid, int status) {
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_189,status,gid,batchId);
+    }
 }

@@ -7,6 +7,8 @@ import com.asofdate.utils.JoinCode;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -14,6 +16,7 @@ import java.util.Map;
  * Created by hzwy23 on 2017/5/29.
  */
 public class RunGroupThread extends Thread {
+    private final Logger logger = LoggerFactory.getLogger(RunGroupThread.class);
     private Scheduler scheduler;
     private TaskStatusService taskStatus;
     private GroupStatusService groupStatus;
@@ -46,6 +49,7 @@ public class RunGroupThread extends Thread {
                     taskStatus.setTaskRunning(JoinCode.join(gid, mt.getUuid()));
                     scheduler.triggerJob(JobKey.jobKey(JoinCode.join(gid, mt.getUuid())));
                 } catch (SchedulerException e) {
+                    logger.info(e.getMessage());
                     e.printStackTrace();
                 }
             }
@@ -63,6 +67,7 @@ public class RunGroupThread extends Thread {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
+                logger.info(e.getMessage());
                 e.printStackTrace();
             }
         }

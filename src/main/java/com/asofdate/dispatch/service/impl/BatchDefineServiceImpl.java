@@ -96,4 +96,9 @@ public class BatchDefineServiceImpl implements BatchDefineService {
     public int destoryBatch(String batchId, String retMsg, int status) {
         return batchDefineDao.destoryBatch(batchId,retMsg,status);
     }
+
+    @Override
+    public int saveHistory(String batchId) {
+        return batchDefineDao.saveHistory(batchId);
+    }
 }

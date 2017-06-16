@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -56,5 +57,10 @@ public class StaticPageController {
         map.put("batchDesc", request.getParameter("batchDesc"));
         map.put("domainId", JoinCode.getFirst(request.getParameter("batchId")));
         return "dispatch/batch_group";
+    }
+
+    @RequestMapping(value = "/v1/dispatch/batch/history",method = RequestMethod.GET)
+    public String getBatchHistory(HttpServletRequest request){
+        return "dispatch/batch_history";
     }
 }

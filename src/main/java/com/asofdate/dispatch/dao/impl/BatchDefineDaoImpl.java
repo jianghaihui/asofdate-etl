@@ -95,4 +95,10 @@ public class BatchDefineDaoImpl implements BatchDefineDao {
     public int destoryBatch(String batchId, String retMsg, int status) {
         return jdbcTemplate.update(SqlDefine.sys_rdbms_179,retMsg,status,batchId);
     }
+
+    @Override
+    public int saveHistory(String batchId) {
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_192,batchId);
+    }
+
 }

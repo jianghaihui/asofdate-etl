@@ -92,6 +92,7 @@ public class JobScheduler extends Thread {
                     scheduler.stop();
                     scheduler.destroy();
                     batchDefineService.destoryBatch(batchId,BATCH_ERROR_MSG,BatchStatus.BATCH_STATUS_ERROR);
+                    return;
                 }
                 Thread.sleep(100);
                 if (BatchStatus.BATCH_STATUS_RUNNING != batchDefineService.getStatus(batchId)) {
@@ -99,6 +100,7 @@ public class JobScheduler extends Thread {
                     scheduler.stop();
                     scheduler.destroy();
                     batchDefineService.destoryBatch(batchId,BATCH_STOPPED_MSG,BatchStatus.BATCH_STATUS_STOPPED);
+                    return;
                 }
             }
         } catch (InterruptedException e) {
@@ -109,6 +111,8 @@ public class JobScheduler extends Thread {
             batchDefineService.destoryBatch(batchId,e.getMessage(),BatchStatus.BATCH_STATUS_ERROR);
             scheduler.stop();
             e.printStackTrace();
+        } finally {
+            batchDefineService.saveHistory(batchId);
         }
     }
 }

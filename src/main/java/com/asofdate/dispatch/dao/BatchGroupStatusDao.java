@@ -15,4 +15,8 @@ public interface BatchGroupStatusDao {
     int getCompletedCnt(String batchId);
 
     int getTotalCnt(String batchId);
+
+    int setGroupRunning(String batchId, String gid, int status);
+
+    int setGroupEnd(String batchId, String gid, int status);
 }

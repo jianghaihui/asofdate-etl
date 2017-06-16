@@ -71,10 +71,10 @@ public class GroupStatusServiceImpl implements GroupStatusService {
 
 
     /*
-* @return: Map<Key,Value>
-*     key: 表示批次中配置的需要运行的任务组id, 这个id不是任务组编码,而是配置任务组依赖关系时,生成的随机唯一性编码
-*     value: 是任务组的详细信息,包括任务组编码,所属域等等
-* */
+    * @return: Map<Key,Value>
+    *     key: 表示批次中配置的需要运行的任务组id, 这个id不是任务组编码,而是配置任务组依赖关系时,生成的随机唯一性编码
+    *     value: 是任务组的详细信息,包括任务组编码,所属域等等
+    * */
     public Map getRunnableGroups() {
         Map<String, BatchGroupModel> map = new HashMap<String, BatchGroupModel>();
         for (BatchGroupModel m : groupList) {
@@ -100,7 +100,7 @@ public class GroupStatusServiceImpl implements GroupStatusService {
     * */
     public void setGroupRunning(String gid) {
         groupMap.put(gid, GroupStatus.Gid_STATUS_RUNNING);
-        batchGroupStatusDao.setGidStatus(batchId, gid, GroupStatus.Gid_STATUS_RUNNING);
+        batchGroupStatusDao.setGroupRunning(batchId,gid,GroupStatus.Gid_STATUS_RUNNING);
     }
 
     /*
@@ -109,13 +109,13 @@ public class GroupStatusServiceImpl implements GroupStatusService {
     * */
     public void setGroupCompleted(String gid) {
         groupMap.put(gid, GroupStatus.Gid_STATUS_COMPLETED);
-        batchGroupStatusDao.setGidStatus(batchId, gid, GroupStatus.Gid_STATUS_COMPLETED);
+        batchGroupStatusDao.setGroupEnd(batchId,gid,GroupStatus.Gid_STATUS_COMPLETED);
     }
 
     @Override
     public void setGroupError(String gid) {
         groupMap.put(gid, GroupStatus.Gid_STATUS_ERROR);
-        batchGroupStatusDao.setGidStatus(batchId, gid, GroupStatus.Gid_STATUS_ERROR);
+        batchGroupStatusDao.setGroupEnd(batchId,gid,GroupStatus.Gid_STATUS_ERROR);
     }
 
 
