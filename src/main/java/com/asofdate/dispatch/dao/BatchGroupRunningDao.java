@@ -10,4 +10,6 @@ import java.util.List;
  */
 public interface BatchGroupRunningDao {
     List<BatchGroupStatusModel> findAll(String domainId);
+    Integer getRatio(String batchId,String gid);
+    BatchGroupStatusModel getDetails(String batchId,String gid);
 }

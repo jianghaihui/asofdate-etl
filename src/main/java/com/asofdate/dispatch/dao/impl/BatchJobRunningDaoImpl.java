@@ -25,4 +25,10 @@ public class BatchJobRunningDaoImpl implements BatchJobRunningDao {
         RowMapper<BatchJobStatusModel> rowMapper = new BeanPropertyRowMapper<>(BatchJobStatusModel.class);
         return jdbcTemplate.query(SqlDefine.sys_rdbms_204,rowMapper,batchId,gid);
     }
+
+    @Override
+    public BatchJobStatusModel getDetails(String batchId,String gid,String tid){
+        RowMapper<BatchJobStatusModel> rowMapper = new BeanPropertyRowMapper<>(BatchJobStatusModel.class);
+        return jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_206,rowMapper,batchId,gid,tid);
+    }
 }

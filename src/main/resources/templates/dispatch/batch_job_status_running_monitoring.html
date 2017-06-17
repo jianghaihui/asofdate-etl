@@ -126,6 +126,68 @@
                     }
 
                     document.getElementById("h-dispatch-batch-job-running-monitoring-content").append(pdiv);
+
+                    var timer = setInterval(function () {
+                        $.getJSON("/v1/dispatch/batch/job/running/details",{
+                            batch_id:uuid,
+                            gid:gid,
+                            tid:element.tid
+                        }).done(function (details) {
+                            ppvalue.innerHTML = details.startTime;
+                            pvalvalue.innerHTML = details.endTime;
+
+                            /*<![CDATA[*/
+                            var start = new Date(details.startTime);
+                            var end = new Date(details.endTime);
+
+                            var diff = (end - start)/1000;
+                            if (diff < 0){
+                                diff = 0;
+                            }
+                            var costTime = diff+"s";
+
+                            if (diff >= 60){
+                                costTime = (diff % 60 ).toFixed(0) + "s";
+                                diff = (diff / 60);
+                                if (diff >= 60) {
+                                    costTime = (diff % 60).toFixed(0) + "m" + costTime;
+                                    diff = (diff / 60);
+                                    if (diff >= 60){
+                                        costTime = (diff % 60).toFixed(0) + "h" + costTime;
+                                    }
+                                }
+                            }
+                            chartdiv.innerHTML = costTime;
+
+                            ph3.innerHTML = details.statusDesc;
+                            switch (details.status){
+                                case "0":
+                                    pdiv2.style.backgroundColor = "#e5e1ff";
+                                    break;
+                                case "1":
+                                    pdiv2.style.backgroundColor = "#fffee8";
+                                    break;
+                                case "2":
+                                    pdiv2.style.backgroundColor = "#f5ffe8";
+                                    break;
+                                case "3":
+                                    pdiv2.style.backgroundColor = "#ffccc8";
+                                    break;
+                                case "4":
+                                    pdiv2.style.backgroundColor = "#f9e3ff";
+                                    break;
+                            }
+
+                            if (details.status != "0" && details.status != "1"){
+                                clearInterval(timer);
+                            }
+
+                            if (document.getElementById("h-dispatch-batch-job-running-monitoring-content") == null){
+                                clearInterval(timer);
+                            }
+                            /*]]>*/
+                        })
+                    },2000)
                 })
             })
         },

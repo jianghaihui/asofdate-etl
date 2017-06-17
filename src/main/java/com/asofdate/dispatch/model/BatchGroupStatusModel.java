@@ -13,6 +13,15 @@ public class BatchGroupStatusModel {
     public String groupDesc;
     public Integer totalJobsCnt;
     public Integer completeJobsCnt;
+    public Integer ratio;
+
+    public Integer getRatio() {
+        return ratio;
+    }
+
+    public void setRatio(Integer ratio) {
+        this.ratio = ratio;
+    }
 
     public String getStatusDesc() {
         return statusDesc;

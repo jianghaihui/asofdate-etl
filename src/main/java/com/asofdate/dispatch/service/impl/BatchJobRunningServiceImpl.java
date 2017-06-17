@@ -20,4 +20,9 @@ public class BatchJobRunningServiceImpl implements BatchJobRunningService {
     public List<BatchJobStatusModel> findAll(String batchId, String gid) {
         return batchJobRunningDao.findAll(batchId,gid);
     }
+
+    @Override
+    public BatchJobStatusModel getDetails(String batchId, String gid, String tid) {
+        return batchJobRunningDao.getDetails(batchId,gid,tid);
+    }
 }

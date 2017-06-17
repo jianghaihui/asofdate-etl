@@ -108,12 +108,13 @@
                     var radio = 0;
                     if (element.status != "0") {
                         if (element.totalJobsCnt == 0){
-                            radio = 100;
+                            if (element.status == "2"){
+                                radio == 100;
+                            }
                         } else {
                             radio = (element.completeJobsCnt / element.totalJobsCnt * 100).toFixed(0);
                         }
                     }
-                    /*]]>*/
                     myChart.setOption(option = {
                         tooltip : {
                             formatter: "{a} <br/>{b} : {c}%"
@@ -127,6 +128,38 @@
                             }
                         ]
                     });
+
+                    var timer = setInterval(function () {
+                        $.getJSON("/v1/dispatch/batch/group/running/details",{batch_id:uuid,gid:element.gid}).done(function (data) {
+
+                            ppvalue.innerHTML = data.startTime;
+                            pvalvalue.innerHTML = data.endTime;
+                            ph3.innerHTML = data.statusDesc;
+
+                            if (data.status != "0" && data.status != "1"){
+                                clearInterval(timer);
+                            }
+
+                            if (document.getElementById("h-dispatch-batch-group-running-monitoring-content") == null){
+                                clearInterval(timer);
+                            }
+
+                            myChart.setOption(option = {
+                                tooltip : {
+                                    formatter: "{a} <br/>{b} : {c}%"
+                                },
+                                series: [
+                                    {
+                                        name: '任务组中job完成比例',
+                                        type: 'gauge',
+                                        detail: {formatter:'{value}%'},
+                                        data: [{value: data.ratio, name: '完成率'}]
+                                    }
+                                ]
+                            });
+                        });
+                    },1000);
+                    /*]]>*/
                 })
             })
         },

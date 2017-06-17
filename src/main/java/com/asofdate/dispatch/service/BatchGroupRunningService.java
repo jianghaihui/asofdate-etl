@@ -9,4 +9,6 @@ import java.util.List;
  */
 public interface BatchGroupRunningService {
     List<BatchGroupStatusModel> findAll(String batchId);
+    Integer getRatio(String batchId,String gid);
+    BatchGroupStatusModel getDetails(String batchId,String gid);
 }
