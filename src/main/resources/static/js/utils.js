@@ -224,24 +224,36 @@ var Hutils = {
         // 判断子元素会否已经被打开，默认设置为未打开
         var flag = false;
 
+        var __DEFAULT = {
+            id:"",
+            tile:"",
+            type: "GET",
+            url: "",
+            data: {},
+            dataType: "text",
+        };
+
+        $.extend(true,__DEFAULT,param);
+
         // 资源url地址
-        var url = param.url;
+        var url = __DEFAULT.url;
 
         // 资源id
-        var data_id = param.id;
+        var data_id = __DEFAULT.id;
 
         // 资源名称
-        var name = param.title;
+        var name = __DEFAULT.title;
 
         $(".H-tabs-index").find("span").each(function(index,element){
             if (data_id == $(element).attr("data-id")){
                 flag = true;
                 $.HAjaxRequest({
-                    type:"get",
-                    url:url,
+                    type:__DEFAULT.type,
+                    url:__DEFAULT.url,
                     cache:false,
                     async:true,
-                    dataType:"text",
+                    data:__DEFAULT.data,
+                    dataType:__DEFAULT.dataType,
                     success: function(data){
                         Hutils.__changetab(element);
                         $(element).find("hzw").html(name);
@@ -260,11 +272,12 @@ var Hutils = {
 
         if (flag == false){
             $.HAjaxRequest({
-                type:"get",
+                type:__DEFAULT.type,
                 url:url,
                 cache:false,
                 async:true,
-                dataType:"text",
+                data:__DEFAULT.data,
+                dataType:__DEFAULT.dataType,
                 error:function (msg) {
                     var m = JSON.parse(msg.responseText);
                     $.Notify({

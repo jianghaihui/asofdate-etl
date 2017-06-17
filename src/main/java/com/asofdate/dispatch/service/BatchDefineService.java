@@ -35,7 +35,7 @@ public interface BatchDefineService {
 
     float getBatchCompletedRadio(String batchId);
 
-    int destoryBatch(String batchId,String retMsg, int Status);
+    int destoryBatch(String batchId, String retMsg, int Status);
 
     int saveHistory(String batchId);
 }

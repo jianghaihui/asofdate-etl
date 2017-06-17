@@ -2,7 +2,6 @@ package com.asofdate.dispatch.dao;
 
 import com.asofdate.dispatch.model.BatchHistoryModel;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -11,5 +10,6 @@ import java.util.List;
  */
 public interface BatchHistoryDao {
     List<BatchHistoryModel> findAll(String domainId);
+
     int delete(JSONArray jsonArray);
 }

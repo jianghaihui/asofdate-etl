@@ -10,5 +10,6 @@ import java.util.List;
  */
 public interface BatchHistoryService {
     List<BatchHistoryModel> findAll(String domainId);
+
     int delete(JSONArray jsonArray);
 }

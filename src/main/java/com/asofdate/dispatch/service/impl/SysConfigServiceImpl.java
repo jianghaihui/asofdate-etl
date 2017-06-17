@@ -4,7 +4,6 @@ import com.asofdate.dispatch.dao.SysConfigDao;
 import com.asofdate.dispatch.model.SysConfigModel;
 import com.asofdate.dispatch.service.SysConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,11 +23,11 @@ public class SysConfigServiceImpl implements SysConfigService {
 
     @Override
     public int setValue(String domainId, String configId, String configValue) {
-        return sysConfigDao.setValue(domainId,configId,configValue);
+        return sysConfigDao.setValue(domainId, configId, configValue);
     }
 
     @Override
     public String getValue(String domainId, String configId) {
-        return sysConfigDao.getValue(domainId,configId);
+        return sysConfigDao.getValue(domainId, configId);
     }
 }

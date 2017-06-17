@@ -37,6 +37,14 @@
                 document.getElementById("h-dispatch-batch-monitoring-content").append(imgdiv);
             }
         },
+        details:function (batchId,batchDesc) {
+            Hutils.openTab({
+                url:"/v1/dispatch/batch/group/running/monitoring/page",
+                title: batchDesc + " 批次运行监控",
+                id:"hzwy23#runninggroup",
+                data:{batch_id:batchId,batch_desc:batchDesc},
+            })
+        },
         stop:function (batchId) {
             $.HAjaxRequest({
                 url:"/v1/dispatch/batch/define/stop",
@@ -80,6 +88,7 @@
             var btn2 = document.createElement("button");
             btn1.className = "btn btn-info btn-sm";
             btn1.innerHTML = "详情";
+            btn1.setAttribute("onclick","BatchMonitoringObj.details('"+element.batch_id+"','"+element.batch_desc+"')")
 
             btn2.className = "btn btn-warning btn-sm";
             btn2.style.marginLeft = "12px";
@@ -202,13 +211,6 @@
                     }
                 });
             },3000);
-            // 使用刚指定的配置项和数据显示图表。
-
-//            myChart.on('click', function(params) {
-//                console.log(arguments)
-//                console.log(params)
-//                // do something useful here
-//            });
             /*]]>*/
         },
     }

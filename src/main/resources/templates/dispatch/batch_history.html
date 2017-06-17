@@ -45,6 +45,7 @@
                 <th data-sortable="true" data-align="center" data-field="startTime">开始日期</th>
                 <th data-sortable="true" data-align="center" data-field="endTime">结束时间</th>
                 <th data-field="retMsg">退出消息</th>
+                <th data-align="center" data-formatter="DispatchBatchHistoryObj.formatter">操作</th>
             </tr>
             </thead>
         </table>
@@ -55,6 +56,17 @@
         $table: $('#h-dispatch-batch-history-info-table-details'),
         formatterindex:function (value, row, index) {
             return index+1;
+        },
+        formatter:function (value,row,index) {
+            return '<span class="h-td-btn btn-success btn-xs" onclick="DispatchBatchHistoryObj.getGroupHistory(\'' + row.uuid + '\',\''+row.batchDesc+'\')"> 详细信息</span>';
+        },
+        getGroupHistory:function (uuid,BatchDesc) {
+            Hutils.openTab({
+                url:"/v1/dispatch/batch/group/monitoring/page",
+                id:"hzwy23##groupBatchMonitoringPage",
+                data:{uuid:uuid,batch_desc:BatchDesc},
+                title:BatchDesc+" 任务组状态",
+            })
         },
         refresh:function () {
             $("#h-dispatch-batch-history-info-table-details").bootstrapTable('refresh');

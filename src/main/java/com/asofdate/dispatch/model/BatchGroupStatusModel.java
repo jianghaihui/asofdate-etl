@@ -7,6 +7,60 @@ public class BatchGroupStatusModel {
     public String batchId;
     public String gid;
     public String status;
+    public String startTime;
+    public String endTime;
+    public String statusDesc;
+    public String groupDesc;
+    public Integer totalJobsCnt;
+    public Integer completeJobsCnt;
+
+    public String getStatusDesc() {
+        return statusDesc;
+    }
+
+    public void setStatusDesc(String statusDesc) {
+        this.statusDesc = statusDesc;
+    }
+
+    public String getGroupDesc() {
+        return groupDesc;
+    }
+
+    public void setGroupDesc(String groupDesc) {
+        this.groupDesc = groupDesc;
+    }
+
+    public Integer getTotalJobsCnt() {
+        return totalJobsCnt;
+    }
+
+    public void setTotalJobsCnt(Integer totalJobsCnt) {
+        this.totalJobsCnt = totalJobsCnt;
+    }
+
+    public Integer getCompleteJobsCnt() {
+        return completeJobsCnt;
+    }
+
+    public void setCompleteJobsCnt(Integer completeJobsCnt) {
+        this.completeJobsCnt = completeJobsCnt;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
 
     public String getBatchId() {
         return batchId;

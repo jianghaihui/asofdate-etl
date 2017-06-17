@@ -16,7 +16,7 @@ public interface BatchJobStatusDao {
 
     int getTotalCnt(String batchId);
 
-    int setJobRunning(String batchId,String jobId,int status);
+    int setJobRunning(String batchId, String jobId, int status);
 
-    int setJobEnd(String batchId,String jobId,int status);
+    int setJobEnd(String batchId, String jobId, int status);
 }

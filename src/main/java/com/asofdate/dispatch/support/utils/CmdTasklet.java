@@ -7,8 +7,6 @@ import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,8 +24,8 @@ public class CmdTasklet implements Tasklet {
     private String ExitMsg = "ExitMsg=";
     private String scritpFile;
 
-    public CmdTasklet(String scriptFile,String basePath) {
-        this.scritpFile = Paths.get(basePath,scriptFile).toString();
+    public CmdTasklet(String scriptFile, String basePath) {
+        this.scritpFile = Paths.get(basePath, scriptFile).toString();
     }
 
     @Override

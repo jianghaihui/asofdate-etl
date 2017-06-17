@@ -2,6 +2,7 @@ package com.asofdate.dispatch.dao.impl;
 
 import com.asofdate.dispatch.dao.BatchJobStatusDao;
 import com.asofdate.sql.SqlDefine;
+import com.asofdate.utils.JoinCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -22,7 +23,9 @@ public class BatchJobStatusDaoImpl implements BatchJobStatusDao {
     public int init(String batchId, Map<String, Integer> map) {
         jdbcTemplate.update(SqlDefine.sys_rdbms_166, batchId);
         for (Map.Entry<String, Integer> m : map.entrySet()) {
-            jdbcTemplate.update(SqlDefine.sys_rdbms_167, batchId, m.getKey(), m.getValue());
+            String gid = JoinCode.getFirst(m.getKey());
+            String tid = JoinCode.getLast(m.getKey());
+            jdbcTemplate.update(SqlDefine.sys_rdbms_167, batchId, m.getKey(), m.getValue(), gid,tid);
         }
         return 1;
     }
@@ -49,11 +52,11 @@ public class BatchJobStatusDaoImpl implements BatchJobStatusDao {
 
     @Override
     public int setJobRunning(String batchId, String jobId, int status) {
-        return jdbcTemplate.update(SqlDefine.sys_rdbms_190,status,batchId,jobId);
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_190, status, batchId, jobId);
     }
 
     @Override
     public int setJobEnd(String batchId, String jobId, int status) {
-        return jdbcTemplate.update(SqlDefine.sys_rdbms_191,status,batchId,jobId);
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_191, status, batchId, jobId);
     }
 }

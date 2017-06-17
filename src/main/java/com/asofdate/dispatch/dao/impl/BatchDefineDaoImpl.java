@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by hzwy23 on 2017/5/24.
@@ -88,17 +89,21 @@ public class BatchDefineDaoImpl implements BatchDefineDao {
 
     @Override
     public int runBatchInit(String batchId) {
-        return jdbcTemplate.update(SqlDefine.sys_rdbms_178,batchId);
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_178, batchId);
     }
 
     @Override
     public int destoryBatch(String batchId, String retMsg, int status) {
-        return jdbcTemplate.update(SqlDefine.sys_rdbms_179,retMsg,status,batchId);
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_179, retMsg, status, batchId);
     }
 
+    @Transactional
     @Override
     public int saveHistory(String batchId) {
-        return jdbcTemplate.update(SqlDefine.sys_rdbms_192,batchId);
+        String uuid = UUID.randomUUID().toString();
+        jdbcTemplate.update(SqlDefine.sys_rdbms_192, uuid, batchId);
+        jdbcTemplate.update(SqlDefine.sys_rdbms_195, uuid, batchId);
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_196, uuid, batchId);
     }
 
 }

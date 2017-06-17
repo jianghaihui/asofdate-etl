@@ -24,23 +24,23 @@ public class BatchHistoryController {
     private BatchHistoryService batchHistoryService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List findAll(HttpServletRequest request){
+    public List findAll(HttpServletRequest request) {
         String domainId = request.getParameter("domain_id");
-        if (domainId == null || domainId.isEmpty()){
+        if (domainId == null || domainId.isEmpty()) {
             domainId = JwtService.getConnectUser(request).getString("DomainId");
         }
         return batchHistoryService.findAll(domainId);
     }
 
-    @RequestMapping(value = "/delete",method = RequestMethod.POST)
-    public String deleteHistory(HttpServletResponse response,HttpServletRequest request){
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public String deleteHistory(HttpServletResponse response, HttpServletRequest request) {
         String JSON = request.getParameter("JSON");
         JSONArray jsonArray = new JSONArray(JSON);
         int size = batchHistoryService.delete(jsonArray);
-        if (size == 1){
-            return Hret.success(200,"success", JSONObject.NULL);
+        if (size == 1) {
+            return Hret.success(200, "success", JSONObject.NULL);
         }
         response.setStatus(421);
-        return Hret.error(421,"删除批次历史信息失败",JSONObject.NULL);
+        return Hret.error(421, "删除批次历史信息失败", JSONObject.NULL);
     }
 }

@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -19,8 +18,8 @@ public class StaticPageController {
         return "dispatch/batch_monitoring";
     }
 
-    @RequestMapping(value = "/v1/dispatch/system/config/page",method = RequestMethod.GET)
-    public String getBatchConfigPage(){
+    @RequestMapping(value = "/v1/dispatch/system/config/page", method = RequestMethod.GET)
+    public String getBatchConfigPage() {
         return "dispatch/batch_config";
     }
 
@@ -59,8 +58,42 @@ public class StaticPageController {
         return "dispatch/batch_group";
     }
 
-    @RequestMapping(value = "/v1/dispatch/batch/history",method = RequestMethod.GET)
-    public String getBatchHistory(HttpServletRequest request){
+    @RequestMapping(value = "/v1/dispatch/batch/history", method = RequestMethod.GET)
+    public String getBatchHistory(HttpServletRequest request) {
         return "dispatch/batch_history";
+    }
+
+    @RequestMapping(value = "/v1/dispatch/batch/group/monitoring/page", method = RequestMethod.GET)
+    public String getGroupMonitoring(HttpServletRequest request, Map<String, Object> map) {
+        map.put("batchDesc", request.getParameter("batch_desc"));
+        map.put("uuid", request.getParameter("uuid"));
+        return "dispatch/batch_group_status_monitoring";
+    }
+
+    @RequestMapping(value = "/v1/dispatch/batch/job/monitoring/page", method = RequestMethod.GET)
+    public String getJobMonitoring(HttpServletRequest request, Map<String, Object> map) {
+        map.put("groupDesc", request.getParameter("group_desc"));
+        map.put("batchDesc", request.getParameter("batch_desc"));
+        map.put("uuid", request.getParameter("uuid"));
+        map.put("gid", request.getParameter("gid"));
+        return "dispatch/batch_job_status_monitoring";
+    }
+
+
+
+    @RequestMapping(value = "/v1/dispatch/batch/group/running/monitoring/page", method = RequestMethod.GET)
+    public String getGroupRunningMonitoring(HttpServletRequest request, Map<String, Object> map) {
+        map.put("batchDesc", request.getParameter("batch_desc"));
+        map.put("batchId", request.getParameter("batch_id"));
+        return "dispatch/batch_group_status_running_monitoring";
+    }
+
+    @RequestMapping(value = "/v1/dispatch/batch/job/running/monitoring/page", method = RequestMethod.GET)
+    public String getJobRunningMonitoring(HttpServletRequest request, Map<String, Object> map) {
+        map.put("groupDesc", request.getParameter("group_desc"));
+        map.put("batchDesc", request.getParameter("batch_desc"));
+        map.put("batchId", request.getParameter("batch_id"));
+        map.put("gid", request.getParameter("gid"));
+        return "dispatch/batch_job_status_running_monitoring";
     }
 }

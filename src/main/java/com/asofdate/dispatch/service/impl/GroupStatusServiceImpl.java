@@ -100,7 +100,7 @@ public class GroupStatusServiceImpl implements GroupStatusService {
     * */
     public void setGroupRunning(String gid) {
         groupMap.put(gid, GroupStatus.Gid_STATUS_RUNNING);
-        batchGroupStatusDao.setGroupRunning(batchId,gid,GroupStatus.Gid_STATUS_RUNNING);
+        batchGroupStatusDao.setGroupRunning(batchId, gid, GroupStatus.Gid_STATUS_RUNNING);
     }
 
     /*
@@ -109,13 +109,13 @@ public class GroupStatusServiceImpl implements GroupStatusService {
     * */
     public void setGroupCompleted(String gid) {
         groupMap.put(gid, GroupStatus.Gid_STATUS_COMPLETED);
-        batchGroupStatusDao.setGroupEnd(batchId,gid,GroupStatus.Gid_STATUS_COMPLETED);
+        batchGroupStatusDao.setGroupEnd(batchId, gid, GroupStatus.Gid_STATUS_COMPLETED);
     }
 
     @Override
     public void setGroupError(String gid) {
         groupMap.put(gid, GroupStatus.Gid_STATUS_ERROR);
-        batchGroupStatusDao.setGroupEnd(batchId,gid,GroupStatus.Gid_STATUS_ERROR);
+        batchGroupStatusDao.setGroupEnd(batchId, gid, GroupStatus.Gid_STATUS_ERROR);
     }
 
 

@@ -9,6 +9,8 @@ import java.util.List;
  */
 public interface SysConfigService {
     List<SysConfigModel> findAll(String domainId);
-    int setValue(String domainId,String configId,String configValue);
-    String getValue(String domainId,String configId);
+
+    int setValue(String domainId, String configId, String configValue);
+
+    String getValue(String domainId, String configId);
 }
