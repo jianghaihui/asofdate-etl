@@ -15,4 +15,5 @@ public interface DomainService {
     int update(DomainModel domainModel);
     String delete(JSONArray jsonArray);
     int add(DomainModel domainModel);
+    DomainModel getDomainDetails(String domainId);
 }

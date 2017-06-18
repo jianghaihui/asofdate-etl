@@ -58,4 +58,9 @@ public class DomainServiecImpl implements DomainService {
     public int add(DomainModel domainModel) {
         return domainDao.add(domainModel);
     }
+
+    @Override
+    public DomainModel getDomainDetails(String domainId) {
+        return domainDao.getDomainDetails(domainId);
+    }
 }

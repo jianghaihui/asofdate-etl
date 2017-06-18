@@ -8,10 +8,13 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -63,5 +66,23 @@ public class DomainDaoImpl implements DomainDao {
                 domainModel.getDomain_status_id(),
                 domainModel.getCreate_user_id(),
                 domainModel.getDomain_modify_user());
+    }
+
+    @Override
+    public DomainModel getDomainDetails(String domainId) {
+        DomainModel domainModel = new DomainModel();
+        jdbcTemplate.query(SqlDefine.sys_rdbms_084, new RowCallbackHandler() {
+            @Override
+            public void processRow(ResultSet resultSet) throws SQLException {
+                domainModel.setDomain_id(domainId);
+                domainModel.setDomain_desc(resultSet.getString("domain_desc"));
+                domainModel.setDomain_status_desc(resultSet.getString("domain_status_desc"));
+                domainModel.setMaintance_date(resultSet.getString("maintance_date"));
+                domainModel.setCreate_user_id(resultSet.getString("create_user_id"));
+                domainModel.setDomain_modify_user(resultSet.getString("domain_modify_user"));
+                domainModel.setDomain_modify_date(resultSet.getString("domain_modify_date"));
+            }
+        }, domainId);
+        return domainModel;
     }
 }
