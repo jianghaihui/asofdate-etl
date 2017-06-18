@@ -1,6 +1,7 @@
 package com.asofdate.platform.dao;
 
 import com.asofdate.platform.model.DomainModel;
+import org.json.JSONArray;
 
 import java.util.List;
 
@@ -9,4 +10,8 @@ import java.util.List;
  */
 public interface DomainDao {
     List<DomainModel> findAll();
+    List<DomainModel> getAll();
+    int update(DomainModel domainModel);
+    String delete(JSONArray jsonArray);
+    int add(DomainModel domainModel);
 }

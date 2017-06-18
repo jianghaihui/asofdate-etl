@@ -4,59 +4,46 @@
     </div>
 </div>
 <div class="row subsystem-toolbar">
-    <div class="col-sm-12 col-md-12 col-lg-12">
-        <div class="pull-left">
-            <button style="margin-top: 8px;" onclick="AuthObj.auth()" class="btn btn-success btn-sm">
-                <i class="icon-search"> 授权</i>
-            </button>
-            <!--<button onclick="window.open('/v1/auth/handle/logs/download.xlsx')" class="btn btn-danger btn-sm" title="下载操作记录">-->
-            <!--<span class="icon-wrench"> 撤销</span>-->
-            <!--</button>-->
-        </div>
-        <div class="pull-right" style="height: 44px; line-height: 44px; width: 260px;">
-            <span style="text-align:right;width:80px;height: 30px; line-height: 30px; margin-top: 7px;display: inline"
-                  class="pull-left">&nbsp;&nbsp;所属域：</span>
-            <select id="h-auth-domain-list" class="form-control pull-right"
-                    style="width: 180px;height: 24px; line-height: 24px; margin-top: 10px;padding: 0px;">
-            </select>
-        </div>
+    <div style="height: 44px; line-height: 44px; width: 260px; display: inline">
+        <span style="font-size: 10px;font-weight: 600; height: 30px; line-height: 30px; margin-top: 7px;"
+              class="pull-left">&nbsp;&nbsp;所属域：</span>
+        <select id="h-auth-domain-list" class="form-control pull-left"
+                style="width: 180px;height: 24px; line-height: 24px; margin-top: 10px;padding: 0px;">
+        </select>
+        <span style="font-size: 10px;font-weight: 600;" class="pull-left">&nbsp;&nbsp;机构：</span>
+        <select id="h-auth-org-list" class="form-control pull-left"
+                style="width: 180px;height: 24px; line-height: 24px; margin-top: 10px; padding: 0px;">
+        </select>
+    </div>
+    <div class="pull-right">
+        <button style="margin-top: 8px;" onclick="AuthObj.auth()" class="btn btn-info btn-sm">
+            <i class="icon-search"> 授权</i>
+        </button>
     </div>
 </div>
 
 <div class="row">
-    <div class="col-sm-12 col-md-6 col-lg-7">
-        <div id="h-grant-user-table-show" style="border: #598f56 solid 1px;">
-            <div id="h-grant-toolbar-list" style="height: 24px; line-height: 24px;">
-                <span style="font-size: 10px;font-weight: 600;display: inline">机构:</span>
-                <select id="h-auth-org-list" class="form-control"
-                        style="height: 24px; line-height: 24px;padding: 0px; display: inline">
-                </select>
-                <!--<button onclick="AuthObj.search()" class="btn btn-success btn-xs" style="margin-left: 8px;"><i class="icon-search"> </i>查询</button>-->
-            </div>
-            <div id="h-grant-table-info" class="col-sm-12 col-md-12 col-lg-12">
-                <table id="h-grant-info-table-details"
-                       data-toggle="table"
-                       data-striped="true"
-                       data-url="/v1/auth/user/get"
-                       data-toolbar="#h-grant-toolbar-list"
-                       data-side-pagination="client"
-                       data-pagination="true"
-                       data-page-list="[20, 50, 100, 200]"
-                       data-click-to-select="true"
-                       data-search="true">
-                    <thead>
-                    <tr>
-                        <th data-field="state" data-radio="true"></th>
-                        <th data-field="user_id" data-sortable="true">账户</th>
-                        <th data-field="user_name">用户名称</th>
-                        <th data-field="org_unit_desc" data-sortable="true">机构</th>
-                        <th data-field="modify_user" data-sortable="true">修改人</th>
-                        <th data-field="modify_date" data-sortable="true">修改时间</th>
-                    </tr>
-                    </thead>
-                </table>
-            </div>
-        </div>
+    <div id="h-grant-user-table-show" class="col-sm-12 col-md-6 col-lg-7">
+        <table id="h-grant-info-table-details"
+               data-toggle="table"
+               data-striped="true"
+               data-url="/v1/auth/user"
+               data-side-pagination="client"
+               data-pagination="true"
+               data-page-list="[20, 50, 100, 200]"
+               data-click-to-select="true"
+               data-search="false">
+            <thead>
+            <tr>
+                <th data-field="state" data-radio="true"></th>
+                <th data-field="user_id" data-sortable="true">账户</th>
+                <th data-field="user_name">用户名称</th>
+                <th data-field="org_unit_desc" data-sortable="true">机构</th>
+                <th data-field="modify_user" data-sortable="true">修改人</th>
+                <th data-field="modify_date" data-sortable="true">修改时间</th>
+            </tr>
+            </thead>
+        </table>
     </div>
     <div class="col-sm-12 col-md-6 col-lg-5" style="padding-left: 0px;">
         <div id="h-grant-user-show-box" style="border: #598f56 solid 1px;">

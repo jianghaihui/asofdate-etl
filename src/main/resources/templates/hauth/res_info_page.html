@@ -5,36 +5,26 @@
 </div>
 
 <div class="row subsystem-toolbar">
-    <div class="col-sm-12 col-md-6 col-lg-4">
-        <div class="pull-left">
-            <button onclick="ResObj.add()" class="btn btn-success btn-sm">
-                <i class="icon-plus"> 新增</i>
-            </button>
-            <button onclick="ResObj.delete()" class="btn btn-danger btn-sm" title="删除机构信息">
-                <span class="icon-trash"> 删除</span>
-            </button>
-        </div>
-    </div>
-    <div class="col-sm-12 col-md-6 col-lg-4" style="padding-left: 0px;">
-        <div class="pull-left">
-            <button style="margin-top: 9px;" onclick="ResObj.edit()" class="btn btn-success btn-sm" title="删除机构信息">
-                <span class="icon-trash"> 编辑</span>
-            </button>
-        </div>
-    </div>
-    <div class="col-sm-12 col-md-6 col-lg-4" style="padding-left: 0px;">
-        <div class="pull-left">
-            <button style="margin-top: 9px;" onclick="ResObj.configTheme()" class="btn btn-success btn-sm"
-                    title="编辑机构信息">
-                <span class="icon-edit"> 配置</span>
-            </button>
-        </div>
+    <div class="pull-right">
+        <button onclick="ResObj.add()" class="btn btn-info btn-sm">
+            <i class="icon-plus"> 新增</i>
+        </button>
+        <button onclick="ResObj.edit()" class="btn btn-info btn-sm" title="编辑菜单信息">
+            <span class="icon-trash"> 编辑菜单</span>
+        </button>
+        <button onclick="ResObj.configTheme()" class="btn btn-info btn-sm"
+                title="配置菜单主题信息">
+            <span class="icon-edit"> 配置主题</span>
+        </button>
+        <button onclick="ResObj.delete()" class="btn btn-danger btn-sm" title="删除菜单信息">
+            <span class="icon-trash"> 删除</span>
+        </button>
     </div>
 </div>
 
-<div class="row">
+<div class="row" style="padding-top: 6px;">
     <div class="col-sm-12 col-md-6 col-lg-4">
-        <div id="h-resource-tree-info" style="border: #598f56 solid 1px;height: 300px;">
+        <div class="thumbnail" id="h-resource-tree-info">
             <div class="col-ms-12 col-md-12 col-lg-12">
                 <div style="border-bottom: #598f56 solid 2px;height: 44px; line-height: 44px;">
                     <div class="pull-left">
@@ -53,7 +43,7 @@
         </div>
     </div>
     <div class="col-sm-12 col-md-6 col-lg-4" style="padding-left: 0px;">
-        <div id="h-resource-details-info" style="border: #598f56 solid 1px;height: 300px;">
+        <div class="thumbnail" id="h-resource-details-info">
             <div class="col-ms-12 col-md-12 col-lg-12">
                 <div style="border-bottom: #598f56 solid 2px;height: 44px; line-height: 44px;">
                     <div class="pull-left">
@@ -113,7 +103,7 @@
         </div>
     </div>
     <div class="col-sm-12 col-md-6 col-lg-4" style="padding-left: 0px;">
-        <div id="h-resource-theme-info" style="border: #598f56 solid 1px;height: 300px;">
+        <div class="thumbnail" id="h-resource-theme-info">
             <div class="col-ms-12 col-md-12 col-lg-12">
                 <div style="border-bottom: #598f56 solid 2px;height: 44px; line-height: 44px;">
                     <div class="pull-left">
@@ -630,10 +620,10 @@
          * 高度填充全屏高度
          * */
         var hwindow = document.documentElement.clientHeight;
-        $("#h-resource-tree-info").height(hwindow - 130);
-        $("#h-resource-details-info").height(hwindow - 130);
-        $("#h-resource-theme-info").height(hwindow - 130);
-        $("#h-resource-list-info").height(hwindow - 204);
+        $("#h-resource-tree-info").height(hwindow - 139);
+        $("#h-resource-details-info").height(hwindow - 139);
+        $("#h-resource-theme-info").height(hwindow - 139);
+        $("#h-resource-list-info").height(hwindow - 214);
         ResObj.tree()
     });
 </script>
@@ -684,7 +674,7 @@
                    style="font-size: 14px; font-weight: 500;text-align: left">资源编码：</label>
             <div class="col-sm-12">
                 <input id="h-res-add-res-id" placeholder="1-30位字母、数字组成" name="res_id" type="text" class="form-control"
-                       style="height: 30px; line-height: 30px;">
+                       style="height: 30px; line-height: 30px;"/>
             </div>
         </div>
         <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 8px;">
@@ -692,7 +682,7 @@
                    style="font-size: 14px; font-weight: 500;text-align: left">资源名称：</label>
             <div class="col-sm-12">
                 <input id="h-res-add-res-name" placeholder="1-30位汉字、字母组成" type="text" class="form-control"
-                       name="res_name" style="height: 30px; line-height: 30px;">
+                       name="res_name" style="height: 30px; line-height: 30px;"/>
             </div>
         </div>
         <div class="col-sm-6 col-md-6 col-lg-6" style="display: none;margin-top: 8px;">
@@ -709,7 +699,7 @@
                    style="font-size: 14px; font-weight: 500;text-align: left">路由信息：</label>
             <div class="col-sm-12">
                 <input id="h-res-add-res-url" placeholder="如：/v1/auth/help" type="url" class="form-control"
-                       name="res_url" style="height: 30px; line-height: 30px;">
+                       name="res_url" style="height: 30px; line-height: 30px;"/>
             </div>
         </div>
         <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 8px;">
@@ -729,7 +719,7 @@
                    style="font-size: 14px; font-weight: 500;text-align: left">图标路径：</label>
             <div class="col-sm-12">
                 <input id="h-res-add-res-img" placeholder="如：/static/images/example.png" name="res_img" type="text"
-                       class="form-control" style="height: 30px; line-height: 30px;">
+                       class="form-control" style="height: 30px; line-height: 30px;"/>
             </div>
         </div>
         <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 8px;">
@@ -737,7 +727,7 @@
                    style="font-size: 14px; font-weight: 500;text-align: left">图标色彩：</label>
             <div class="col-sm-12">
                 <input id="h-res-add-res-bg-color" placeholder="#339999" name="res_bg_color" type="text"
-                       class="form-control" style="height: 30px; line-height: 30px;">
+                       class="form-control" style="height: 30px; line-height: 30px;"/>
             </div>
         </div>
         <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 8px;">
@@ -745,7 +735,7 @@
                    style="font-size: 14px; font-weight: 500;text-align: left">分组编号：</label>
             <div class="col-sm-12">
                 <input id="h-res-add-group-id" placeholder="菜单所属分组，请用数字表示" type="number" class="form-control"
-                       name="group_id" style="height: 30px; line-height: 30px;">
+                       name="group_id" style="height: 30px; line-height: 30px;"/>
             </div>
         </div>
         <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 8px;">
@@ -753,7 +743,7 @@
                    style="font-size: 14px; font-weight: 500;text-align: left">排序号：</label>
             <div class="col-sm-12">
                 <input id="h-res-add-sort-id" placeholder="所在分组的排序号，请用数字表示" name="sort_id" type="number"
-                       class="form-control" style="height: 30px; line-height: 30px;">
+                       class="form-control" style="height: 30px; line-height: 30px;"/>
             </div>
         </div>
     </form>
@@ -767,7 +757,7 @@
                    style="font-size: 14px; font-weight: 500;text-align: left">资源编码：</label>
             <div class="col-sm-12">
                 <input readonly="readonly" id="h-res-modify-res-id" placeholder="1-30位字母、数字组成" name="res_id" type="text"
-                       class="form-control" style="height: 30px; line-height: 30px;">
+                       class="form-control" style="height: 30px; line-height: 30px;"/>
             </div>
         </div>
         <div class="col-sm-12 col-md-12 col-lg-12" style="margin-top: 15px;">
@@ -775,7 +765,7 @@
                    style="font-size: 14px; font-weight: 500;text-align: left">资源名称：</label>
             <div class="col-sm-12">
                 <input id="h-res-modify-res-name" placeholder="1-30位汉字、字母组成" type="text" class="form-control"
-                       name="res_name" style="height: 30px; line-height: 30px;">
+                       name="res_name" style="height: 30px; line-height: 30px;"/>
             </div>
         </div>
     </form>
@@ -825,7 +815,7 @@
                    style="font-size: 14px; font-weight: 500;text-align: left">图标路径：</label>
             <div class="col-sm-12">
                 <input id="h-res-modify-res-img" placeholder="如：/static/images/example.png" name="res_img" type="text"
-                       class="form-control" style="height: 30px; line-height: 30px;">
+                       class="form-control" style="height: 30px; line-height: 30px;"/>
             </div>
         </div>
         <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 8px;">
@@ -833,7 +823,7 @@
                    style="font-size: 14px; font-weight: 500;text-align: left">图标色彩：</label>
             <div class="col-sm-12">
                 <input id="h-res-modify-res-bg-color" placeholder="#339999" name="res_bg_color" type="text"
-                       class="form-control" style="height: 30px; line-height: 30px;">
+                       class="form-control" style="height: 30px; line-height: 30px;"/>
             </div>
         </div>
         <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 8px;">
@@ -841,7 +831,7 @@
                    style="font-size: 14px; font-weight: 500;text-align: left">路由信息：</label>
             <div class="col-sm-12">
                 <input id="h-res-modify-res-url" placeholder="如：/v1/auth/help" type="url" class="form-control"
-                       name="res_url" style="height: 30px; line-height: 30px;">
+                       name="res_url" style="height: 30px; line-height: 30px;"/>
             </div>
         </div>
         <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 8px;">
@@ -849,7 +839,7 @@
                    style="font-size: 14px; font-weight: 500;text-align: left">分组编号：</label>
             <div class="col-sm-12">
                 <input id="h-res-modify-group-id" placeholder="菜单所属分组，请用数字表示" type="number" class="form-control"
-                       name="group_id" style="height: 30px; line-height: 30px;">
+                       name="group_id" style="height: 30px; line-height: 30px;"/>
             </div>
         </div>
         <div class="col-sm-6 col-md-6 col-lg-6" style="margin-top: 8px;">
@@ -857,7 +847,7 @@
                    style="font-size: 14px; font-weight: 500;text-align: left">排序号：</label>
             <div class="col-sm-12">
                 <input id="h-res-modify-sort-id" placeholder="所在分组的排序号，请用数字表示" name="sort_id" type="number"
-                       class="form-control" style="height: 30px; line-height: 30px;">
+                       class="form-control" style="height: 30px; line-height: 30px;"/>
             </div>
         </div>
     </form>
