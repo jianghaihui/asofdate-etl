@@ -3,7 +3,6 @@
         <span style="font-size: 16px;">系统资源管理</span>
     </div>
 </div>
-
 <div class="row subsystem-toolbar">
     <div class="pull-right">
         <button onclick="ResObj.add()" class="btn btn-info btn-sm">
@@ -21,9 +20,8 @@
         </button>
     </div>
 </div>
-
 <div class="row" style="padding-top: 6px;">
-    <div class="col-sm-12 col-md-6 col-lg-4">
+    <div class="col-sm-12 col-md-6 col-lg-5">
         <div class="thumbnail" id="h-resource-tree-info">
             <div class="col-ms-12 col-md-12 col-lg-12">
                 <div style="border-bottom: #598f56 solid 2px;height: 44px; line-height: 44px;">
@@ -42,7 +40,7 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-12 col-md-6 col-lg-4" style="padding-left: 0px;">
+    <div class="col-sm-12 col-md-6 col-lg-3" style="padding-left: 0px;">
         <div class="thumbnail" id="h-resource-details-info">
             <div class="col-ms-12 col-md-12 col-lg-12">
                 <div style="border-bottom: #598f56 solid 2px;height: 44px; line-height: 44px;">
@@ -75,7 +73,7 @@
                     </tr>
                     <tr style="height: 36px; line-height: 36px;">
                         <td class="col-sm-4 col-md-4 col-lg-4"
-                            style="text-align: right;padding-right: 15px;vertical-align: middle;">上级资源编码
+                            style="text-align: right;padding-right: 15px;vertical-align: middle;">上级编码
                         </td>
                         <td id="h-resource-show-up-id" class="col-sm-8 col-md-8 col-lg-8"
                             style="vertical-align: middle;padding-left: 15px;">-
@@ -399,7 +397,7 @@
             })
         },
         tree: function () {
-            $.getJSON("/v1/auth/resource/get", function (data) {
+            $.getJSON("/v1/auth/menu", function (data) {
                 if (data.length == 0) {
                     $.Notify({
                         title: "温馨提示",
