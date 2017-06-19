@@ -15,13 +15,13 @@ import java.util.List;
  * Created by hzwy23 on 2017/6/18.
  */
 @Repository
-public class MenuDaoImpl implements MenuDao{
+public class MenuDaoImpl implements MenuDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Override
     public List<MenuModel> findAll() {
         RowMapper<MenuModel> rowMapper = new BeanPropertyRowMapper<>(MenuModel.class);
-        return jdbcTemplate.query(SqlDefine.sys_rdbms_071,rowMapper);
+        return jdbcTemplate.query(SqlDefine.sys_rdbms_071, rowMapper);
     }
 }

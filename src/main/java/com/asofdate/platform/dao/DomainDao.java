@@ -10,9 +10,14 @@ import java.util.List;
  */
 public interface DomainDao {
     List<DomainModel> findAll();
+
     List<DomainModel> getAll();
+
     int update(DomainModel domainModel);
+
     String delete(JSONArray jsonArray);
+
     int add(DomainModel domainModel);
+
     DomainModel getDomainDetails(String domainId);
 }

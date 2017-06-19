@@ -9,6 +9,8 @@ import java.util.List;
  */
 public interface HandleLogDao {
     List<HandleLogModel> findAll(String domainId);
-    List<HandleLogModel> findAll(String domainId,Integer offset, Integer limit);
+
+    List<HandleLogModel> findAll(String domainId, Integer offset, Integer limit);
+
     Integer getTotal(String domainId);
 }

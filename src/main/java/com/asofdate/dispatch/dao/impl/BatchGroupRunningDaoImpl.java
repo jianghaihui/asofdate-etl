@@ -1,18 +1,14 @@
 package com.asofdate.dispatch.dao.impl;
 
 import com.asofdate.dispatch.dao.BatchGroupRunningDao;
-import com.asofdate.dispatch.model.BatchGroupHistoryModel;
 import com.asofdate.dispatch.model.BatchGroupStatusModel;
 import com.asofdate.sql.SqlDefine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -41,13 +37,13 @@ public class BatchGroupRunningDaoImpl implements BatchGroupRunningDao {
     }
 
     @Override
-    public BatchGroupStatusModel getDetails(String batchId,String gid){
+    public BatchGroupStatusModel getDetails(String batchId, String gid) {
         RowMapper<BatchGroupStatusModel> rowMapper = new BeanPropertyRowMapper<>(BatchGroupStatusModel.class);
-        BatchGroupStatusModel batchGroupStatusModel = jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_205,rowMapper,batchId,gid);
+        BatchGroupStatusModel batchGroupStatusModel = jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_205, rowMapper, batchId, gid);
 
         Integer totalCnt = getTotalJobs(batchId, gid);
 
-        Integer completeCnt = getCompleteJobs(batchId,gid);
+        Integer completeCnt = getCompleteJobs(batchId, gid);
 
         Integer ratio = 100;
 
@@ -55,7 +51,7 @@ public class BatchGroupRunningDaoImpl implements BatchGroupRunningDao {
             ratio = 100 * completeCnt / totalCnt;
         } else {
             String statusCd = batchGroupStatusModel.getStatus();
-            if (statusCd.equals("0") || statusCd.equals("1")){
+            if (statusCd.equals("0") || statusCd.equals("1")) {
                 ratio = 0;
             }
         }
@@ -71,12 +67,12 @@ public class BatchGroupRunningDaoImpl implements BatchGroupRunningDao {
 
     @Override
     public Integer getRatio(String batchId, String gid) {
-        Integer totalJobs = getTotalJobs(batchId,gid);
-        Integer completeJobs = getCompleteJobs(batchId,gid);
-        if ( totalJobs == 0 ){
+        Integer totalJobs = getTotalJobs(batchId, gid);
+        Integer completeJobs = getCompleteJobs(batchId, gid);
+        if (totalJobs == 0) {
             return 100;
         }
-        return 100 * completeJobs / totalJobs ;
+        return 100 * completeJobs / totalJobs;
     }
 
     /*

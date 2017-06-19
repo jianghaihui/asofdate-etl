@@ -11,9 +11,14 @@ import java.util.List;
  */
 public interface DomainService {
     JSONObject findAll(String domainId);
+
     List<DomainModel> getAll();
+
     int update(DomainModel domainModel);
+
     String delete(JSONArray jsonArray);
+
     int add(DomainModel domainModel);
+
     DomainModel getDomainDetails(String domainId);
 }

@@ -21,9 +21,9 @@ public class RoleController {
     private RoleService roleService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<RoleModel> findAll(HttpServletRequest request){
+    public List<RoleModel> findAll(HttpServletRequest request) {
         String domainId = request.getParameter("domain_id");
-        if (domainId == null || domainId.isEmpty()){
+        if (domainId == null || domainId.isEmpty()) {
             domainId = JwtService.getConnectUser(request).getString("DomainId");
         }
         return roleService.findAll(domainId);

@@ -22,15 +22,15 @@ public class HandleLogController {
     private HandleLogService handleLogService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String getAll(HttpServletRequest request){
+    public String getAll(HttpServletRequest request) {
         String domainId = JwtService.getConnectUser(request).getString("DomainId");
         String offset = request.getParameter("offset");
         String limit = request.getParameter("limit");
-        List<HandleLogModel> list = handleLogService.findAll(domainId,Integer.parseInt(offset),Integer.parseInt(limit));
+        List<HandleLogModel> list = handleLogService.findAll(domainId, Integer.parseInt(offset), Integer.parseInt(limit));
         JSONObject jsonObject = new JSONObject();
         Integer total = handleLogService.getTotal(domainId);
-        jsonObject.put("total",total);
-        jsonObject.put("rows",list);
+        jsonObject.put("total", total);
+        jsonObject.put("rows", list);
         return jsonObject.toString();
     }
 }

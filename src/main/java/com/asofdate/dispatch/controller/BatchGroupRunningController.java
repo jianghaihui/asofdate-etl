@@ -20,23 +20,23 @@ public class BatchGroupRunningController {
     private BatchGroupRunningService batchGroupRunningService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<BatchGroupStatusModel> findAll(HttpServletRequest request){
+    public List<BatchGroupStatusModel> findAll(HttpServletRequest request) {
         String batchId = request.getParameter("batch_id");
         return batchGroupRunningService.findAll(batchId);
     }
 
-    @RequestMapping(value = "/ratio",method = RequestMethod.GET)
-    public Integer getRatio(HttpServletRequest request){
+    @RequestMapping(value = "/ratio", method = RequestMethod.GET)
+    public Integer getRatio(HttpServletRequest request) {
         String batchId = request.getParameter("batch_id");
         String gid = request.getParameter("gid");
-        return batchGroupRunningService.getRatio(batchId,gid);
+        return batchGroupRunningService.getRatio(batchId, gid);
     }
 
-    @RequestMapping(value = "/details",method = RequestMethod.GET)
-    public BatchGroupStatusModel getDetails(HttpServletRequest request){
+    @RequestMapping(value = "/details", method = RequestMethod.GET)
+    public BatchGroupStatusModel getDetails(HttpServletRequest request) {
         String batchId = request.getParameter("batch_id");
         String gid = request.getParameter("gid");
-        return batchGroupRunningService.getDetails(batchId,gid);
+        return batchGroupRunningService.getDetails(batchId, gid);
     }
 
 }

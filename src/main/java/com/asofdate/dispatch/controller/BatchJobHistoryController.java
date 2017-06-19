@@ -19,9 +19,9 @@ public class BatchJobHistoryController {
     private BatchJobHistoryService batchJobHistoryService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List getJob(HttpServletRequest request){
+    public List getJob(HttpServletRequest request) {
         String uuid = request.getParameter("uuid");
         String gid = request.getParameter("gid");
-        return batchJobHistoryService.findAll(uuid,gid);
+        return batchJobHistoryService.findAll(uuid, gid);
     }
 }

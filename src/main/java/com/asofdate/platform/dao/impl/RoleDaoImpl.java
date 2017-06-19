@@ -22,6 +22,6 @@ public class RoleDaoImpl implements RoleDao {
     @Override
     public List<RoleModel> findAll(String domainId) {
         RowMapper<RoleModel> rowMapper = new BeanPropertyRowMapper<>(RoleModel.class);
-        return jdbcTemplate.query(SqlDefine.sys_rdbms_028,rowMapper,domainId);
+        return jdbcTemplate.query(SqlDefine.sys_rdbms_028, rowMapper, domainId);
     }
 }

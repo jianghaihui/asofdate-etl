@@ -21,9 +21,9 @@ public class OrgController {
     private OrgService orgService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List findAll(HttpServletRequest request){
+    public List findAll(HttpServletRequest request) {
         String domainId = request.getParameter("domain_id");
-        if (domainId == null || domainId.isEmpty()){
+        if (domainId == null || domainId.isEmpty()) {
             domainId = JwtService.getConnectUser(request).getString("DomainId");
         }
         return orgService.findAll(domainId);

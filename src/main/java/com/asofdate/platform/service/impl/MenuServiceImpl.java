@@ -12,7 +12,7 @@ import java.util.List;
  * Created by hzwy23 on 2017/6/18.
  */
 @Service
-public class MenuServiceImpl  implements MenuService{
+public class MenuServiceImpl implements MenuService {
     @Autowired
     private MenuDao menuDao;
 

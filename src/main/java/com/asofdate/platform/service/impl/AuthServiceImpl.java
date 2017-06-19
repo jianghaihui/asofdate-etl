@@ -15,13 +15,13 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Service
 public class AuthServiceImpl implements AuthService {
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
     private final String READ_MODE = "r";
     private final String WRITE_MODE = "w";
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-    private Integer checkMode(String mode){
-        if ( mode.toLowerCase().equals(READ_MODE) ) {
+    private Integer checkMode(String mode) {
+        if (mode.toLowerCase().equals(READ_MODE)) {
             return 1;
         } else if (mode.toLowerCase().equals(WRITE_MODE)) {
             return 2;
@@ -30,31 +30,31 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
-    private JSONObject result(Boolean flag,String message){
+    private JSONObject result(Boolean flag, String message) {
         JSONObject ret = new JSONObject();
-        ret.put("status",flag);
-        ret.put("message",message);
+        ret.put("status", flag);
+        ret.put("message", message);
         return ret;
     }
 
     @Override
     public JSONObject domainAuth(HttpServletRequest request, String domainId, String mode) {
         String userDomainId = JwtService.getConnectUser(request).getString("DomainId");
-        if (userDomainId.equals(domainId)){
-            return result(true,"success");
+        if (userDomainId.equals(domainId)) {
+            return result(true, "success");
         }
         try {
-            Integer level = jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_010,Integer.class,domainId,userDomainId);
-            if (level == 2){
-                return result(true,"success");
-            } else if (level == 1 && checkMode(mode) == 2){
-                return result(false,"只有读取权限,没有写入权限");
-            } else if (level == 1 && checkMode(mode) == 1){
-                return result(true,"success");
+            Integer level = jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_010, Integer.class, domainId, userDomainId);
+            if (level == 2) {
+                return result(true, "success");
+            } else if (level == 1 && checkMode(mode) == 2) {
+                return result(false, "只有读取权限,没有写入权限");
+            } else if (level == 1 && checkMode(mode) == 1) {
+                return result(true, "success");
             }
-            return result(false,"您没有被授权访问这个域");
-        } catch (Exception e){
-            return result(false,"您没有被授权访问域 ["+domainId+"]");
+            return result(false, "您没有被授权访问这个域");
+        } catch (Exception e) {
+            return result(false, "您没有被授权访问域 [" + domainId + "]");
         }
     }
 

@@ -1,8 +1,6 @@
 package com.asofdate.platform.service;
 
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,5 +9,6 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface AuthService {
     JSONObject domainAuth(HttpServletRequest request, String domainId, String mode);
+
     JSONObject basicAuth(HttpServletRequest request);
 }

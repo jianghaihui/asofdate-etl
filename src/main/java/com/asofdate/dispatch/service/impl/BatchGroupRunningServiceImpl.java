@@ -23,11 +23,11 @@ public class BatchGroupRunningServiceImpl implements BatchGroupRunningService {
 
     @Override
     public Integer getRatio(String batchId, String gid) {
-        return batchGroupRunningDao.getRatio(batchId,gid);
+        return batchGroupRunningDao.getRatio(batchId, gid);
     }
 
     @Override
     public BatchGroupStatusModel getDetails(String batchId, String gid) {
-        return batchGroupRunningDao.getDetails(batchId,gid);
+        return batchGroupRunningDao.getDetails(batchId, gid);
     }
 }

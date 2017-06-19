@@ -25,13 +25,13 @@ public class ShareDomainDaoImpl implements ShareDomainDao {
     @Override
     public List<ShareDomainModel> findAll(String domainId) {
         RowMapper<ShareDomainModel> rowMapper = new BeanPropertyRowMapper<>(ShareDomainModel.class);
-        return jdbcTemplate.query(SqlDefine.sys_rdbms_083,rowMapper,domainId);
+        return jdbcTemplate.query(SqlDefine.sys_rdbms_083, rowMapper, domainId);
     }
 
     @Override
     public List<ShareDomainModel> unShareTarget(String domainId) {
         RowMapper<ShareDomainModel> rowMapper = new BeanPropertyRowMapper<>(ShareDomainModel.class);
-        return jdbcTemplate.query(SqlDefine.sys_rdbms_085,rowMapper,domainId,domainId);
+        return jdbcTemplate.query(SqlDefine.sys_rdbms_085, rowMapper, domainId, domainId);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ShareDomainDaoImpl implements ShareDomainDao {
     @Transactional
     @Override
     public int delete(JSONArray jsonArray) {
-        for (int i=0; i < jsonArray.length(); i++){
+        for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject m = (JSONObject) jsonArray.get(i);
             jdbcTemplate.update(SqlDefine.sys_rdbms_087,
                     m.getString("uuid"));

@@ -18,6 +18,6 @@ public class BatchJobHistoryServiceImpl implements BatchJobHistoryService {
 
     @Override
     public List<BatchJobHistoryModel> findAll(String id, String gid) {
-        return batchJobHistoryDao.findAll(id,gid);
+        return batchJobHistoryDao.findAll(id, gid);
     }
 }

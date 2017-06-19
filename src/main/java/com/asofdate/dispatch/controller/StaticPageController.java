@@ -80,7 +80,6 @@ public class StaticPageController {
     }
 
 
-
     @RequestMapping(value = "/v1/dispatch/batch/group/running/monitoring/page", method = RequestMethod.GET)
     public String getGroupRunningMonitoring(HttpServletRequest request, Map<String, Object> map) {
         map.put("batchDesc", request.getParameter("batch_desc"));

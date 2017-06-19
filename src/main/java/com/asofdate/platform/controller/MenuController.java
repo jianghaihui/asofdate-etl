@@ -20,7 +20,7 @@ public class MenuController {
     private MenuService menuService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<MenuModel> findAll(HttpServletRequest request){
+    public List<MenuModel> findAll(HttpServletRequest request) {
         return menuService.findAll();
     }
 }

@@ -15,6 +15,7 @@ import java.util.List;
 public class HandleLogServiceImpl implements HandleLogService {
     @Autowired
     private HandleLogDao handleLogDao;
+
     @Override
     public List<HandleLogModel> findAll(String domainId) {
         return handleLogDao.findAll(domainId);
@@ -22,7 +23,7 @@ public class HandleLogServiceImpl implements HandleLogService {
 
     @Override
     public List<HandleLogModel> findAll(String domainId, Integer offset, Integer limit) {
-        return handleLogDao.findAll(domainId,offset,limit);
+        return handleLogDao.findAll(domainId, offset, limit);
     }
 
     @Override

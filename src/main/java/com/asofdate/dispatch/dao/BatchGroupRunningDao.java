@@ -1,7 +1,6 @@
 package com.asofdate.dispatch.dao;
 
 import com.asofdate.dispatch.model.BatchGroupStatusModel;
-import com.asofdate.dispatch.model.GroupStatus;
 
 import java.util.List;
 
@@ -10,6 +9,8 @@ import java.util.List;
  */
 public interface BatchGroupRunningDao {
     List<BatchGroupStatusModel> findAll(String domainId);
-    Integer getRatio(String batchId,String gid);
-    BatchGroupStatusModel getDetails(String batchId,String gid);
+
+    Integer getRatio(String batchId, String gid);
+
+    BatchGroupStatusModel getDetails(String batchId, String gid);
 }

@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserModel> findAll(String domainId, String orgId, String statusCd) {
-        return userDao.findAll(domainId,orgId,statusCd);
+        return userDao.findAll(domainId, orgId, statusCd);
     }
 
     @Override
@@ -50,6 +50,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int changeStatus(String userId, String status) {
-        return userDao.changeStatus(userId,status);
+        return userDao.changeStatus(userId, status);
     }
 }

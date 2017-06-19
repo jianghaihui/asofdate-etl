@@ -25,7 +25,7 @@ public class BatchJobStatusDaoImpl implements BatchJobStatusDao {
         for (Map.Entry<String, Integer> m : map.entrySet()) {
             String gid = JoinCode.getFirst(m.getKey());
             String tid = JoinCode.getLast(m.getKey());
-            jdbcTemplate.update(SqlDefine.sys_rdbms_167, batchId, m.getKey(), m.getValue(), gid,tid);
+            jdbcTemplate.update(SqlDefine.sys_rdbms_167, batchId, m.getKey(), m.getValue(), gid, tid);
         }
         return 1;
     }

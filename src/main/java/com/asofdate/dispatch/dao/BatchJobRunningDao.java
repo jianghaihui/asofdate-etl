@@ -1,8 +1,6 @@
 package com.asofdate.dispatch.dao;
 
-import com.asofdate.dispatch.model.BatchJobHistoryModel;
 import com.asofdate.dispatch.model.BatchJobStatusModel;
-import com.asofdate.dispatch.model.GroupStatus;
 
 import java.util.List;
 
@@ -11,5 +9,6 @@ import java.util.List;
  */
 public interface BatchJobRunningDao {
     List<BatchJobStatusModel> findAll(String batchId, String gid);
-    BatchJobStatusModel getDetails(String batchId,String gid,String tid);
+
+    BatchJobStatusModel getDetails(String batchId, String gid, String tid);
 }

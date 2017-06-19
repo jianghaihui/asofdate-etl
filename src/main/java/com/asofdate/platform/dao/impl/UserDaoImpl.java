@@ -31,29 +31,29 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<UserModel> findAll(String domainid) {
         RowMapper<UserModel> rowMapper = new BeanPropertyRowMapper<>(UserModel.class);
-        return jdbcTemplate.query(SqlDefine.sys_rdbms_017,rowMapper,domainid);
+        return jdbcTemplate.query(SqlDefine.sys_rdbms_017, rowMapper, domainid);
     }
 
     @Override
     public List<UserModel> findAll(String domainId, String orgId, String statusCd) {
         List<UserModel> list = findAll(domainId);
-        if ( "0".equals(statusCd) || "1".equals(statusCd) ){
-            for(int i=0; i < list.size(); i++){
-                if (!statusCd.equals(list.get(i).getStatus_cd())){
+        if ("0".equals(statusCd) || "1".equals(statusCd)) {
+            for (int i = 0; i < list.size(); i++) {
+                if (!statusCd.equals(list.get(i).getStatus_cd())) {
                     list.remove(i);
                     i--;
                 }
             }
         }
-        if (orgId != null && !orgId.isEmpty()){
-            List<OrgModel> orgList = orgDao.findSub(domainId,orgId);
+        if (orgId != null && !orgId.isEmpty()) {
+            List<OrgModel> orgList = orgDao.findSub(domainId, orgId);
             Set<String> set = new HashSet<>();
-            for(OrgModel om : orgList){
+            for (OrgModel om : orgList) {
                 set.add(om.getOrg_id());
             }
             set.add(orgId);
-            for(int i=0; i < list.size(); i++){
-                if (!set.contains(list.get(i).getOrg_unit_id())){
+            for (int i = 0; i < list.size(); i++) {
+                if (!set.contains(list.get(i).getOrg_unit_id())) {
                     list.remove(i);
                     i--;
                 }

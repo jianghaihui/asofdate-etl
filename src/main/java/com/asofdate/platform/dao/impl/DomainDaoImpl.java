@@ -51,9 +51,9 @@ public class DomainDaoImpl implements DomainDao {
     @Transactional
     @Override
     public String delete(JSONArray jsonArray) {
-        for(int i=0; i< jsonArray.length(); i++){
-            String domainId = ((JSONObject)jsonArray.get(i)).getString("domain_id");
-            jdbcTemplate.update(SqlDefine.sys_rdbms_037,domainId);
+        for (int i = 0; i < jsonArray.length(); i++) {
+            String domainId = ((JSONObject) jsonArray.get(i)).getString("domain_id");
+            jdbcTemplate.update(SqlDefine.sys_rdbms_037, domainId);
         }
         return "success";
     }

@@ -11,11 +11,16 @@ import java.util.List;
  */
 public interface UserService {
     List<UserModel> findAll(String domainid);
-    List<UserModel> findAll(String domainId,String orgId,String statusCd);
+
+    List<UserModel> findAll(String domainId, String orgId, String statusCd);
 
     int add(UserModel userModel);
+
     int delete(JSONArray jsonArray);
+
     int update(UserModel userModel);
+
     int changePassword(JSONObject jsonObject);
-    int changeStatus(String userId,String status);
+
+    int changeStatus(String userId, String status);
 }

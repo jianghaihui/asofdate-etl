@@ -10,9 +10,12 @@ import java.util.List;
  */
 public interface ShareDomainDao {
     List<ShareDomainModel> findAll(String domainId);
+
     List<ShareDomainModel> unShareTarget(String domainId);
 
     int add(ShareDomainModel shareDomainModel);
+
     int delete(JSONArray jsonArray);
+
     int update(ShareDomainModel shareDomainModel);
 }

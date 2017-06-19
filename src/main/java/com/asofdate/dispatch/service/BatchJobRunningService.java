@@ -9,5 +9,6 @@ import java.util.List;
  */
 public interface BatchJobRunningService {
     List<BatchJobStatusModel> findAll(String batchId, String gid);
-    BatchJobStatusModel getDetails(String batchId,String gid,String tid);
+
+    BatchJobStatusModel getDetails(String batchId, String gid, String tid);
 }
