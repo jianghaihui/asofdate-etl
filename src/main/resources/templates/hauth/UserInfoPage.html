@@ -10,19 +10,17 @@
         <select id="h-user-domain-list" class="form-control pull-left"
                 style="width: 180px;height: 24px; line-height: 24px; margin-top: 10px;padding: 0px;">
         </select>
-
         <span style="font-size: 10px;font-weight: 600;" class="pull-left">&nbsp;&nbsp;机构:</span>
         <select id="h-user-org-list" class="form-control pull-left"
-                style="width: 180px;height: 24px; line-height: 24px; margin-top: 10px; padding: 0px;">
+                style="width: 280px;height: 24px; line-height: 24px; margin-top: 10px; padding: 0px;">
         </select>
         <span style="font-size: 10px;font-weight: 600;" class="pull-left">&nbsp;&nbsp;状态:</span>
         <select id="h-user-status-list" class="form-control pull-left"
-                style="width: 180px;height: 24px; line-height: 24px; margin-top: 10px;padding: 0px;">
+                style="width: 120px;height: 24px; line-height: 24px; margin-top: 10px;padding: 0px;">
             <option value="0">正常</option>
             <option value="1">失效</option>
         </select>
-        <button onclick="UserObj.search()" class="btn btn-info btn-xs pull-left" style="margin-left: 8px; margin-top: 10px;"><i
-                class="icon-search"> </i>查询
+        <button onclick="UserObj.search()" class="btn btn-default btn-xs pull-left" style="margin-left: 8px; margin-top: 11px;">查询
         </button>
     </div>
     <div class="pull-right">
@@ -106,7 +104,7 @@
             /*
              * 初始化默认域下的机构树信息
              * */
-            $.getJSON("/v1/auth/resource/org/get", {domain_id: data.domain_id}, function (data) {
+            $.getJSON("/v1/auth/org", {domain_id: data.domain_id}, function (data) {
                 var arr = new Array()
                 $(data).each(function (index, element) {
                     var ijs = {}
@@ -119,7 +117,7 @@
                 $("#h-user-org-list").Hselect({
                     data: arr,
                     height: "24px",
-                    width: "180px",
+                    width: "280px",
                 });
             });
 
@@ -137,7 +135,7 @@
 
                     var did = $("#h-user-domain-list").val();
 
-                    $.getJSON("/v1/auth/resource/org/get", {domain_id: did}, function (data) {
+                    $.getJSON("/v1/auth/org", {domain_id: did}, function (data) {
                         var arr = new Array()
                         $(data).each(function (index, element) {
                             var ijs = {}
@@ -150,7 +148,7 @@
                         $("#h-user-org-list").Hselect({
                             data: arr,
                             height: "24px",
-                            width: "180px",
+                            width: "280px",
                         });
                     });
                 }
@@ -161,7 +159,7 @@
         // 机构状态选择框
         $("#h-user-status-list").Hselect({
             height: "24px",
-            width: "180px",
+            width: "120px",
             value: 0,
         })
     });
@@ -170,9 +168,9 @@
         add: function () {
             var getDomainInfo = function () {
 
-                $.getJSON("/v1/auth/domain/owner", function (data) {
+                $.getJSON("/v1/auth/domain/self/owner", function (data) {
                     var arr = new Array()
-                    $(data).each(function (index, element) {
+                    $(data.owner_list).each(function (index, element) {
                         var ijs = {}
                         ijs.id = element.domain_id
                         ijs.text = element.domain_desc
@@ -183,9 +181,10 @@
                     $("#h-domain-up-id").Hselect({
                         data: arr,
                         height: "30px",
+                        value:data.domain_id,
                         onclick: function () {
                             var domain_id = $("#h-domain-up-id").val()
-                            $.getJSON("/v1/auth/resource/org/get", {domain_id: domain_id}, function (data) {
+                            $.getJSON("/v1/auth/org", {domain_id: domain_id}, function (data) {
                                 var arr = new Array()
                                 $(data).each(function (index, element) {
                                     var ijs = {}
@@ -201,8 +200,22 @@
                             })
                         },
                     });
-                    var domain_id = $("#h-user-domain-list").val();
-                    $("#h-domain-up-id").val(domain_id).trigger("change");
+
+
+                    $.getJSON("/v1/auth/org", {domain_id: data.domain_id}, function (data) {
+                        var arr = new Array()
+                        $(data).each(function (index, element) {
+                            var ijs = {}
+                            ijs.id = element.org_id;
+                            ijs.text = element.org_desc;
+                            ijs.upId = element.up_org_id;
+                            arr.push(ijs)
+                        });
+                        $("#h-add-org-unit-list").Hselect({
+                            data: arr,
+                            height: "30px",
+                        })
+                    })
                 });
             };
 
@@ -213,7 +226,7 @@
                 preprocess: getDomainInfo,
                 callback: function (hmode) {
                     $.HAjaxRequest({
-                        url: "/v1/auth/user/post",
+                        url: "/v1/auth/user",
                         type: "post",
                         data: $("#h-user-add-info").serialize(),
                         dataType: "json",
@@ -404,6 +417,10 @@
                 type: "get",
                 data: {org_id: org_id, status_id: status_id, domain_id: did},
                 success: function (data) {
+                    $.Notify({
+                        message:"查询已完成",
+                        type:"success",
+                    });
                     $("#h-user-info-table-details").bootstrapTable('load', data)
                 },
             })

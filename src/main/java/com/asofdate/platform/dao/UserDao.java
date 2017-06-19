@@ -11,7 +11,6 @@ import java.util.List;
  */
 public interface UserDao {
     List<UserModel> findAll(String domainid);
-    List<UserModel> findAll(String domainId,String orgId);
     List<UserModel> findAll(String domainId,String orgId,String statusCd);
 
     int add(UserModel userModel);

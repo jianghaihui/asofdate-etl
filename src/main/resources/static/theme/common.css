@@ -251,15 +251,6 @@ li {
     display: none;
 }
 
-.h-td-btn {
-    height: 14px;
-    line-height: 14px;
-    vertical-align: middle;
-    text-align: center;
-    border: none;
-    outline: none;
-}
-
 .h-td-btn:hover {
     cursor: pointer;
 }
@@ -281,13 +272,6 @@ li {
     -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
     -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-}
-
-.h-btn-sm {
-    height: 26px;
-    line-height: 26px;
-    padding: 0px 8px;
-    min-width: 42px;
 }
 
 .h-label {

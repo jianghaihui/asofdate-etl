@@ -43,7 +43,7 @@
                 <th data-sortable="true" data-field="arg_desc">参数描述</th>
                 <th data-sortable="true" data-align="center" data-field="arg_type_desc">参数类型</th>
                 <th data-sortable="true" data-align="right" data-field="arg_value">参数初始值</th>
-                <th data-sortable="true" data-align="right" data-field="bind_as_of_date" data-formatter="DispatchArgumentDefineObj.formatter2">是否绑定批次</th>
+                <th data-sortable="true" data-align="right" data-field="bind_as_of_date" data-formatter="DispatchArgumentDefineObj.formatter2">是否绑定批次日期</th>
                 <th data-align="center" data-field="create_user">创建人</th>
                 <th data-align="center" data-field="create_date">创建时间</th>
                 <th data-align="center" data-field="modify_user">修改人</th>
@@ -101,7 +101,6 @@
                     $bind.Hselect({
                         height:"30px",
                     });
-
 
                     $("#h-dispatch-argument-define-form").find("select[name='arg_type']").Hselect({
                         height: "30px",

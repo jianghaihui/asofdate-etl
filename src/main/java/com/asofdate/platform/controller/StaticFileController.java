@@ -1,6 +1,7 @@
 package com.asofdate.platform.controller;
 
 import com.asofdate.platform.model.DomainModel;
+import com.asofdate.platform.service.AuthService;
 import com.asofdate.platform.service.DomainService;
 import com.asofdate.utils.Hret;
 import org.json.JSONObject;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import sun.misc.Request;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +23,9 @@ import java.util.Map;
 public class StaticFileController {
     @Autowired
     private DomainService domainService;
+
+    @Autowired
+    private AuthService authService;
 
     @RequestMapping(value = "/v1/help/system/help",method = RequestMethod.GET)
     public String getSysHelp(){
@@ -62,12 +67,16 @@ public class StaticFileController {
         return "hauth/res_info_page";
     }
 
+
     @RequestMapping(value = "/v1/auth/domain/share/page",method = RequestMethod.GET)
     public String getDomainSharePage(HttpServletResponse response, HttpServletRequest request,Map<String,Object> map){
         String domainId =request.getParameter("domain_id");
-        if (domainId == null || domainId.isEmpty()){
-            response.setStatus(421);
-            return Hret.error(421,"域信息格式不正确", JSONObject.NULL);
+
+        JSONObject o = authService.domainAuth(request,domainId,"r");
+        if (!o.getBoolean("status")){
+            response.setStatus(423);
+            map.put("domainId",domainId);
+            return "hauth/NoAuth";
         }
         DomainModel domainModel = domainService.getDomainDetails(domainId);
 

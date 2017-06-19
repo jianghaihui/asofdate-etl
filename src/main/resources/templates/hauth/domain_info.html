@@ -36,7 +36,7 @@
                     $.Notify({
                         title: "温馨提示：",
                         message: "您没有被授权访问这个域。",
-                        type: "info",
+                        type: "danger",
                     })
                 }
             })
@@ -44,7 +44,7 @@
         getDomainInfo: function () {
             $("#HdomainInfoTable").bootstrapTable({
                 url: '/v1/auth/domain',
-                height: document.documentElement.clientHeight - 76,
+                height: document.documentElement.clientHeight - 142,
                 uniqueId: 'domain_id',
                 striped: true,
                 pagination: true,
@@ -275,15 +275,13 @@
                 var preHand = function () {
                     var domainid = tr.domain_id;
                     var domainDesc = tr.domain_desc;
-                    var domainStatus = tr.domain_status == "正常" ? 0 : 1;
                     $("#h-domain-add-tpl").find("input[name='domain_id']").val(domainid).attr("readonly", "readonly");
                     $("#h-domain-add-tpl").find("input[name='domain_desc']").val(domainDesc);
 
                     $("#h-domain-add-status").Hselect({
                         height: "30px",
+                        value: tr.domain_status_cd,
                     });
-                    $("#h-domain-add-status").val(domainStatus).trigger("change");
-
                 };
                 $.Hmodal({
                     callback: editMenu,

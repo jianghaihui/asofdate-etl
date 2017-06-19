@@ -64,25 +64,27 @@
             </table>
         </div>
     </div>
-    <div id="h-domain-share-info-details" class="col-sm-12 col-md-7 col-lg-9" style="padding-left: 0px;">
+    <div id="h-domain-share-info-details"
+         class="col-sm-12 col-md-7 col-lg-9"
+         style="padding-left: 0px;">
         <table id="h-domain-share-info-table"
                data-toggle="table"
                data-side-pagination="client"
                data-pagination="true"
                data-striped="true"
-               data-url="/v1/auth/domain/share/get"
+               data-url="/v1/auth/share/domain"
                data-page-list="[20, 50, 100, 200]"
                data-search="false">
             <thead>
             <tr>
                 <th data-field="state" data-checkbox="true"></th>
-                <th data-field="target_domain_id">域编码</th>
+                <th data-align="center" data-field="target_domain_id">域编码</th>
                 <th data-field="domain_name">域描述</th>
-                <th data-field="create_date">创建日期</th>
-                <th data-field="create_user">创建人</th>
-                <th data-field="modify_date">修改日期</th>
-                <th data-field="modify_user">修改人</th>
-                <th data-field="auth_level" data-formatter="DomainShareObj.authformatter">共享模式</th>
+                <th data-align="center" data-field="create_date">创建日期</th>
+                <th data-align="center" data-field="create_user">创建人</th>
+                <th data-align="center" data-field="modify_date">修改日期</th>
+                <th data-align="center" data-field="modify_user">修改人</th>
+                <th data-align="center" data-field="authorization_level" data-formatter="DomainShareObj.authformatter">共享模式</th>
             </tr>
             </thead>
         </table>
@@ -101,7 +103,7 @@
                     //获取列表中被授权访问的域信息
                     var arr = new Array()
                     var domain_id = $("#h-domain-share-did").html()
-                    $.getJSON("/v1/auth/domain/share/unauth", {domain_id: domain_id}, function (data) {
+                    $.getJSON("/v1/auth/share/domain/unshare", {domain_id: domain_id}, function (data) {
                         $(data).each(function (index, element) {
                             if (element.domain_id != domain_id) {
                                 var ijs = {}
@@ -126,9 +128,9 @@
                     var target_domain_id = $("#h-domain-share-target-domain-id").val();
                     var auth_level = $("#h-domain-share-auth-level").val();
                     $.HAjaxRequest({
-                        url: "/v1/auth/domain/share/post",
+                        url: "/v1/auth/share/domain",
                         type: "post",
-                        data: {domain_id: domain_id, target_domain_id: target_domain_id, auth_level: auth_level},
+                        data: {domain_id: domain_id, target_domain_id: target_domain_id, authorization_level: auth_level},
                         success: function () {
                             $(hmode).remove()
                             $.Notify({
@@ -162,22 +164,22 @@
                         var $select = $("#h-domain-share-modify-auth-level");
                         $select.Hselect({
                             height: "30px",
+                            value:sel[0].authorization_level,
                         });
-                        $select.val(sel[0].auth_level).trigger("change");
                     },
                     callback: function (hmode) {
                         var uuid = sel[0].uuid;
                         var auth_level = $("#h-domain-share-modify-auth-level").val();
                         $.HAjaxRequest({
-                            url: "/v1/auth/domain/share/put",
+                            url: "/v1/auth/share/domain",
                             type: "put",
-                            data: {uuid: uuid, auth_level: auth_level, domain_id: $("#h-domain-share-did").html()},
+                            data: {uuid: uuid, authorization_level: auth_level, domain_id: $("#h-domain-share-did").html()},
                             success: function () {
                                 $.Notify({
                                     title: "操作成功",
                                     message: "修改域共享模式成功",
                                     type: "success",
-                                })
+                                });
                                 $(hmode).remove()
                                 $('#h-domain-share-info-table').bootstrapTable('refresh');
                             },
@@ -199,7 +201,7 @@
                 callback: function () {
                     var sel = $('#h-domain-share-info-table').bootstrapTable('getSelections');
                     $.HAjaxRequest({
-                        url: "/v1/auth/domain/share/delete",
+                        url: "/v1/auth/share/domain/delete",
                         type: "Post",
                         data: {JSON: JSON.stringify(sel), domain_id: $("#h-domain-share-did").html()},
                         success: function () {
@@ -256,11 +258,11 @@
                         return
                     }
                     //刷新左侧公告栏信息
-                    $.getJSON("/v1/auth/domain/row/details", {domain_id: domain_id}, function (data) {
+                    $.getJSON("/v1/auth/domain/details", {domain_id: domain_id}, function (data) {
                         $(data).each(function (index, element) {
                             $("#h-domain-share-did").html(element.domain_id)
                             $("#h-domain-share-did-name").html(element.domain_desc)
-                            $("#h-domain-share-did-status").html(element.domain_status)
+                            $("#h-domain-share-did-status").html(element.domain_status_desc)
                             $("#h-domain-share-did-create-date").html(element.maintance_date)
                             $("#h-domain-share-did-create-user").html(element.create_user_id)
                             $("#h-domain-share-did-modify-date").html(element.domain_modify_date)
@@ -269,7 +271,7 @@
                     });
 
                     //刷新右侧分享域信息
-                    $.getJSON("/v1/auth/domain/share/get", {domain_id: domain_id}, function (data) {
+                    $.getJSON("/v1/auth/share/domain", {domain_id: domain_id}, function (data) {
                         $table.bootstrapTable('load', data)
                     })
                 }

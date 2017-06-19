@@ -20,7 +20,7 @@ public class OracleDefine {
         SqlDefine.sys_rdbms_007 = "delete from sys_user_info where user_id = ? and org_unit_id = ?";
         SqlDefine.sys_rdbms_008 = "insert into sys_theme_value(uuid,theme_id,res_id,res_url,res_type,res_bg_color,res_class,group_id,res_img,sort_id) value(sys_guid(),?,?,?,?,?,?,?,?,?)";
         SqlDefine.sys_rdbms_009 = "update sys_theme_value set res_url = ?, res_bg_color = ?, res_class = ?, res_img = ?, group_id = ?, sort_id = ?, res_type = ? where theme_id = ? and res_id = ?";
-        SqlDefine.sys_rdbms_010 = "select f.authorization_level from sys_user_info t inner join sys_org_info i on t.org_unit_id = i.org_unit_id inner join sys_domain_share_info f on f.domain_id = ? and i.domain_id = f.target_domain_id where t.user_id = ?";
+        SqlDefine.sys_rdbms_010 = "select authorization_level from sys_domain_share_info where domain_id = ? and target_domain_id = ?";
         SqlDefine.sys_rdbms_011 = "select distinct t2.res_url from sys_user_theme t1 inner join sys_theme_value t2 on t1.theme_id = t2.theme_id inner join sys_resource_info t3 on t2.res_id = t3.res_id where t1.user_id = ? and t2.res_id = ? and t3.res_type = '0'";
         SqlDefine.sys_rdbms_012 = "select uuid,user_id,handle_time,client_ip,status_code,method,url,data from sys_handle_logs t where t.domain_id = ? order by handle_time desc";
         SqlDefine.sys_rdbms_013 = "select res_type from sys_resource_info where res_id = ?";
@@ -74,9 +74,9 @@ public class OracleDefine {
         SqlDefine.sys_rdbms_080 = "select o.org_unit_id from sys_user_info i inner join sys_org_info o on i.org_unit_id = o.org_unit_id where user_id = ?";
         SqlDefine.sys_rdbms_083 = "select t.uuid,t.target_domain_id,i.domain_name,t.authorization_level,t.create_user,t.create_date,t.modify_user,t.modify_date from sys_domain_share_info t inner join sys_domain_info i on t.target_domain_id = i.domain_id where t.domain_id = ?";
         SqlDefine.sys_rdbms_084 = "select t.domain_id, t.domain_name as domain_desc, s.domain_status_name  as domain_status_desc, t.domain_create_date  as maintance_date, t.domain_owner as create_user_id,t.domain_maintance_date as domain_modify_date,t.domain_maintance_user as domain_modify_user from sys_domain_info t inner join sys_domain_status_attr s  on t.domain_status_id = s.domain_status_id where t.domain_id = ?";
-        SqlDefine.sys_rdbms_085 = "select t.domain_id as project_id, t.domain_name as project_name from sys_domain_info t where not exists ( select 1 from sys_domain_share_info i where t.domain_id = i.target_domain_id and i.domain_id = ? )";
+        SqlDefine.sys_rdbms_085 = "select t.domain_id, t.domain_name from sys_domain_info t where not exists ( select 1 from sys_domain_share_info i where t.domain_id = i.target_domain_id and i.domain_id = ? ) and t.domain_id <> ?";
         SqlDefine.sys_rdbms_086 = "insert into sys_domain_share_info(uuid,domain_id,target_domain_id,authorization_level,create_user,create_date,modify_date,modify_user) values(sys_guid(),?,?,?,?,sysdate,sysdate,?)";
-        SqlDefine.sys_rdbms_087 = "delete from sys_domain_share_info where uuid = ? and domain_id = ?";
+        SqlDefine.sys_rdbms_087 = "delete from sys_domain_share_info where uuid = ?";
         SqlDefine.sys_rdbms_088 = "update sys_domain_share_info set authorization_level = ?,modify_user = ? , modify_date = sysdate where uuid = ?";
         SqlDefine.sys_rdbms_089 = "select t.res_id,t.res_name,t.res_attr, a.res_attr_desc,t.res_up_id,t.res_type,r.res_type_desc from sys_resource_info t inner join sys_resource_info_attr a on t.res_attr = a.res_attr inner join sys_resource_type_attr r on t.res_type = r.res_type where res_id = ?";
         SqlDefine.sys_rdbms_093 = "delete from sys_role_resource_relat where role_id = ? and res_id = ?";
@@ -174,8 +174,8 @@ public class OracleDefine {
         SqlDefine.sys_rdbms_187 = "select config_id,config_value,domain_id from dispatch_batch_domain_config where domain_id = ?";
         SqlDefine.sys_rdbms_188 = "update dispatch_batch_group_status set start_time = sysdate, status = ? where gid = ? and batch_id = ?";
         SqlDefine.sys_rdbms_189 = "update dispatch_batch_group_status set end_time = sysdate, status = ? where gid = ? and batch_id = ?";
-        SqlDefine.sys_rdbms_190 = "update dispatch_batch_job_status set start_time = now(), status = ? where batch_id = ? and job_id = ?";
-        SqlDefine.sys_rdbms_191 = "update dispatch_batch_job_status set end_time = now(), status = ? where batch_id = ? and job_id = ?";
+        SqlDefine.sys_rdbms_190 = "update dispatch_batch_job_status set start_time = sysdate, status = ? where batch_id = ? and job_id = ?";
+        SqlDefine.sys_rdbms_191 = "update dispatch_batch_job_status set end_time = sysdate, status = ? where batch_id = ? and job_id = ?";
         SqlDefine.sys_rdbms_192 = "insert into dispatch_batch_history(uuid,batch_id,batch_status,as_of_date,start_time,end_time,ret_msg,domain_id) select ?,batch_id,batch_status,as_of_date,start_date,end_date,ret_msg,domain_id from dispatch_batch_define where batch_id = ?";
         SqlDefine.sys_rdbms_193 = "select t.uuid,d.code_number,t.batch_id,d.batch_desc,t.batch_status,a.batch_status_desc,t.as_of_date,t.start_time,t.end_time,t.ret_msg,t.domain_id from dispatch_batch_history t inner join dispatch_batch_define d on t.batch_id = d.batch_id inner join dispatch_batch_status_attr a on t.batch_status = a.batch_status where t.domain_id = ?";
         SqlDefine.sys_rdbms_194 = "delete from dispatch_batch_history where uuid = ?";

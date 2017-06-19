@@ -60,14 +60,27 @@
                     var costTime = diff+"s";
 
                     if (diff >= 60){
-                        costTime = (diff % 60 ).toFixed(0) + "s";
-                        diff = (diff / 60);
+                        if (diff % 60 != 0){
+                            costTime = (diff % 60 ).toFixed(0) + "s";
+                        }
+                        // 转换成分钟
+                        diff = (diff / 60).toFixed(0);
                         if (diff >= 60) {
-                            costTime = (diff % 60).toFixed(0) + "m" + costTime;
-                            diff = (diff / 60);
-                            if (diff >= 60){
-                                costTime = (diff % 60).toFixed(0) + "h" + costTime;
+                            if (diff % 60 != 0){
+                                costTime = (diff % 60).toFixed(0) + "m " + costTime;
                             }
+                            // 转换成小时
+                            diff = (diff / 24).toFixed();
+                            if (diff >= 24){
+                                if (diff % 24 != 0){
+                                    costTime = (diff % 60).toFixed(0) + "h " + costTime;
+                                }
+                                costTime = (diff % 24).toFixed(0) + "d" + costTime;
+                            } else {
+                                costTime = diff + "h " + costTime;
+                            }
+                        } else {
+                            costTime = diff + "m "+ costTime;
                         }
                     }
 

@@ -24,37 +24,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserModel> findAll(String domainId, String orgId) {
-        return null;
-    }
-
-    @Override
     public List<UserModel> findAll(String domainId, String orgId, String statusCd) {
-        return null;
+        return userDao.findAll(domainId,orgId,statusCd);
     }
 
     @Override
     public int add(UserModel userModel) {
-        return 0;
+        return userDao.add(userModel);
     }
 
     @Override
     public int delete(JSONArray jsonArray) {
-        return 0;
+        return userDao.delete(jsonArray);
     }
 
     @Override
     public int update(UserModel userModel) {
-        return 0;
+        return userDao.update(userModel);
     }
 
     @Override
     public int changePassword(JSONObject jsonObject) {
-        return 0;
+        return userDao.changePassword(jsonObject);
     }
 
     @Override
     public int changeStatus(String userId, String status) {
-        return 0;
+        return userDao.changeStatus(userId,status);
     }
 }

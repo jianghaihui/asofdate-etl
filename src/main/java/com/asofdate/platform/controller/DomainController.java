@@ -2,8 +2,10 @@ package com.asofdate.platform.controller;
 
 import com.asofdate.platform.authentication.JwtService;
 import com.asofdate.platform.model.DomainModel;
+import com.asofdate.platform.service.AuthService;
 import com.asofdate.platform.service.DomainService;
 import com.asofdate.utils.Hret;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -28,6 +30,8 @@ public class DomainController {
     private final Logger logger = LoggerFactory.getLogger(DomainController.class);
     @Autowired
     private DomainService domainService;
+    @Autowired
+    private AuthService authService;
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
@@ -39,6 +43,14 @@ public class DomainController {
     @ResponseBody
     public String delete(HttpServletResponse response, HttpServletRequest request){
         JSONArray jsonArray = new JSONArray(request.getParameter("JSON"));
+        for (int i = 0; i < jsonArray.length(); i++){
+            String domain_id = ((JSONObject) jsonArray.get(i)).getString("domain_id");
+            Boolean status = authService.domainAuth(request,domain_id,"w").getBoolean("status");
+            if (!status){
+                response.setStatus(403);
+                return Hret.error(403,"您没有权限删除域[ "+domain_id+" ]",null);
+            }
+        }
         String ret = domainService.delete(jsonArray);
         if ( "success".equals(ret) ){
             return Hret.success(200,"success",JSONObject.NULL);
@@ -59,10 +71,25 @@ public class DomainController {
         return Hret.error(421,"域编码冲突,这个域已经存在,无法重复添加",JSONObject.NULL);
     }
 
+    @RequestMapping(value = "/details", method = RequestMethod.GET)
+    public DomainModel getDomainDetails(HttpServletRequest request){
+        String domainId = request.getParameter("domain_id");
+        if (domainId == null || domainId.isEmpty()){
+            logger.info("domain id is empty, return null");
+            return null;
+        }
+        return domainService.getDomainDetails(domainId);
+    }
+
     @RequestMapping(method = RequestMethod.PUT)
     @ResponseBody
     public String update(HttpServletResponse response, HttpServletRequest request){
         DomainModel domainModel = parse(request);
+        Boolean status = authService.domainAuth(request,domainModel.getDomain_id(),"w").getBoolean("status");
+        if (!status){
+            response.setStatus(403);
+            return Hret.error(403,"你没有权限编辑域 [ "+domainModel.getDomain_desc()+" ]",domainModel);
+        }
         try {
             int size = domainService.update(domainModel);
             if (size == 1){

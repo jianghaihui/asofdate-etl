@@ -9,4 +9,5 @@ import java.util.List;
  */
 public interface OrgDao {
     List<OrgModel> findAll(String domainId);
+    List<OrgModel> findSub(String domainId,String orgId);
 }
