@@ -18,6 +18,33 @@ public class UserModel {
     public String modify_date;
     public String modify_user;
     public String status_cd;
+    public String user_passwd;
+    public String user_passwd_confirm;
+    public String user_status;
+
+    public String getUser_status() {
+        return user_status;
+    }
+
+    public void setUser_status(String user_status) {
+        this.user_status = user_status;
+    }
+
+    public String getUser_passwd() {
+        return user_passwd;
+    }
+
+    public void setUser_passwd(String user_passwd) {
+        this.user_passwd = user_passwd;
+    }
+
+    public String getUser_passwd_confirm() {
+        return user_passwd_confirm;
+    }
+
+    public void setUser_passwd_confirm(String user_passwd_confirm) {
+        this.user_passwd_confirm = user_passwd_confirm;
+    }
 
     public String getUser_id() {
         return user_id;

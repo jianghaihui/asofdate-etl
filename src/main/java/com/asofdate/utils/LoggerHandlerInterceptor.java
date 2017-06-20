@@ -2,7 +2,6 @@ package com.asofdate.utils;
 
 import com.asofdate.platform.authentication.JwtService;
 import com.asofdate.sql.SqlDefine;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +23,7 @@ public class LoggerHandlerInterceptor implements HandlerInterceptor {
     private final Logger logger = LoggerFactory.getLogger(LoggerHandlerInterceptor.class);
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         return true;
@@ -42,11 +42,22 @@ public class LoggerHandlerInterceptor implements HandlerInterceptor {
         Integer statuCd = httpServletResponse.getStatus();
         String method = httpServletRequest.getMethod();
         String uri = httpServletRequest.getRequestURI();
-        Map<String,String[]> map = httpServletRequest.getParameterMap();
+        Map<String, String[]> map = httpServletRequest.getParameterMap();
         JSONObject jsonObject = new JSONObject();
-        for(Map.Entry<String,String[]> m : map.entrySet()){
-            jsonObject.put(m.getKey(),m.getValue());
+        for (Map.Entry<String, String[]> m : map.entrySet()) {
+            if ("_".equals(m.getKey())) {
+                continue;
+            }
+            String val = "";
+            for (int i = 0; i < m.getValue().length; i++) {
+                if (i == 0) {
+                    val += m.getValue()[i];
+                } else {
+                    val += "," + m.getValue()[i];
+                }
+            }
+            jsonObject.put(m.getKey(), val);
         }
-        jdbcTemplate.update(SqlDefine.sys_rdbms_207,userId,clientIp,statuCd,method,uri,jsonObject.toString(),domainId);
+        jdbcTemplate.update(SqlDefine.sys_rdbms_207, userId, clientIp, statuCd, method, uri, jsonObject.toString(), domainId);
     }
 }

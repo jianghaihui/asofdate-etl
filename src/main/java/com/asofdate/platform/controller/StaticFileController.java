@@ -1,8 +1,10 @@
 package com.asofdate.platform.controller;
 
 import com.asofdate.platform.model.DomainModel;
+import com.asofdate.platform.model.RoleModel;
 import com.asofdate.platform.service.AuthService;
 import com.asofdate.platform.service.DomainService;
+import com.asofdate.platform.service.RoleService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,9 @@ import java.util.Map;
 public class StaticFileController {
     @Autowired
     private DomainService domainService;
+
+    @Autowired
+    private RoleService roleService;
 
     @Autowired
     private AuthService authService;
@@ -90,6 +95,19 @@ public class StaticFileController {
     @RequestMapping(value = "/v1/auth/role/resource/details", method = RequestMethod.GET)
     public String getResRolePage(HttpServletResponse response, HttpServletRequest request, Map<String, Object> map) {
         String roleId = request.getParameter("role_id");
+        RoleModel roleModel = roleService.getDetails(roleId);
+
+        map.put("code_number", roleModel.getCode_number());
+        map.put("role_id", roleModel.getRole_id());
+        map.put("role_name", roleModel.getRole_name());
+        map.put("domain_id", roleModel.getDomain_id());
+        map.put("domain_desc", roleModel.getDomain_desc());
+
         return "hauth/res_role_rel_page";
+    }
+
+    @RequestMapping(value = "/v1/auth/swagger/page", method = RequestMethod.GET)
+    public String getSwagger(){
+        return "help/swagger_index";
     }
 }

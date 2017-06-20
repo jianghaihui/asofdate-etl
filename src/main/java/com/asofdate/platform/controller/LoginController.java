@@ -1,6 +1,6 @@
 package com.asofdate.platform.controller;
 
-import com.asofdate.utils.JSONResult;
+import com.asofdate.utils.Hret;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * Created by hzwy23 on 2017/5/16.
@@ -21,21 +20,12 @@ public class LoginController {
 
     @RequestMapping(value = "/signout", produces = "application/json")
     @ResponseBody
-    public void logout(HttpServletResponse response, HttpServletRequest request) {
-        Cookie[] cookie = request.getCookies();
-        if (cookie != null) {
-            for (int i = 0; i < cookie.length; i++) {
-                if (cookie[i].getName().equals(HEADER_STRING)) {
-                    cookie[i].setMaxAge(0);
-                    response.addCookie(cookie[i]);
-                }
-            }
-        }
-        try {
-            response.getOutputStream().println(JSONResult.fillResultString(0, "", "logout successfully"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public String logout(HttpServletResponse response, HttpServletRequest request) {
+        Cookie cookie = new Cookie("Authorization", "");
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        return Hret.success(200, "success", null);
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)

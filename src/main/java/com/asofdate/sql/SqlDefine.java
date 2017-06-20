@@ -58,8 +58,8 @@ public class SqlDefine {
     public static String sys_rdbms_071 = "select t.res_id,t.res_name,t.res_attr, a.res_attr_desc,t.res_up_id,t.res_type,r.res_type_desc,t.sys_flag from sys_resource_info t inner join sys_resource_info_attr a on t.res_attr = a.res_attr inner join sys_resource_type_attr r on t.res_type = r.res_type";
     public static String sys_rdbms_072 = "insert into sys_resource_info(res_id,res_name,res_attr,res_up_id,res_type) values(?,?,?,?,?)";
     public static String sys_rdbms_073 = "insert into sys_theme_value(uuid,theme_id,res_id,res_url,res_type,res_bg_color,res_class,group_id,res_img,sort_id) values(uuid(),?,?,?,?,?,?,?,?,?)";
-    public static String sys_rdbms_074 = "insert into sys_role_resource_relat(uuid,role_id,res_id) values(uuid(),?,?)";
-    public static String sys_rdbms_075 = "delete from sys_role_resource_relat where res_id = ?";
+    public static String sys_rdbms_074 = "insert into sys_role_resource_relat(uuid,role_id,res_id) values(?,?,?)";
+    public static String sys_rdbms_075 = "";
     public static String sys_rdbms_076 = "delete from sys_theme_value where res_id = ?";
     public static String sys_rdbms_077 = "delete from sys_resource_info where res_id = ?";
     public static String sys_rdbms_078 = "select t1.res_url from sys_index_page t1 inner join sys_user_theme t2 on t1.theme_id = t2.theme_id where t2.user_id = ?";
@@ -187,4 +187,6 @@ public class SqlDefine {
     public static String sys_rdbms_205 = "select t.batch_id,t.gid,t.status,t.start_time,t.end_time,d.batch_status_desc as status_desc,g.group_id,e.group_desc from dispatch_batch_group_status t inner join dispatch_batch_group_relation g on t.gid = g.id inner join dispatch_group_define e on g.group_id = e.group_id left join dispatch_batch_status_attr d on t.status = d.batch_status where t.batch_id = ? and t.gid = ?";
     public static String sys_rdbms_206 = "select t.batch_id,t.job_id,t.status,t.start_time,t.end_time,t.gid,t.tid,a.batch_status_desc as status_desc,td.task_id,td.task_desc,td.task_type,c.task_type_desc from dispatch_batch_job_status t left join dispatch_batch_status_attr a on t.status = a.batch_status inner join dispatch_group_task_relation o on t.tid = o.id inner join dispatch_task_define td on o.task_id = td.task_id inner join dispatch_task_type_attr c on td.task_type = c.task_type where t.batch_id = ? and t.gid = ? and t.tid = ?";
     public static String sys_rdbms_207 = "insert into sys_handle_logs(uuid,user_id,handle_time,client_ip,status_code,method,url,data,domain_id) values(uuid(),?,now(),?,?,?,?,?,?)";
+    public static String sys_rdbms_208 = "select t.code_number,t.role_name,t.role_owner as create_user,t.role_create_date as create_date,a.role_status_desc,a.role_status_id as role_status_code,t.domain_id,o.domain_name as domain_desc,t.role_maintance_date as modify_date,t.role_maintance_user as modify_user,t.role_id from sys_role_info t inner join sys_role_status_attr a on t.role_status_id = a.role_status_id inner join sys_domain_info o on t.domain_id = o.domain_id where t.role_id = ?";
+    public static String sys_rdbms_209 = "select t.uuid, t.role_id, t.res_id, i.res_name,res_up_id from sys_role_resource_relat t left join sys_resource_info i on t.res_id = i.res_id where t.role_id = ?";
 }

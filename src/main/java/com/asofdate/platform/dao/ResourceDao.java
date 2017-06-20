@@ -9,4 +9,5 @@ public interface ResourceDao {
     List findAll();
 
     List findSubByUpId(String resUpId);
+
 }

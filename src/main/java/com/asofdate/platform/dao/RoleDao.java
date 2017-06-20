@@ -1,6 +1,7 @@
 package com.asofdate.platform.dao;
 
 import com.asofdate.platform.model.RoleModel;
+import org.json.JSONArray;
 
 import java.util.List;
 
@@ -9,4 +10,12 @@ import java.util.List;
  */
 public interface RoleDao {
     List<RoleModel> findAll(String domainId);
+
+    RoleModel getDetails(String roleId);
+
+    int add(RoleModel roleModel);
+
+    int delete(JSONArray jsonArray);
+
+    int update(RoleModel roleModel);
 }

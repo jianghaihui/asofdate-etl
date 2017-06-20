@@ -12,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class LoggerWebAppConfigurer extends WebMvcConfigurerAdapter {
     @Autowired
     private LoggerHandlerInterceptor loggerHandlerInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loggerHandlerInterceptor).addPathPatterns("/v1/**");
