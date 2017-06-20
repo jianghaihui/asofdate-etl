@@ -103,7 +103,6 @@ public class GroupDefineController {
     public String getTaskDependency(HttpServletRequest request) {
         String id = request.getParameter("id");
         JSONArray jsonArray = taskDependencyService.getTaskDependency(id);
-        logger.info(jsonArray.toString());
         return jsonArray.toString();
     }
 
