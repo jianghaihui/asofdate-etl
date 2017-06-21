@@ -13,6 +13,16 @@ public interface RoleDao {
 
     RoleModel getDetails(String roleId);
 
+    List<RoleModel> getOther(String userId);
+
+    List<RoleModel> getOwner(String userId);
+
+    int auth(JSONArray jsonArray,String modifyUserId);
+
+    int revoke(JSONArray jsonArray);
+
+    int batchAuth(JSONArray jsonArray,String modifyUserId);
+
     int add(RoleModel roleModel);
 
     int delete(JSONArray jsonArray);

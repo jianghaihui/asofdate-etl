@@ -3,6 +3,7 @@ package com.asofdate.platform.dao.impl;
 import com.asofdate.platform.dao.RoleDao;
 import com.asofdate.platform.model.RoleModel;
 import com.asofdate.sql.SqlDefine;
+import com.asofdate.utils.JoinCode;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -50,6 +52,62 @@ public class RoleDaoImpl implements RoleDao {
     }
 
     @Override
+    public List<RoleModel> getOther(String userId) {
+        RowMapper<RoleModel> rowMapper = new BeanPropertyRowMapper<>(RoleModel.class);
+        return jdbcTemplate.query(SqlDefine.sys_rdbms_095, rowMapper, userId);
+    }
+
+    @Override
+    public List<RoleModel> getOwner(String userId) {
+        RowMapper<RoleModel> rowMapper = new BeanPropertyRowMapper<>(RoleModel.class);
+        return jdbcTemplate.query(SqlDefine.sys_rdbms_094, rowMapper, userId);
+    }
+
+    @Transactional
+    @Override
+    public int auth(JSONArray jsonArray,String modifyUserId) {
+        for ( int i = 0; i < jsonArray.length(); i++ ) {
+            JSONObject arg = (JSONObject) jsonArray.get(i);
+            String userId = arg.getString("user_id");
+            String roleId = arg.getString("role_id");
+            String uuid = JoinCode.join(userId,roleId);
+            jdbcTemplate.update(SqlDefine.sys_rdbms_096,uuid,roleId,userId,modifyUserId);
+        }
+        return 1;
+    }
+
+    @Transactional
+    @Override
+    public int batchAuth(JSONArray jsonArray,String modifyUserId){
+        for ( int i = 0; i < jsonArray.length(); i++ ) {
+            JSONObject arg = (JSONObject) jsonArray.get(i);
+            String userId = arg.getString("user_id");
+            String roleId = arg.getString("role_id");
+            String uuid = JoinCode.join(userId,roleId);
+            try{
+                jdbcTemplate.update(SqlDefine.sys_rdbms_096,uuid,roleId,userId,modifyUserId);
+            } catch (Exception e){
+                logger.info("用户[{}]已经拥有了角色[{}],无需重复授权",userId,roleId);
+                logger.info(e.getMessage());
+            }
+        }
+        return 1;
+    }
+
+    @Transactional
+    @Override
+    public int revoke(JSONArray jsonArray) {
+        for ( int i = 0; i < jsonArray.length(); i++ ) {
+            JSONObject arg = (JSONObject) jsonArray.get(i);
+            String userId = arg.getString("user_id");
+            String roleId = arg.getString("role_id");
+            String uuid = JoinCode.join(userId,roleId);
+            jdbcTemplate.update(SqlDefine.sys_rdbms_097,uuid);
+        }
+        return 1;
+    }
+
+    @Override
     public int add(RoleModel roleModel) {
         return jdbcTemplate.update(SqlDefine.sys_rdbms_026,
                 roleModel.getRole_id(),
@@ -74,7 +132,7 @@ public class RoleDaoImpl implements RoleDao {
 
     @Override
     public int update(RoleModel roleModel) {
-        logger.info("{},{},{},{}",
+        logger.debug("{},{},{},{}",
                 roleModel.getRole_name(),
                 roleModel.getRole_status_code(),
                 roleModel.getModify_user(),

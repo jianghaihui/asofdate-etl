@@ -23,8 +23,33 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public List<RoleModel> getOther(String userId) {
+        return roleDao.getOther(userId);
+    }
+
+    @Override
+    public List<RoleModel> getOwner(String userId) {
+        return roleDao.getOwner(userId);
+    }
+
+    @Override
     public RoleModel getDetails(String roleId) {
         return roleDao.getDetails(roleId);
+    }
+
+    @Override
+    public int auth(JSONArray jsonArray, String modifyUserId) {
+        return roleDao.auth(jsonArray,modifyUserId);
+    }
+
+    @Override
+    public int revoke(JSONArray jsonArray) {
+        return roleDao.revoke(jsonArray);
+    }
+
+    @Override
+    public int batchAuth(JSONArray jsonArray, String modifyUserId) {
+        return roleDao.batchAuth(jsonArray,modifyUserId);
     }
 
     @Override

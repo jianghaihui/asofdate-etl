@@ -11,7 +11,17 @@ import java.util.List;
 public interface RoleService {
     List<RoleModel> findAll(String domainId);
 
+    List<RoleModel> getOther(String userId);
+
+    List<RoleModel> getOwner(String userId);
+
     RoleModel getDetails(String roleId);
+
+    int auth(JSONArray jsonArray,String modifyUserId);
+
+    int revoke(JSONArray jsonArray);
+
+    int batchAuth(JSONArray jsonArray,String modifyUserId);
 
     int add(RoleModel roleModel);
 

@@ -1,5 +1,7 @@
 package com.asofdate.platform.dao;
 
+import com.asofdate.platform.model.ResourceModel;
+
 import java.util.List;
 
 /**
