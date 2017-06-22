@@ -39,21 +39,22 @@
                     pplavel.innerHTML = "开始时间:&nbsp;";
                     var ppvalue = document.createElement("span");
                     ppvalue.innerHTML = element.startTime;
-                    pp.append(pplavel);
-                    pp.append(ppvalue);
+                    pp.appendChild(pplavel);
+                    pp.appendChild(ppvalue);
 
                     var pval = document.createElement("div");
                     var pvallavel = document.createElement("label");
                     pvallavel.innerHTML = "结束时间:&nbsp;";
                     var pvalvalue = document.createElement("span");
                     pvalvalue.innerHTML = element.endTime;
-                    pval.append(pvallavel);
-                    pval.append(pvalvalue);
+                    pval.appendChild(pvallavel);
+                    pval.appendChild(pvalvalue);
                     /*<![CDATA[*/
-                    var start = new Date(element.startTime);
-                    var end = new Date(element.endTime);
+                    var start = new Date(element.startTime.substr(0,19));
+                    var end = new Date(element.endTime.substr(0,19));
 
                     var diff = (end - start)/1000;
+
                     if (diff < 0){
                         diff = 0;
                     }
@@ -105,20 +106,19 @@
                     pgidlabel.innerHTML = "id:&nbsp;";
                     var pgidvalue = document.createElement("span");
                     pgidvalue.innerHTML = element.tid;
-                    pgid.append(pgidlabel);
-                    pgid.append(pgidvalue);
+                    pgid.appendChild(pgidlabel);
+                    pgid.appendChild(pgidvalue);
 
-                    pdiv3.append(pgid);
-                    pdiv3.append(pp);
-                    pdiv3.append(pval);
-//                    pdiv3.append(pbtn);
+                    pdiv3.appendChild(pgid);
+                    pdiv3.appendChild(pp);
+                    pdiv3.appendChild(pval);
 
-                    pdiv2.append(ph3);
-                    pdiv2.append(chartdiv);
-                    pdiv2.append(pbatchDesc);
-                    pdiv2.append(pdiv3);
+                    pdiv2.appendChild(ph3);
+                    pdiv2.appendChild(chartdiv);
+                    pdiv2.appendChild(pbatchDesc);
+                    pdiv2.appendChild(pdiv3);
 
-                    pdiv.append(pdiv2);
+                    pdiv.appendChild(pdiv2);
                     switch (element.status){
                         case "0":
                             pdiv2.style.backgroundColor = "#e5e1ff";
@@ -137,7 +137,7 @@
                             break;
                     }
 
-                    document.getElementById("h-dispatch-batch-job-monitoring-content").append(pdiv);
+                    document.getElementById("h-dispatch-batch-job-monitoring-content").appendChild(pdiv);
                 })
             })
         },

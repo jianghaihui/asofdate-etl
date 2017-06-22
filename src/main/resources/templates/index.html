@@ -42,6 +42,25 @@
     /*<![CDATA[*/
     NProgress.start();
     $(document).ready(function () {
+
+        var hh = document.documentElement.clientHeight;
+
+        if (hh == 0) {
+            hh = document.body.clientHeight;
+        }
+
+        var margin_top = (hh - 370) / 2;
+        var margin_left = (document.documentElement.clientWidth - 985) / 2;
+
+        var lf = document.getElementById("h-login-login-form");
+        if (margin_top < 0) {
+            margin_top = 0;
+        }
+
+        lf.style.marginTop = margin_top;
+        lf.style.marginLeft = margin_left;
+        lf.style.display = "block";
+
         $.i18n.properties({
             name: 'Messages',
             path: '/jquery-i18n-properties/bundle/',
@@ -49,17 +68,6 @@
             language: (navigator.language || navigator.browserLanguage).toLowerCase(),
             async: true,
         });
-        var $body = $(".container-fluid");
-        $body.height(document.documentElement.clientHeight);
-        var margin_top = (document.documentElement.clientHeight - 370) / 2;
-        var margin_left = (document.documentElement.clientWidth - 985) / 2;
-        var lf = document.getElementById("h-login-login-form");
-        if (margin_top < 0) {
-            margin_top = 0;
-        }
-        lf.style.marginTop = margin_top;
-        lf.style.marginLeft = margin_left;
-        lf.style.display = "block";
         NProgress.done();
     });
 
@@ -75,8 +83,9 @@
     });
 
     window.onresize = function () {
-        $(".container-fluid").height(document.documentElement.clientHeight);
-        var margin_top = (document.documentElement.clientHeight - 369) / 2;
+        var hh = $(document).clientHeight;
+
+        var margin_top = (hh - 369) / 2;
         var margin_left = (document.documentElement.clientWidth - 980) / 2;
         var lf = document.getElementById("h-login-login-form");
         if (margin_top < 0) {

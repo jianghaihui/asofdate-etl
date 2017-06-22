@@ -34,11 +34,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         if (pd == null) {
             return new UsernamePasswordAuthenticationToken(name, "", new ArrayList<>());
         }
-
         String password = pd.toString();
-
         UserLoginModel userLoginModel = loginService.loginValidator(name, password);
-
         // 认证逻辑
         if (userLoginModel.isFlag()) {
             // 这里设置权限和角色
@@ -56,7 +53,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         }
     }
 
-    // 是否可以提供输入类型的认证服务
     @Override
     public boolean supports(Class<?> authentication) {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);

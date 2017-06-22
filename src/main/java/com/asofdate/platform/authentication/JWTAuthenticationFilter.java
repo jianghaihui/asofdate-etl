@@ -3,6 +3,7 @@ package com.asofdate.platform.authentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -30,26 +31,19 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 
         try {
 
-            logger.debug("URI is:{}", r.getRequestURI());
-
             Authentication authentication = JwtService.getAuthentication(r);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             filterChain.doFilter(request, response);
 
-        } catch (Exception e) {
-
+        } catch (AuthenticationException e) {
             HttpServletResponse w = (HttpServletResponse) response;
-
-            logger.debug("clear Cookie that the name is Authorization");
-
-            w.addCookie(new Cookie("Authorization", ""));
-
-            w.sendRedirect("/");
-
-            e.printStackTrace();
-
+            Cookie cookie = new Cookie("Authorization", "");
+            cookie.setMaxAge(0);
+            cookie.setPath("/");
+            w.addCookie(cookie);
+            logger.info(e.getMessage());
         }
     }
 }

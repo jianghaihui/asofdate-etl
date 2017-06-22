@@ -32,9 +32,9 @@
                 span.style.fontWeight = "600";
                 span.style.marginTop = "12px";
                 span.innerHTML = "木有运行中的批次";
-                imgdiv.append(mimg);
-                imgdiv.append(span);
-                document.getElementById("h-dispatch-batch-monitoring-content").append(imgdiv);
+                imgdiv.appendChild(mimg);
+                imgdiv.appendChild(span);
+                document.getElementById("h-dispatch-batch-monitoring-content").appendChild(imgdiv);
             }
         },
         details:function (batchId,batchDesc) {
@@ -42,7 +42,10 @@
                 url:"/v1/dispatch/batch/group/running/monitoring/page",
                 title: batchDesc + " 批次运行监控",
                 id:"hzwy23#runninggroup",
-                data:{batch_id:batchId,batch_desc:batchDesc},
+                data:{
+                    batch_id:batchId,
+                    batch_desc:batchDesc
+                },
             })
         },
         stop:function (batchId) {
@@ -74,15 +77,16 @@
             var divchart = document.createElement("div");
             divchart.style.height = "280px";
             divchart.style.minWidth = "300px";
-            div.append(divchart);
+            div.appendChild(divchart);
+
             $("#h-dispatch-batch-monitoring-content").append(div);
             BatchMonitoringObj.initChart(divchart,element.batch_id,element.batch_desc);
             var div1 = BatchMonitoringObj.addSpan("批次编码:",element.code_number);
             var div2 = BatchMonitoringObj.addSpan("批次名称:",element.batch_desc);
             var div3 = BatchMonitoringObj.addSpan("批次日期:",element.as_of_date);
-            div.append(div1);
-            div.append(div2);
-            div.append(div3);
+            div.appendChild(div1);
+            div.appendChild(div2);
+            div.appendChild(div3);
 
             var btn1 = document.createElement("button");
             var btn2 = document.createElement("button");
@@ -101,9 +105,9 @@
             btndiv.style.backgroundColor = "#f7f7f7";
             btndiv.style.paddingTop = "6px";
             btndiv.style.paddingBottom = "6px";
-            btndiv.append(btn1);
-            btndiv.append(btn2);
-            div.append(btndiv);
+            btndiv.appendChild(btn1);
+            btndiv.appendChild(btn2);
+            div.appendChild(btndiv);
         },
         getRunning:function () {
             BatchMonitoringObj.noBatch();
@@ -154,8 +158,8 @@
             span.style.paddingLeft = "2px";
             span.style.textAlign = "left";
             span.innerHTML = value;
-            div.append(key);
-            div.append(span);
+            div.appendChild(key);
+            div.appendChild(span);
             return div;
         },
         initChart:function (dom,batchId,batchDesc) {

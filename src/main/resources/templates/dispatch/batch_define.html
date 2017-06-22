@@ -226,8 +226,9 @@
             /*<![CDATA[*/
             var name = batchDesc+"中任务组配置";
             Hutils.openTab({
-                url:"/v1/dispatch/batchAndGroup/page?batchId="+batchId+"&batchDesc="+batchDesc,
+                url:"/v1/dispatch/batchAndGroup/page",
                 id:"batchGroup1989",
+                data:{batchId:batchId,batchDesc:batchDesc},
                 title:name,
                 error:function (m) {
                     $.Notify({

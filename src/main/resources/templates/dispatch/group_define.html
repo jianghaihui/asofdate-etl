@@ -215,9 +215,10 @@
             /*<![CDATA[*/
             var name = groupDesc+"中任务配置"
             Hutils.openTab({
-                url:"/v1/dispatch/groupAndTask/page?groupId="+groupId+"&groupDesc="+groupDesc,
+                url:"/v1/dispatch/groupAndTask/page",
                 id:"grouptask1989",
                 title:name,
+                data:{groupId:groupId,groupDesc:groupDesc},
                 error:function (m) {
                     $.Notify({
                         title:"温馨提示：",

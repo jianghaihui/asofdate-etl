@@ -38,7 +38,6 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
         String username = req.getParameter("username");
         String password = req.getParameter("password");
-
         if (password != null) {
             password = aesEncrypt(password);
         }
