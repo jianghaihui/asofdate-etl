@@ -1,11 +1,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <div class="row subsystem-header">
     <div class="pull-left">
-        <span style="font-size: 13px" class="label label-warning" th:text="${groupDesc}"></span><span>&nbsp;任务配置管理</span>
+        <span>任务配置管理</span>
         <i id="h-group-task-group-id" style="display: none;" th:text="${groupId}"></i>
     </div>
 </div>
 <div class="row subsystem-toolbar">
+    <div style="height: 44px; line-height: 44px;display: inline;">
+        <span style="height: 30px; line-height: 30px; margin-top: 7px;display: inline"
+              class="pull-left">&nbsp;任务组描述 = <span th:text="${groupDesc}"></span></span>
+    </div>
+
     <div id="h-dispatch-group-task-toolbar-listt" class="pull-right">
         <button onclick="DispatchGroupTaskObj.addTask()" class="btn btn-info btn-sm" title="新增配置任务">
             <span class="icon-plus"> 添加任务</span>
@@ -29,7 +34,7 @@
             <tr>
                 <th data-field="state" data-checkbox="true"></th>
                 <th data-align="center" data-formatter="DispatchGroupTaskObj.formatterindex">序号</th>
-                <th data-align="center" data-field="id">任务组内唯一任务ID号</th>
+                <th data-field="id">任务组内唯一任务ID号</th>
                 <th data-align="center" data-field="code_number">任务编码</th>
                 <th data-align="left" data-field="task_desc">任务名称</th>
                 <th data-align="center" data-field="task_type_desc">任务类型</th>

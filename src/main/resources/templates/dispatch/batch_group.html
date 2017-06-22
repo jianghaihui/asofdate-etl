@@ -1,12 +1,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <div class="row subsystem-header">
     <div class="pull-left">
-        <span class="label label-warning" style="font-size: 13px" th:text="${batchDesc}"></span><span>&nbsp;任务组配置管理</span>
+        <span>任务组配置管理</span>
         <i  id="h-batch-group-batch-id" style="display: none;" th:text="${batchId}"></i>
         <i id="h-batch-group-domain-id" style="display: none;" th:text="${domainId}"></i>
     </div>
 </div>
 <div class="row subsystem-toolbar">
+    <div style="height: 44px; line-height: 44px;display: inline;">
+        <span style="height: 30px; line-height: 30px; margin-top: 7px;display: inline"
+              class="pull-left">&nbsp;批次描述 = <span th:text="${batchDesc}"></span></span>
+    </div>
+
     <div id="h-dispatch-batch-group-toolbar-list" class="pull-right">
         <button onclick="DispatchBatchGroupObj.addGroup()" class="btn btn-info btn-sm" title="新增任务">
             <span class="icon-plus"> 添加任务组</span>
@@ -29,7 +34,7 @@
             <tr>
                 <th data-field="state" data-checkbox="true"></th>
                 <th data-align="center" data-formatter="DispatchBatchGroupObj.formatterindex">序号</th>
-                <th data-align="center" data-field="id">批次内唯一任务组ID号</th>
+                <th data-field="id">批次内唯一任务组ID号</th>
                 <th data-align="center" data-field="code_number">任务组编码</th>
                 <th data-align="left" data-field="group_desc">任务组名称</th>
                 <th data-align="center" data-formatter="DispatchBatchGroupObj.formatterGroup">上级任务组</th>
@@ -64,8 +69,8 @@
             return '<span class="h-td-btn btn-danger btn-xs" onclick="DispatchBatchGroupObj.deleteDependency(\'' + row.uuid + '\',\''+row.id+'\')"><i class="icon-trash"> 删除</i></span>'
         },
         formatterGroup: function (value, row, index) {
-            return '<span class="h-td-btn btn-info btn-xs" onclick="DispatchBatchGroupObj.getDependency(\'' + row.id + '\',\''+row.group_desc+'\')"><i class="icon-circle-arrow-up"> 查询依赖</i></span>'+
-                 '&nbsp;&nbsp;<span class="h-td-btn btn-danger btn-xs" onclick="DispatchBatchGroupObj.deleteGroup(\'' + row.id + '\')"><i class="icon-trash"> 删除</i></span>';
+            return '<span class="h-td-btn btn-success btn-xs" onclick="DispatchBatchGroupObj.getDependency(\'' + row.id + '\',\''+row.group_desc+'\')"><i class="icon-circle-arrow-up"> 查询依赖</i></span>'+
+                 '&nbsp;&nbsp;<span class="h-td-btn btn-warning btn-xs" onclick="DispatchBatchGroupObj.deleteGroup(\'' + row.id + '\')"><i class="icon-trash"> 删除</i></span>';
         },
         addDependency:function (id,groupDesc) {
             var batchId = $("#h-batch-group-batch-id").html();
