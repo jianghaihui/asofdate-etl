@@ -37,13 +37,13 @@ public class RoleResourceController {
         String roleId = request.getParameter("role_id");
         String resId = request.getParameter("res_id");
         try {
-            int size = roleResourceService.revoke(roleId,resId);
-            if ( 1 == size ){
-                return Hret.success(200,"success",null);
+            int size = roleResourceService.revoke(roleId, resId);
+            if (1 == size) {
+                return Hret.success(200, "success", null);
             }
             response.setStatus(421);
-            return Hret.error(421,"移除角色拥有的权限失败",null);
-        }catch (Exception e){
+            return Hret.error(421, "移除角色拥有的权限失败", null);
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             response.setStatus(422);
             return Hret.error(422, "移除角色拥有的权限失败", null);

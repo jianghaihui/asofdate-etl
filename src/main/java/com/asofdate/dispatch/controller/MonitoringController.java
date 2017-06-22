@@ -2,6 +2,7 @@ package com.asofdate.dispatch.controller;
 
 import com.asofdate.dispatch.service.BatchDefineService;
 import com.asofdate.platform.authentication.JwtService;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class MonitoringController {
     @RequestMapping(method = RequestMethod.GET, value = "/radio")
     public String getBatchCompletedRadio(HttpServletRequest request) {
         String batchId = request.getParameter("batch_id");
-        float radio = batchDefineService.getBatchCompletedRadio(batchId);
-        return String.valueOf(radio);
+        JSONObject ratio = batchDefineService.getBatchCompletedRadio(batchId);
+        return ratio.toString();
     }
 }

@@ -28,13 +28,13 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public String update(String resId, String resDesc,String resUpId) {
-        return menuDao.update(resId,resDesc,resUpId);
+    public String update(String resId, String resDesc, String resUpId) {
+        return menuDao.update(resId, resDesc, resUpId);
     }
 
     @Override
     public ThemeValueModel getThemeDetails(String themeId, String resId) {
-        return menuDao.getThemeDetails(themeId,resId);
+        return menuDao.getThemeDetails(themeId, resId);
     }
 
     @Override

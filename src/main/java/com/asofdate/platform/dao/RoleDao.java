@@ -17,11 +17,11 @@ public interface RoleDao {
 
     List<RoleModel> getOwner(String userId);
 
-    int auth(JSONArray jsonArray,String modifyUserId);
+    int auth(JSONArray jsonArray, String modifyUserId);
 
     int revoke(JSONArray jsonArray);
 
-    int batchAuth(JSONArray jsonArray,String modifyUserId);
+    int batchAuth(JSONArray jsonArray, String modifyUserId);
 
     int add(RoleModel roleModel);
 

@@ -9,6 +9,8 @@ import com.asofdate.dispatch.support.JobScheduler;
 import com.asofdate.dispatch.support.utils.QuartzConfiguration;
 import com.asofdate.utils.Hret;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -24,9 +26,11 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 @Scope("prototype")
 public class DispatchController {
+    private final Logger logger = LoggerFactory.getLogger(DispatchController.class);
 
     @Autowired
     public QuartzConfiguration quartzConfiguration;
+
     @Autowired
     private JobScheduler jobScheduler;
     @Autowired
@@ -47,15 +51,22 @@ public class DispatchController {
 
         if (domainId == null || batchId == null) {
             response.setStatus(421);
+            logger.info("batch id or domain id is null ,batch id is: {}, domain id is: {}", batchId, domainId);
             return Hret.error(421, "domain_id is empty or batch_id is empty", JSONObject.NULL);
         }
 
         if (BatchStatus.BATCH_STATUS_RUNNING == batchDefineService.getStatus(batchId)) {
             response.setStatus(421);
+            logger.info("batch is running,batch_id is: {}", batchId);
             return Hret.error(421, "批次正在运行中", JSONObject.NULL);
         }
 
-        batchDefineService.runBatchInit(batchId);
+        int size = batchDefineService.runBatchInit(batchId);
+        if ( 1 != size ){
+            logger.info("批次日期大于终止日期,无法运行");
+            response.setStatus(426);
+            return Hret.error(426,"批次日期大于终止日期,批次无法运行",null);
+        }
 
         groupStatus.afterPropertiesSet(domainId, batchId);
         taskStatus.afterPropertiesSet(domainId, batchId);
@@ -70,6 +81,7 @@ public class DispatchController {
         jobScheduler.createJobSchedulerService(quartzConfiguration, groupStatus, taskStatus, batchDefineService);
         jobScheduler.start();
 
+        logger.info("batch started, batch_id is:{},domain_id is:{}", batchId, domainId);
         return Hret.success(200, "start batch successfully. batch id is :" + batchId, JSONObject.NULL);
     }
 }

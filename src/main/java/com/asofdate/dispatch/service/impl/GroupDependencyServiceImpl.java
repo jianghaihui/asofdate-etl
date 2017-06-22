@@ -22,7 +22,7 @@ public class GroupDependencyServiceImpl implements GroupDependencyService {
     * key : 任务组
     * value: 所有依赖的任务组
     * */
-    private Map<String, Set<GroupDependencyModel>> groupMap = new HashMap<>();
+    private Map<String, Set<GroupDependencyModel>> groupMap;
 
     @Override
     public List<GroupDependencyModel> findById(String domainId, String batchId) {
@@ -34,6 +34,7 @@ public class GroupDependencyServiceImpl implements GroupDependencyService {
     * */
     @Override
     public void afterPropertiesSet(String domainId, String batchId) {
+        this.groupMap = groupMap = new HashMap<>();
         /*
         * 初始化批次中任务组的依赖HashMap
         * */

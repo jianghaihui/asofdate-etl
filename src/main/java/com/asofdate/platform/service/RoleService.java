@@ -17,11 +17,11 @@ public interface RoleService {
 
     RoleModel getDetails(String roleId);
 
-    int auth(JSONArray jsonArray,String modifyUserId);
+    int auth(JSONArray jsonArray, String modifyUserId);
 
     int revoke(JSONArray jsonArray);
 
-    int batchAuth(JSONArray jsonArray,String modifyUserId);
+    int batchAuth(JSONArray jsonArray, String modifyUserId);
 
     int add(RoleModel roleModel);
 

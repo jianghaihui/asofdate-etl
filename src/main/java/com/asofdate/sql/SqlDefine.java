@@ -81,7 +81,7 @@ public class SqlDefine {
     public static String sys_rdbms_099 = "update sys_sec_user set status_id = 1 where user_id = ?";
     public static String sys_rdbms_100 = "select role_id,res_id from sys_role_resource_relat where role_id = ?";
     public static String sys_rdbms_101 = "select t.theme_id,i.theme_desc,res_id,res_url,res_type,res_bg_color,res_class,group_id,res_img,sort_id from sys_theme_value t inner join sys_theme_info i on t.theme_id = i.theme_id where t.theme_id = ? order by group_id,sort_id asc";
-    public static String sys_rdbms_102 = "select t.user_id,t.theme_id,i.theme_desc from sys_user_theme t inner join sys_theme_info i on t.theme_id = i.theme_id where t.user_id = ?";
+    public static String sys_rdbms_102 = "select as_of_date from dispatch_batch_define where batch_id = ? and complete_date >= as_of_date";
     public static String sys_rdbms_103 = "select theme_id from sys_user_theme where user_id = ?";
     public static String sys_rdbms_104 = "select t.arg_id, t.arg_type,a.arg_type_desc,t.arg_value,t.code_number,t.create_user,t.create_date,t.modify_user,t.modify_date,t.domain_id,t.arg_desc,t.bind_as_of_date from dispatch_argument_define t left join dispatch_argument_type_attr a on t.arg_type = a.arg_type where t.domain_id = ?";
     public static String sys_rdbms_105 = "select t.uuid,t.batch_id,t.arg_id,t.arg_value,t.domain_id from dispatch_batch_argument_rel t where t.domain_id = ?";
@@ -155,9 +155,9 @@ public class SqlDefine {
     public static String sys_rdbms_173 = "insert into dispatch_batch_group_status(batch_id,gid,status) values(?,?,?)";
     public static String sys_rdbms_174 = "update dispatch_batch_group_status set status = ? where batch_id = ? and gid = ?";
     public static String sys_rdbms_175 = "select status from dispatch_batch_group_status where batch_id = ? and gid = ?";
-    public static String sys_rdbms_176 = "select count(*) from dispatch_batch_group_status where batch_id = ?";
+    public static String sys_rdbms_176 = "update dispatch_batch_define set as_of_date = as_of_date + 1, batch_status = '1',start_date = now(), ret_msg = null, end_date = null where batch_id = ? and complete_date > as_of_date";
     public static String sys_rdbms_177 = "select count(*) from dispatch_batch_group_status where batch_id = ? and status = '2'";
-    public static String sys_rdbms_178 = "update dispatch_batch_define set batch_status = '1',start_date = now(), ret_msg = null, end_date = null where batch_id = ?";
+    public static String sys_rdbms_178 = "update dispatch_batch_define set batch_status = '1',start_date = now(), ret_msg = null, end_date = null where batch_id = ? and complete_date >= as_of_date";
     public static String sys_rdbms_179 = "update dispatch_batch_define set ret_msg = ? , end_date = now(), batch_status = ? where batch_id = ?";
     public static String sys_rdbms_180 = "update dispatch_batch_define set batch_status = '4' where batch_status = '1'";
     public static String sys_rdbms_181 = "select config_id,config_desc,config_value,image,details from dispatch_batch_system_config";

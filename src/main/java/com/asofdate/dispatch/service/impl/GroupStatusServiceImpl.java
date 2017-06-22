@@ -43,12 +43,13 @@ public class GroupStatusServiceImpl implements GroupStatusService {
     *      3: 错误
     *      4: 停止
     * */
-    private Map<String, Integer> groupMap = new HashMap<String, Integer>();
+    private Map<String, Integer> groupMap;
 
     // 初始化两个变量
     public void afterPropertiesSet(String domainId, String batchId) {
         this.domainId = domainId;
         this.batchId = batchId;
+        this.groupMap = new HashMap<String, Integer>();
         this.groupList = groupService.findByBatchId(domainId, batchId);
 
         /*

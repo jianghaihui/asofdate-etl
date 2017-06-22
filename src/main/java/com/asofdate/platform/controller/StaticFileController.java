@@ -107,7 +107,7 @@ public class StaticFileController {
     }
 
     @RequestMapping(value = "/v1/auth/swagger/page", method = RequestMethod.GET)
-    public String getSwagger(){
+    public String getSwagger() {
         return "help/swagger_index";
     }
 }

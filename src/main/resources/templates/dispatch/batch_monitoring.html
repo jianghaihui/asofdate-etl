@@ -13,7 +13,7 @@
         </select>
     </div>
 </div>
-<div class="row col-sm-12 col-md-12 col-lg-12" id="h-dispatch-batch-monitoring-content"></div>
+<div class="row col-sm-12 col-md-12 col-lg-12" id="h-dispatch-batch-monitoring-content" style="padding-top: 6px;"></div>
 <script type="text/javascript">
 
     var BatchMonitoringObj = {
@@ -68,10 +68,9 @@
             if (document.getElementById("h-dispatch-batch-monitoring-no-batch") != null){
                 $("#h-dispatch-batch-monitoring-no-batch").remove();
             }
-
             var div = document.createElement("div");
             div.style.border = "#fcfcfc solid 1px";
-            div.className += " col-sm-6 col-md-4 col-lg-3";
+            div.className = "thumbnail";
             div.style.height = "400px";
             div.id = element.batch_id;
             var divchart = document.createElement("div");
@@ -79,14 +78,21 @@
             divchart.style.minWidth = "300px";
             div.appendChild(divchart);
 
-            $("#h-dispatch-batch-monitoring-content").append(div);
-            BatchMonitoringObj.initChart(divchart,element.batch_id,element.batch_desc);
+            var thumbnailDiv = document.createElement("div");
+            thumbnailDiv.className = "col-sm-6 col-md-4 col-lg-3 ";
+            thumbnailDiv.appendChild(div);
+            $("#h-dispatch-batch-monitoring-content").append(thumbnailDiv);
+
             var div1 = BatchMonitoringObj.addSpan("批次编码:",element.code_number);
             var div2 = BatchMonitoringObj.addSpan("批次名称:",element.batch_desc);
             var div3 = BatchMonitoringObj.addSpan("批次日期:",element.as_of_date);
+
+            BatchMonitoringObj.initChart(divchart,element.batch_id,element.batch_desc,div3);
+
             div.appendChild(div1);
             div.appendChild(div2);
             div.appendChild(div3);
+
 
             var btn1 = document.createElement("button");
             var btn2 = document.createElement("button");
@@ -100,9 +106,8 @@
             btn2.setAttribute("onclick","BatchMonitoringObj.stop('"+element.batch_id+"')")
 
             var btndiv = document.createElement("div");
-            btndiv.className += " col-sm-12 col-md-12 col-lg-12";
+            btndiv.className = "col-sm-12 col-md-12 col-lg-12";
             btndiv.style.textAlign = "center";
-            btndiv.style.backgroundColor = "#f7f7f7";
             btndiv.style.paddingTop = "6px";
             btndiv.style.paddingBottom = "6px";
             btndiv.appendChild(btn1);
@@ -162,7 +167,7 @@
             div.appendChild(span);
             return div;
         },
-        initChart:function (dom,batchId,batchDesc) {
+        initChart:function (dom,batchId,batchDesc,obj) {
             /*<![CDATA[*/
             // 基于准备好的dom，初始化echarts实例
             var myChart = echarts.init(dom);
@@ -177,7 +182,7 @@
                     myChart.setOption({
                         series: [{
                             type: 'liquidFill',
-                            data: [data],
+                            data: [data.ratio.toFixed(0)],
                             name:"运行中的批次...",
                         }],
                         tooltip: {
@@ -190,7 +195,7 @@
                     if (!$("[data-id='0503020000']").hasClass("active")){
                         return false;
                     }
-
+                    $(obj).find("span").html(data.as_of_date);
                     var batchIdExists = document.getElementById(batchId);
                     if (batchIdExists == null){
                         clearInterval(timer)
@@ -198,14 +203,15 @@
                         myChart.setOption({
                             series: [{
                                 type: 'liquidFill',
-                                data: [data.toFixed(2)],
+                                data: [data.ratio.toFixed(0)],
                                 name:batchDesc+" 运行中...",
                             }],
                             tooltip: {
                                 show: true
                             }});
                     }
-                    if (data == 1){
+//                    console.log(data.as_of_date,data==1)
+                    if (data.as_of_date == null){
                         clearInterval(timer);
                         $.Notify({
                             message:batchDesc+" 运行完成",

@@ -10,13 +10,15 @@ import java.util.List;
  */
 public interface MenuService {
     List<MenuModel> findAll();
+
     MenuModel getDetails(String resId);
 
-    String update(String resId,String resDesc,String resUpId);
+    String update(String resId, String resDesc, String resUpId);
 
-    ThemeValueModel getThemeDetails(String themeId,String resId);
+    ThemeValueModel getThemeDetails(String themeId, String resId);
 
     String add(ThemeValueModel themeValueModel);
+
     String delete(String resId);
 
     String updateTheme(ThemeValueModel themeValueModel);

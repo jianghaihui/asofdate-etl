@@ -6,6 +6,7 @@ import com.asofdate.dispatch.dao.BatchJobStatusDao;
 import com.asofdate.dispatch.model.BatchDefineModel;
 import com.asofdate.dispatch.service.BatchDefineService;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -66,6 +67,11 @@ public class BatchDefineServiceImpl implements BatchDefineService {
     }
 
     @Override
+    public int batchPagging(String batchid) {
+        return batchDefineDao.batchPagging(batchid);
+    }
+
+    @Override
     public int updateAsofdate(String asofdate, String batchId) {
         return batchDefineDao.updateAsofdate(asofdate, batchId);
     }
@@ -82,13 +88,19 @@ public class BatchDefineServiceImpl implements BatchDefineService {
     }
 
     @Override
-    public float getBatchCompletedRadio(String batchId) {
+    public JSONObject getBatchCompletedRadio(String batchId) {
         int completedCnt = batchJobStatusDao.getCompletedCnt(batchId);
         int totalCnt = batchJobStatusDao.getTotalCnt(batchId);
+        String asOfDate = batchDefineDao.getBatchAsOfDate(batchId);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("as_of_date",asOfDate);
         if (totalCnt == 0) {
-            return 0;
+            jsonObject.put("ratio",0);
+            return jsonObject;
         }
-        return (float) completedCnt / (float) totalCnt;
+        float radio = (float) completedCnt / (float) totalCnt;
+        jsonObject.put("ratio",radio);
+        return jsonObject;
 
     }
 

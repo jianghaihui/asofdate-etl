@@ -76,11 +76,11 @@ public class RoleResourceDaoImpl implements RoleResourceDao {
     public int revoke(String roleId, String resId) {
         List<ResourceModel> list = resourceDao.findAll();
         Set<String> child = new HashSet<>();
-        getChild(list,resId,child);
+        getChild(list, resId, child);
         child.add(resId);
 
         for (String m : child) {
-            jdbcTemplate.update(SqlDefine.sys_rdbms_093,roleId, m);
+            jdbcTemplate.update(SqlDefine.sys_rdbms_093, roleId, m);
         }
         return 1;
     }
@@ -125,8 +125,8 @@ public class RoleResourceDaoImpl implements RoleResourceDao {
                 if (set.contains(m.getRes_up_id())) {
                     continue;
                 }
-                for ( ResourceModel  c : all ) {
-                    if (m.getRes_up_id().equals(c.getRes_id())){
+                for (ResourceModel c : all) {
+                    if (m.getRes_up_id().equals(c.getRes_id())) {
                         set.add(m.getRes_up_id());
                         getParent(all, m.getRes_up_id(), set);
                         break;

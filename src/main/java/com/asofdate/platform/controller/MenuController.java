@@ -5,15 +5,12 @@ import com.asofdate.platform.model.ThemeValueModel;
 import com.asofdate.platform.service.MenuService;
 import com.asofdate.utils.Hret;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
 import java.util.List;
 
 /**
@@ -31,66 +28,66 @@ public class MenuController {
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    public String update(HttpServletResponse response,HttpServletRequest request){
+    public String update(HttpServletResponse response, HttpServletRequest request) {
         String resId = request.getParameter("res_id");
         String resDesc = request.getParameter("res_name");
         String resUpId = request.getParameter("res_up_id");
 
-        String msg = menuService.update(resId,resDesc,resUpId);
-        if ( "success".equals(msg) ) {
-            return Hret.success(200,"success",null);
+        String msg = menuService.update(resId, resDesc, resUpId);
+        if ("success".equals(msg)) {
+            return Hret.success(200, "success", null);
         }
         response.setStatus(421);
-        return Hret.error(421,msg,null);
+        return Hret.error(421, msg, null);
     }
 
-    @RequestMapping( method = RequestMethod.POST)
-    public String add(HttpServletResponse response,HttpServletRequest request){
+    @RequestMapping(method = RequestMethod.POST)
+    public String add(HttpServletResponse response, HttpServletRequest request) {
         ThemeValueModel menuModel = parse(request);
         String msg = menuService.add(menuModel);
-        if ("success".equals(msg)){
-            return Hret.success(200,msg,null);
+        if ("success".equals(msg)) {
+            return Hret.success(200, msg, null);
         }
         response.setStatus(421);
-        return Hret.success(421,msg,null);
+        return Hret.success(421, msg, null);
     }
 
-    @RequestMapping(method = RequestMethod.POST,value = "/delete")
-    public String delete(HttpServletResponse response, HttpServletRequest request){
+    @RequestMapping(method = RequestMethod.POST, value = "/delete")
+    public String delete(HttpServletResponse response, HttpServletRequest request) {
         String resId = request.getParameter("res_id");
         String msg = menuService.delete(resId);
-        if ("success".equals(msg)){
-            return Hret.success(200,msg,null);
+        if ("success".equals(msg)) {
+            return Hret.success(200, msg, null);
         }
         response.setStatus(421);
-        return Hret.error(421,msg,null);
+        return Hret.error(421, msg, null);
     }
 
     @RequestMapping(value = "/details", method = RequestMethod.GET)
-    public MenuModel getDetails(HttpServletResponse httpServletResponse,HttpServletRequest request){
+    public MenuModel getDetails(HttpServletResponse httpServletResponse, HttpServletRequest request) {
         String resId = request.getParameter("res_id");
         return menuService.getDetails(resId);
     }
 
-    @RequestMapping(value = "/theme",method = RequestMethod.GET)
-    public ThemeValueModel getThemeDetails(HttpServletResponse response,HttpServletRequest request){
+    @RequestMapping(value = "/theme", method = RequestMethod.GET)
+    public ThemeValueModel getThemeDetails(HttpServletResponse response, HttpServletRequest request) {
         String resId = request.getParameter("res_id");
         String themeId = request.getParameter("theme_id");
-        return menuService.getThemeDetails(themeId,resId);
+        return menuService.getThemeDetails(themeId, resId);
     }
 
-    @RequestMapping(value = "/theme/config",method = RequestMethod.POST)
-    public String updateTheme(HttpServletResponse response,HttpServletRequest request){
+    @RequestMapping(value = "/theme/config", method = RequestMethod.POST)
+    public String updateTheme(HttpServletResponse response, HttpServletRequest request) {
         ThemeValueModel themeValueModel = parse(request);
         String msg = menuService.updateTheme(themeValueModel);
-        if ("success".equals(msg)){
-            return Hret.success(200,msg,null);
+        if ("success".equals(msg)) {
+            return Hret.success(200, msg, null);
         }
         response.setStatus(422);
-        return Hret.error(422,msg,null);
+        return Hret.error(422, msg, null);
     }
 
-    private ThemeValueModel parse(HttpServletRequest request){
+    private ThemeValueModel parse(HttpServletRequest request) {
         ThemeValueModel menuModel = new ThemeValueModel();
         String resId = request.getParameter("res_id");
         String resName = request.getParameter("res_name");
@@ -106,7 +103,7 @@ public class MenuController {
         String sortId = request.getParameter("sort_id");
         String resAttr = "0";
 
-        switch (resType){
+        switch (resType) {
             case "0":
                 resUpId = "-1";
                 break;

@@ -78,6 +78,11 @@ public class BatchDefineDaoImpl implements BatchDefineDao {
     }
 
     @Override
+    public int batchPagging(String batchId) {
+        return jdbcTemplate.update(SqlDefine.sys_rdbms_176, batchId);
+    }
+
+    @Override
     public int setStatus(String batchId, int status) {
         return jdbcTemplate.update(SqlDefine.sys_rdbms_140, Integer.toString(status), batchId);
     }
@@ -106,4 +111,12 @@ public class BatchDefineDaoImpl implements BatchDefineDao {
         return jdbcTemplate.update(SqlDefine.sys_rdbms_196, uuid, batchId);
     }
 
+    @Override
+    public String getBatchAsOfDate(String batchId) {
+        try{
+            return jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_102,String.class,batchId);
+        } catch (Exception e){
+            return null;
+        }
+    }
 }

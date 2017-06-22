@@ -38,7 +38,7 @@ public class ResourceDaoImpl implements ResourceDao {
     private void dfs(List<ResourceModel> all, String resUpId, List<ResourceModel> ret) {
         for (ResourceModel m : all) {
             String upId = m.getRes_up_id();
-            if (upId != null){
+            if (upId != null) {
                 if (upId.equals(resUpId)) {
                     ret.add(m);
                     dfs(all, m.getRes_id(), ret);

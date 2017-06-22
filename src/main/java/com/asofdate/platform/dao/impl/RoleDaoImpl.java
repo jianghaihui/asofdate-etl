@@ -65,29 +65,29 @@ public class RoleDaoImpl implements RoleDao {
 
     @Transactional
     @Override
-    public int auth(JSONArray jsonArray,String modifyUserId) {
-        for ( int i = 0; i < jsonArray.length(); i++ ) {
+    public int auth(JSONArray jsonArray, String modifyUserId) {
+        for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject arg = (JSONObject) jsonArray.get(i);
             String userId = arg.getString("user_id");
             String roleId = arg.getString("role_id");
-            String uuid = JoinCode.join(userId,roleId);
-            jdbcTemplate.update(SqlDefine.sys_rdbms_096,uuid,roleId,userId,modifyUserId);
+            String uuid = JoinCode.join(userId, roleId);
+            jdbcTemplate.update(SqlDefine.sys_rdbms_096, uuid, roleId, userId, modifyUserId);
         }
         return 1;
     }
 
     @Transactional
     @Override
-    public int batchAuth(JSONArray jsonArray,String modifyUserId){
-        for ( int i = 0; i < jsonArray.length(); i++ ) {
+    public int batchAuth(JSONArray jsonArray, String modifyUserId) {
+        for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject arg = (JSONObject) jsonArray.get(i);
             String userId = arg.getString("user_id");
             String roleId = arg.getString("role_id");
-            String uuid = JoinCode.join(userId,roleId);
-            try{
-                jdbcTemplate.update(SqlDefine.sys_rdbms_096,uuid,roleId,userId,modifyUserId);
-            } catch (Exception e){
-                logger.info("用户[{}]已经拥有了角色[{}],无需重复授权",userId,roleId);
+            String uuid = JoinCode.join(userId, roleId);
+            try {
+                jdbcTemplate.update(SqlDefine.sys_rdbms_096, uuid, roleId, userId, modifyUserId);
+            } catch (Exception e) {
+                logger.info("用户[{}]已经拥有了角色[{}],无需重复授权", userId, roleId);
                 logger.info(e.getMessage());
             }
         }
@@ -97,12 +97,12 @@ public class RoleDaoImpl implements RoleDao {
     @Transactional
     @Override
     public int revoke(JSONArray jsonArray) {
-        for ( int i = 0; i < jsonArray.length(); i++ ) {
+        for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject arg = (JSONObject) jsonArray.get(i);
             String userId = arg.getString("user_id");
             String roleId = arg.getString("role_id");
-            String uuid = JoinCode.join(userId,roleId);
-            jdbcTemplate.update(SqlDefine.sys_rdbms_097,uuid);
+            String uuid = JoinCode.join(userId, roleId);
+            jdbcTemplate.update(SqlDefine.sys_rdbms_097, uuid);
         }
         return 1;
     }

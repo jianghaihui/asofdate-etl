@@ -20,6 +20,8 @@ public interface BatchDefineDao {
 
     int getStatus(String batchId);
 
+    int batchPagging(String batchId);
+
     int setStatus(String batchId, int status);
 
     int updateAsofdate(String asofdate, String batchId);
@@ -29,4 +31,6 @@ public interface BatchDefineDao {
     int destoryBatch(String batchId, String retMsg, int status);
 
     int saveHistory(String batchId);
+
+    String getBatchAsOfDate(String batchId);
 }

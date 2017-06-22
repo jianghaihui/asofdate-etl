@@ -39,7 +39,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public int auth(JSONArray jsonArray, String modifyUserId) {
-        return roleDao.auth(jsonArray,modifyUserId);
+        return roleDao.auth(jsonArray, modifyUserId);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public int batchAuth(JSONArray jsonArray, String modifyUserId) {
-        return roleDao.batchAuth(jsonArray,modifyUserId);
+        return roleDao.batchAuth(jsonArray, modifyUserId);
     }
 
     @Override

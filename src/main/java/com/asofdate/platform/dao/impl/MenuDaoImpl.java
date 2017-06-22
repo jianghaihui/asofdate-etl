@@ -38,8 +38,8 @@ public class MenuDaoImpl implements MenuDao {
     @Override
     public MenuModel getDetails(String resId) {
         RowMapper<MenuModel> rowMapper = new BeanPropertyRowMapper<>(MenuModel.class);
-        List<MenuModel> list = jdbcTemplate.query(SqlDefine.sys_rdbms_089, rowMapper,resId);
-        if ( list.size() == 1 ) {
+        List<MenuModel> list = jdbcTemplate.query(SqlDefine.sys_rdbms_089, rowMapper, resId);
+        if (list.size() == 1) {
             return list.get(0);
         }
         return null;
@@ -70,7 +70,7 @@ public class MenuDaoImpl implements MenuDao {
                         themeValueModel.getSort_id());
             }
             return "success";
-        } catch (Exception e){
+        } catch (Exception e) {
             logger.info(e.getMessage());
             return e.getMessage();
         }
@@ -81,9 +81,9 @@ public class MenuDaoImpl implements MenuDao {
     public String delete(String resId) {
         List<ResourceModel> list = resourceDao.findSubByUpId(resId);
         try {
-            jdbcTemplate.update(SqlDefine.sys_rdbms_077,resId);
-            for(ResourceModel m: list){
-                jdbcTemplate.update(SqlDefine.sys_rdbms_077,m.getRes_id());
+            jdbcTemplate.update(SqlDefine.sys_rdbms_077, resId);
+            for (ResourceModel m : list) {
+                jdbcTemplate.update(SqlDefine.sys_rdbms_077, m.getRes_id());
             }
             return "success";
         } catch (Exception e) {
@@ -93,22 +93,22 @@ public class MenuDaoImpl implements MenuDao {
     }
 
     @Override
-    public String update(String resId, String resDesc,String resUpId) {
+    public String update(String resId, String resDesc, String resUpId) {
         List<ResourceModel> list = resourceDao.findSubByUpId(resId);
-        for (ResourceModel m: list){
-            if (resUpId.equals(m.getRes_id())){
+        for (ResourceModel m : list) {
+            if (resUpId.equals(m.getRes_id())) {
                 return "不能将菜单的上级编码设置成自己的下级菜单";
             }
         }
-        jdbcTemplate.update(SqlDefine.sys_rdbms_005,resDesc,resUpId,resId);
+        jdbcTemplate.update(SqlDefine.sys_rdbms_005, resDesc, resUpId, resId);
         return "success";
     }
 
     @Override
     public ThemeValueModel getThemeDetails(String themeId, String resId) {
         RowMapper<ThemeValueModel> rowMapper = new BeanPropertyRowMapper<>(ThemeValueModel.class);
-        List<ThemeValueModel> list = jdbcTemplate.query(SqlDefine.sys_rdbms_070, rowMapper,themeId,resId);
-        if (list.size() == 1){
+        List<ThemeValueModel> list = jdbcTemplate.query(SqlDefine.sys_rdbms_070, rowMapper, themeId, resId);
+        if (list.size() == 1) {
             return list.get(0);
         }
         return null;
@@ -118,8 +118,8 @@ public class MenuDaoImpl implements MenuDao {
     public String updateTheme(ThemeValueModel themeValueModel) {
         String resId = themeValueModel.getRes_id();
         String themeId = themeValueModel.getTheme_id();
-        Integer cnt = jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_006,Integer.class,themeId,resId);
-        if (cnt == 0){
+        Integer cnt = jdbcTemplate.queryForObject(SqlDefine.sys_rdbms_006, Integer.class, themeId, resId);
+        if (cnt == 0) {
             try {
                 jdbcTemplate.update(SqlDefine.sys_rdbms_008,
                         themeValueModel.getTheme_id(),
@@ -132,7 +132,7 @@ public class MenuDaoImpl implements MenuDao {
                         themeValueModel.getRes_img(),
                         themeValueModel.getSort_id());
                 return "success";
-            } catch (Exception e){
+            } catch (Exception e) {
                 logger.info(e.getMessage());
                 return e.getMessage();
             }
@@ -149,7 +149,7 @@ public class MenuDaoImpl implements MenuDao {
                     themeValueModel.getTheme_id(),
                     themeValueModel.getRes_id());
             return "success";
-        } catch (Exception e){
+        } catch (Exception e) {
             logger.info(e.getMessage());
             return e.getMessage();
         }

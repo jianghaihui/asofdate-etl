@@ -27,7 +27,7 @@ public class TaskDependencyServiceImpl implements TaskDependencyService {
     * key: 任务编码
     * value: 所有依赖的任务
     * */
-    private Map<String, Set<String>> taskMap = new HashMap<>();
+    private Map<String, Set<String>> taskMap;
 
     @Override
     public List<TaskDependencyModel> findById(String domainId, String batchId) {
@@ -35,6 +35,7 @@ public class TaskDependencyServiceImpl implements TaskDependencyService {
     }
 
     public void afterPropertiesSet(String domainId, String batchId) {
+        this.taskMap = new HashMap<>();
         List<BatchGroupModel> groupList = groupService.findByBatchId(domainId, batchId);
         List<TaskDependencyModel> taskList = findById(domainId, batchId);
 

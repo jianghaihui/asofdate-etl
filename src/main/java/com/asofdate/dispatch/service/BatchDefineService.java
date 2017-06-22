@@ -2,6 +2,7 @@ package com.asofdate.dispatch.service;
 
 import com.asofdate.dispatch.model.BatchDefineModel;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -25,6 +26,8 @@ public interface BatchDefineService {
 
     int runBatchInit(String batchId);
 
+    int batchPagging(String batchid);
+
     int updateAsofdate(String asofdate, String batchId);
 
     // 根据批次号,查询这个批次中的批次参数信息
@@ -33,7 +36,7 @@ public interface BatchDefineService {
     // 根据批次号,向这个批次中,给批次参数赋值
     int addBatchArg(JSONArray jsonArray);
 
-    float getBatchCompletedRadio(String batchId);
+    JSONObject getBatchCompletedRadio(String batchId);
 
     int destoryBatch(String batchId, String retMsg, int Status);
 

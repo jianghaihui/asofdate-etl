@@ -49,7 +49,7 @@ public class TaskStatusServiceImpl implements TaskStatusService {
     *       2: 已完成
     *       3: 错误
     * */
-    private Map<String, Integer> taskMap = new HashMap<String, Integer>();
+    private Map<String, Integer> taskMap;
 
     @Override
     public Map<String, Integer> getAll() {
@@ -61,6 +61,7 @@ public class TaskStatusServiceImpl implements TaskStatusService {
     public void afterPropertiesSet(String domainId, String batchId) {
         this.domainId = domainId;
         this.batchId = batchId;
+        this.taskMap = new HashMap<String, Integer>();
         this.groupList = groupService.findByBatchId(domainId, batchId);
         this.taskList = taskService.findByBatchId(domainId, batchId);
 

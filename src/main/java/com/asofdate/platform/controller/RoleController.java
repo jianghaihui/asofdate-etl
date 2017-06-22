@@ -6,7 +6,6 @@ import com.asofdate.platform.service.RoleService;
 import com.asofdate.utils.Hret;
 import com.asofdate.utils.JoinCode;
 import org.json.JSONArray;
-import org.omg.CORBA.PRIVATE_MEMBER;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,68 +28,68 @@ public class RoleController {
     private RoleService roleService;
 
     @RequestMapping(value = "/other", method = RequestMethod.GET)
-    public List getOther(HttpServletRequest request){
+    public List getOther(HttpServletRequest request) {
         String userId = request.getParameter("user_id");
         return roleService.getOther(userId);
     }
 
     @RequestMapping(value = "/owner", method = RequestMethod.GET)
-    public List getOwner(HttpServletRequest request){
+    public List getOwner(HttpServletRequest request) {
         String userId = request.getParameter("user_id");
         return roleService.getOwner(userId);
     }
 
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
-    public String auth(HttpServletResponse response,HttpServletRequest request){
+    public String auth(HttpServletResponse response, HttpServletRequest request) {
         String modifyUserId = JwtService.getConnectUser(request).getString("UserId");
         JSONArray json = new JSONArray(request.getParameter("JSON"));
         try {
-            int size = roleService.auth(json,modifyUserId);
-            if ( 1 == size ){
-                return Hret.success(200,"success",null);
+            int size = roleService.auth(json, modifyUserId);
+            if (1 == size) {
+                return Hret.success(200, "success", null);
             }
             response.setStatus(422);
-            return Hret.error(422,"授权失败,用户已经拥有了这个角色",null);
-        } catch (Exception e){
+            return Hret.error(422, "授权失败,用户已经拥有了这个角色", null);
+        } catch (Exception e) {
             logger.info(e.getMessage());
             response.setStatus(421);
-            return Hret.error(421,"授权失败,用户已经拥有了这个角色",null);
+            return Hret.error(421, "授权失败,用户已经拥有了这个角色", null);
         }
     }
 
 
     @RequestMapping(value = "/auth/batch", method = RequestMethod.POST)
-    public String batchAuth(HttpServletResponse response,HttpServletRequest request){
+    public String batchAuth(HttpServletResponse response, HttpServletRequest request) {
         String modifyUserId = JwtService.getConnectUser(request).getString("UserId");
         JSONArray json = new JSONArray(request.getParameter("JSON"));
         try {
-            int size = roleService.batchAuth(json,modifyUserId);
-            if ( 1 == size ){
-                return Hret.success(200,"success",null);
+            int size = roleService.batchAuth(json, modifyUserId);
+            if (1 == size) {
+                return Hret.success(200, "success", null);
             }
             response.setStatus(422);
-            return Hret.error(422,"授权失败,用户已经拥有了这个角色",null);
-        } catch (Exception e){
+            return Hret.error(422, "授权失败,用户已经拥有了这个角色", null);
+        } catch (Exception e) {
             logger.info(e.getMessage());
             response.setStatus(421);
-            return Hret.error(421,"授权失败,用户已经拥有了这个角色",null);
+            return Hret.error(421, "授权失败,用户已经拥有了这个角色", null);
         }
     }
 
     @RequestMapping(value = "/revoke", method = RequestMethod.POST)
-    public String revoke(HttpServletResponse response,HttpServletRequest request){
+    public String revoke(HttpServletResponse response, HttpServletRequest request) {
         JSONArray json = new JSONArray(request.getParameter("JSON"));
         try {
             int size = roleService.revoke(json);
-            if ( 1 == size ){
-                return Hret.success(200,"success",null);
+            if (1 == size) {
+                return Hret.success(200, "success", null);
             }
             response.setStatus(422);
-            return Hret.error(422,"撤销权限失败,请联系管理员",null);
-        } catch (Exception e){
+            return Hret.error(422, "撤销权限失败,请联系管理员", null);
+        } catch (Exception e) {
             logger.info(e.getMessage());
             response.setStatus(421);
-            return Hret.error(421,"撤销权限失败,请联系管理员",null);
+            return Hret.error(421, "撤销权限失败,请联系管理员", null);
         }
     }
 
