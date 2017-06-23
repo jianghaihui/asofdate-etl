@@ -83,6 +83,7 @@
                         height:280,
                         queryParams:function (params) {
                             params.batch_id = batchId;
+                            params.id = id;
                             return params;
                         },
                         onPostBody:function () {
@@ -222,7 +223,7 @@
            data-striped="true"
            data-unique-id="id"
            data-click-to-select="true"
-           data-url="/v1/dispatch/batch/define/group"
+           data-url="/v1/dispatch/batch/define/group/dependency/add"
            data-side-pagination="client"
            data-pagination="false"
            data-search="false">
@@ -230,7 +231,7 @@
         <tr>
             <th data-field="state" data-checkbox="true"></th>
             <th data-align="center" data-formatter="DispatchBatchGroupObj.formatterindex">序号</th>
-            <th data-align="center" data-field="id">批次内唯一任务组ID号</th>
+            <th data-field="id">批次内唯一任务组ID号</th>
             <th data-align="center" data-field="code_number">任务组编码</th>
             <th data-align="left" data-field="group_desc">任务组名称</th>
         </tr>

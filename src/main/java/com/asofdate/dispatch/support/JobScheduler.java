@@ -57,7 +57,7 @@ public class JobScheduler extends Thread {
 
     private void batchPagging() throws Exception {
         int size =  batchDefineService.batchPagging(batchId);
-        if ( 1 != size ){
+        if ( 1 != size ) {
             logger.info("批次已经运行到终止日期,终止运行");
             return;
         }

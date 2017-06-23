@@ -7,7 +7,43 @@ public class BatchGroupModel {
     public String uuid;
     public String batch_id;
     public String group_id;
+    public String id;
+    public String up_id;
+    public String group_desc;
+    public String code_number;
     public String domain_id;
+
+    public String getUpId() {
+        return up_id;
+    }
+
+    public void setUpId(String up_id) {
+        this.up_id = up_id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getGroupDesc() {
+        return group_desc;
+    }
+
+    public void setGroupDesc(String group_desc) {
+        this.group_desc = group_desc;
+    }
+
+    public String getCodeNumber() {
+        return code_number;
+    }
+
+    public void setCodeNumber(String code_number) {
+        this.code_number = code_number;
+    }
 
     public String getUuid() {
         return uuid;

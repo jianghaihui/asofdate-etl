@@ -1,6 +1,7 @@
 package com.asofdate.dispatch.controller;
 
 import com.asofdate.dispatch.model.BatchDefineModel;
+import com.asofdate.dispatch.model.BatchGroupModel;
 import com.asofdate.dispatch.model.BatchStatus;
 import com.asofdate.dispatch.service.ArgumentService;
 import com.asofdate.dispatch.service.BatchDefineService;
@@ -113,9 +114,9 @@ public class BatchDefineController {
 
     @RequestMapping(value = "/group", method = RequestMethod.GET)
     @ResponseBody
-    public String getGroup(HttpServletRequest request) {
+    public List<BatchGroupModel> getGroup(HttpServletRequest request) {
         String batchId = request.getParameter("batch_id");
-        return batchGroupService.getGroup(batchId).toString();
+        return batchGroupService.getGroup(batchId);
     }
 
     @RequestMapping(value = "/stop", method = RequestMethod.POST)
@@ -185,6 +186,14 @@ public class BatchDefineController {
     public String getDependency(HttpServletRequest request) {
         String id = request.getParameter("id");
         return groupDependencyService.getUp(id).toString();
+    }
+
+    @RequestMapping(value = "/group/dependency/add",method = RequestMethod.GET)
+    @ResponseBody
+    public List<BatchGroupModel> canAddDependency(HttpServletRequest request) {
+        String batchId = request.getParameter("batch_id");
+        String id = request.getParameter("id");
+        return batchGroupService.getDependency(batchId,id);
     }
 
     @RequestMapping(value = "/group/dependency", method = RequestMethod.POST)

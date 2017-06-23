@@ -101,10 +101,9 @@ public class GroupDefineController {
 
     @RequestMapping(value = "/task/dependency", method = RequestMethod.GET)
     @ResponseBody
-    public String getTaskDependency(HttpServletRequest request) {
+    public List<GroupTaskModel> getTaskDependency(HttpServletRequest request) {
         String id = request.getParameter("id");
-        JSONArray jsonArray = taskDependencyService.getTaskDependency(id);
-        return jsonArray.toString();
+        return taskDependencyService.getTaskDependency(id);
     }
 
     /*

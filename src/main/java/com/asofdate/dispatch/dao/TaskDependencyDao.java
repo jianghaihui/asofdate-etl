@@ -14,7 +14,7 @@ public interface TaskDependencyDao {
 
     List<TaskDependencyModel> findById(String domainId, String batchId);
 
-    JSONArray getTaskDependency(String id);
+    List<GroupTaskModel> getTaskDependency(String id);
 
     List<GroupTaskModel> getGroupTasks(String groupId, String id);
 

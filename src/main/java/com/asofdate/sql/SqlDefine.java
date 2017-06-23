@@ -57,7 +57,7 @@ public class SqlDefine {
     public static String sys_rdbms_070 = "select t.theme_id,i.theme_desc, res_id,res_url,res_type,res_bg_color,res_class,group_id,res_img,sort_id from sys_theme_value t left join sys_theme_info i on t.theme_id = i.theme_id where t.theme_id = ? and t.res_id = ?";
     public static String sys_rdbms_071 = "select t.res_id,t.res_name,t.res_attr, a.res_attr_desc,t.res_up_id,t.res_type,r.res_type_desc,t.sys_flag from sys_resource_info t inner join sys_resource_info_attr a on t.res_attr = a.res_attr inner join sys_resource_type_attr r on t.res_type = r.res_type";
     public static String sys_rdbms_072 = "insert into sys_resource_info(res_id,res_name,res_attr,res_up_id,res_type) values(?,?,?,?,?)";
-    public static String sys_rdbms_073 = "";
+    public static String sys_rdbms_073 = "select t.id,d.up_id from dispatch_batch_group_relation t inner join dispatch_group_dependency d on t.id = d.id where t.batch_id = ?";
     public static String sys_rdbms_074 = "insert into sys_role_resource_relat(uuid,role_id,res_id) values(?,?,?)";
     public static String sys_rdbms_075 = "select t.id, d.up_id from dispatch_group_task_relation t inner join  dispatch_task_dependency d on t.id = d.id where t.group_id = ?";
     public static String sys_rdbms_076 = "delete from sys_theme_value where res_id = ?";

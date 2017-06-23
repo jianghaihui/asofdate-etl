@@ -17,7 +17,7 @@ public interface TaskDependencyService {
 
     void afterPropertiesSet(String domainId, String batchId);
 
-    JSONArray getTaskDependency(String id);
+    List<GroupTaskModel> getTaskDependency(String id);
 
     List<GroupTaskModel> getGroupTask(String groupId, String id);
 

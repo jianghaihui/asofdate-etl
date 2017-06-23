@@ -10,6 +10,24 @@ public class GroupTaskModel {
     public String domain_id;
     public String task_desc;
     public String id;
+    public String code_number;
+    public String up_id;
+
+    public String getCodeNumber() {
+        return code_number;
+    }
+
+    public void setCodeNumber(String code_number) {
+        this.code_number = code_number;
+    }
+
+    public String getUpId() {
+        return up_id;
+    }
+
+    public void setUpId(String up_id) {
+        this.up_id = up_id;
+    }
 
     public String getTaskDesc() {
         return task_desc;

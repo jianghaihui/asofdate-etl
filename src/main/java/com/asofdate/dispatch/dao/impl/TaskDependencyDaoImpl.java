@@ -52,25 +52,10 @@ public class TaskDependencyDaoImpl implements TaskDependencyDao {
 
     @Transactional
     @Override
-    public JSONArray getTaskDependency(String id) {
-        JSONArray jsonArray = new JSONArray();
-        logger.info("id is :" + id);
-        jdbcTemplate.query(SqlDefine.sys_rdbms_134, new RowCallbackHandler() {
-            @Override
-            public void processRow(ResultSet resultSet) throws SQLException {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("uuid", resultSet.getString("uuid"));
-                jsonObject.put("id", resultSet.getString("id"));
-                jsonObject.put("up_id", resultSet.getString("up_id"));
-                jsonObject.put("domain_id", resultSet.getString("domain_id"));
-                jsonObject.put("group_id", resultSet.getString("group_id"));
-                jsonObject.put("task_id", resultSet.getString("task_id"));
-                jsonObject.put("task_desc", resultSet.getString("task_desc"));
-                jsonObject.put("code_number", resultSet.getString("code_number"));
-                jsonArray.put(jsonObject);
-            }
-        }, id);
-        return jsonArray;
+    public List<GroupTaskModel> getTaskDependency(String id) {
+        RowMapper<GroupTaskModel> rowMapper = new BeanPropertyRowMapper<>(GroupTaskModel.class);
+        List<GroupTaskModel> list = jdbcTemplate.query(SqlDefine.sys_rdbms_134,rowMapper,id);
+        return list;
     }
 
     @Override
@@ -79,9 +64,17 @@ public class TaskDependencyDaoImpl implements TaskDependencyDao {
         RowMapper<GroupTaskModel> rowMapper = new BeanPropertyRowMapper<>(GroupTaskModel.class);
         List<GroupTaskModel> list = jdbcTemplate.query(SqlDefine.sys_rdbms_150, rowMapper, groupId);
         Set<String> set = getChildren(groupId,id);
-        for(String m : set){
-            System.out.println(m);
+        List<GroupTaskModel> owner = getTaskDependency(id);
+
+        // 获取已经存在的依赖任务
+        for (GroupTaskModel m:owner){
+            set.add(m.getUpId());
         }
+
+        /*
+        * 在任务依赖选择项目中,删除已经存在的依赖,并删除当前job的下级任务
+        * 任务组内任务禁止产生闭环
+        * */
         for (int i = 0; i < list.size(); i++){
             String subid = list.get(i).getId();
             if (set.contains(subid)) {

@@ -58,7 +58,7 @@ public class TaskDependencyServiceImpl implements TaskDependencyService {
     }
 
     @Override
-    public JSONArray getTaskDependency(String id) {
+    public List<GroupTaskModel> getTaskDependency(String id) {
         return taskDependencyDao.getTaskDependency(id);
     }
 
