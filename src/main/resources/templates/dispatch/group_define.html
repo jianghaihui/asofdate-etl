@@ -179,7 +179,7 @@
                     $("#h-dispatch-group-task-dependency-relation-form").bootstrapTable({
                         height:280,
                     });
-                    $.getJSON("/v1/dispatch/group/define/group/task/current",{group_id:groupId},function (data) {
+                    $.getJSON("/v1/dispatch/group/define/group/task/current",{group_id:groupId,id:id},function (data) {
                         $("#h-dispatch-group-task-dependency-relation-form").bootstrapTable('load',data);
                         $("#h-dispatch-group-task-dependency-relation-form").bootstrapTable('removeByUniqueId',id);
                     });

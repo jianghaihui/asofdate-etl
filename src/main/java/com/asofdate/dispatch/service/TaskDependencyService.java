@@ -1,5 +1,6 @@
 package com.asofdate.dispatch.service;
 
+import com.asofdate.dispatch.model.GroupTaskModel;
 import com.asofdate.dispatch.model.TaskDependencyModel;
 import org.json.JSONArray;
 
@@ -18,7 +19,7 @@ public interface TaskDependencyService {
 
     JSONArray getTaskDependency(String id);
 
-    JSONArray getGroupTask(String groupId);
+    List<GroupTaskModel> getGroupTask(String groupId, String id);
 
     int addTaskDependency(JSONArray jsonArray);
 

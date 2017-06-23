@@ -2,6 +2,7 @@ package com.asofdate.dispatch.service.impl;
 
 import com.asofdate.dispatch.dao.TaskDependencyDao;
 import com.asofdate.dispatch.model.BatchGroupModel;
+import com.asofdate.dispatch.model.GroupTaskModel;
 import com.asofdate.dispatch.model.TaskDependencyModel;
 import com.asofdate.dispatch.service.BatchGroupService;
 import com.asofdate.dispatch.service.TaskDependencyService;
@@ -62,8 +63,8 @@ public class TaskDependencyServiceImpl implements TaskDependencyService {
     }
 
     @Override
-    public JSONArray getGroupTask(String groupId) {
-        return taskDependencyDao.getGroupTasks(groupId);
+    public List<GroupTaskModel> getGroupTask(String groupId, String id) {
+        return taskDependencyDao.getGroupTasks(groupId,id);
     }
 
     @Override

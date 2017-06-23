@@ -66,7 +66,7 @@ public class OracleDefine {
         SqlDefine.sys_rdbms_072 = "insert into sys_resource_info(res_id,res_name,res_attr,res_up_id,res_type) values(?,?,?,?,?)";
         SqlDefine.sys_rdbms_073 = "";
         SqlDefine.sys_rdbms_074 = "insert into sys_role_resource_relat(uuid,role_id,res_id) values(?,?,?)";
-        SqlDefine.sys_rdbms_075 = "";
+        SqlDefine.sys_rdbms_075 = "select t.id, d.up_id from dispatch_group_task_relation t inner join  dispatch_task_dependency d on t.id = d.id where t.group_id = ?";
         SqlDefine.sys_rdbms_076 = "delete from sys_theme_value where res_id = ?";
         SqlDefine.sys_rdbms_077 = "delete from sys_resource_info where res_id = ? and sys_flag is null";
         SqlDefine.sys_rdbms_078 = "select t1.res_url from sys_index_page t1 inner join sys_user_theme t2 on t1.theme_id = t2.theme_id where t2.user_id = ?";

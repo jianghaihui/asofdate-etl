@@ -59,7 +59,7 @@ public class SqlDefine {
     public static String sys_rdbms_072 = "insert into sys_resource_info(res_id,res_name,res_attr,res_up_id,res_type) values(?,?,?,?,?)";
     public static String sys_rdbms_073 = "";
     public static String sys_rdbms_074 = "insert into sys_role_resource_relat(uuid,role_id,res_id) values(?,?,?)";
-    public static String sys_rdbms_075 = "";
+    public static String sys_rdbms_075 = "select t.id, d.up_id from dispatch_group_task_relation t inner join  dispatch_task_dependency d on t.id = d.id where t.group_id = ?";
     public static String sys_rdbms_076 = "delete from sys_theme_value where res_id = ?";
     public static String sys_rdbms_077 = "delete from sys_resource_info where res_id = ? and sys_flag is null";
     public static String sys_rdbms_078 = "select t1.res_url from sys_index_page t1 inner join sys_user_theme t2 on t1.theme_id = t2.theme_id where t2.user_id = ?";
@@ -155,7 +155,7 @@ public class SqlDefine {
     public static String sys_rdbms_173 = "insert into dispatch_batch_group_status(batch_id,gid,status) values(?,?,?)";
     public static String sys_rdbms_174 = "update dispatch_batch_group_status set status = ? where batch_id = ? and gid = ?";
     public static String sys_rdbms_175 = "select status from dispatch_batch_group_status where batch_id = ? and gid = ?";
-    public static String sys_rdbms_176 = "update dispatch_batch_define set as_of_date = as_of_date + 1, batch_status = '1',start_date = now(), ret_msg = null, end_date = null where batch_id = ? and complete_date > as_of_date";
+    public static String sys_rdbms_176 = "update dispatch_batch_define set as_of_date = date_add(as_of_date,interval 1 day), batch_status = '1',start_date = now(), ret_msg = null, end_date = null where batch_id = ? and complete_date > as_of_date";
     public static String sys_rdbms_177 = "select count(*) from dispatch_batch_group_status where batch_id = ? and status = '2'";
     public static String sys_rdbms_178 = "update dispatch_batch_define set batch_status = '1',start_date = now(), ret_msg = null, end_date = null where batch_id = ? and complete_date >= as_of_date";
     public static String sys_rdbms_179 = "update dispatch_batch_define set ret_msg = ? , end_date = now(), batch_status = ? where batch_id = ?";

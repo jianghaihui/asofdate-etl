@@ -1,6 +1,7 @@
 package com.asofdate.dispatch.controller;
 
 import com.asofdate.dispatch.model.GroupDefineModel;
+import com.asofdate.dispatch.model.GroupTaskModel;
 import com.asofdate.dispatch.service.GroupDefineService;
 import com.asofdate.dispatch.service.GroupTaskService;
 import com.asofdate.dispatch.service.TaskDependencyService;
@@ -106,12 +107,19 @@ public class GroupDefineController {
         return jsonArray.toString();
     }
 
+    /*
+    * 查询任务组可以配置的上级依赖任务
+    * 禁止将任务组现有的下级任务配置成他的上级任务组依赖
+    * @param group_id 任务组编码
+    * @return JSON 可以选择的任务组列表
+    * */
     @RequestMapping(value = "/group/task/current", method = RequestMethod.GET)
     @ResponseBody
-    public String getGroupTasks(HttpServletRequest request) {
+    public List<GroupTaskModel> getGroupTasks(HttpServletRequest request) {
         String groupId = request.getParameter("group_id");
-        logger.info("group_id is：" + groupId);
-        return taskDependencyService.getGroupTask(groupId).toString();
+        String id = request.getParameter("id");
+        logger.debug("group_id is ：{},id is:{}", groupId, id);
+        return taskDependencyService.getGroupTask(groupId,id);
     }
 
     @RequestMapping(value = "/group/task/dependency", method = RequestMethod.POST)

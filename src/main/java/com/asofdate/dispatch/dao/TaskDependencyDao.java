@@ -1,5 +1,6 @@
 package com.asofdate.dispatch.dao;
 
+import com.asofdate.dispatch.model.GroupTaskModel;
 import com.asofdate.dispatch.model.TaskDependencyModel;
 import org.json.JSONArray;
 
@@ -15,7 +16,7 @@ public interface TaskDependencyDao {
 
     JSONArray getTaskDependency(String id);
 
-    JSONArray getGroupTasks(String groupId);
+    List<GroupTaskModel> getGroupTasks(String groupId, String id);
 
     int addTaskDependency(JSONArray jsonArray);
 

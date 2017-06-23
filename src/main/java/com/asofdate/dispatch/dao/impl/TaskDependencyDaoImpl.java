@@ -1,6 +1,7 @@
 package com.asofdate.dispatch.dao.impl;
 
 import com.asofdate.dispatch.dao.TaskDependencyDao;
+import com.asofdate.dispatch.model.GroupTaskModel;
 import com.asofdate.dispatch.model.TaskDependencyModel;
 import com.asofdate.sql.SqlDefine;
 import org.json.JSONArray;
@@ -17,7 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by hzwy23 on 2017/5/27.
@@ -71,22 +74,22 @@ public class TaskDependencyDaoImpl implements TaskDependencyDao {
     }
 
     @Override
-    public JSONArray getGroupTasks(String groupId) {
-        JSONArray jsonArray = new JSONArray();
+    public List<GroupTaskModel> getGroupTasks(String groupId,String id) {
         logger.info("groupId is :" + groupId);
-        jdbcTemplate.query(SqlDefine.sys_rdbms_150, new RowCallbackHandler() {
-            @Override
-            public void processRow(ResultSet resultSet) throws SQLException {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("id", resultSet.getString("id"));
-                jsonObject.put("group_id", resultSet.getString("group_id"));
-                jsonObject.put("task_id", resultSet.getString("task_id"));
-                jsonObject.put("task_desc", resultSet.getString("task_desc"));
-                jsonObject.put("domain_id", resultSet.getString("domain_id"));
-                jsonArray.put(jsonObject);
+        RowMapper<GroupTaskModel> rowMapper = new BeanPropertyRowMapper<>(GroupTaskModel.class);
+        List<GroupTaskModel> list = jdbcTemplate.query(SqlDefine.sys_rdbms_150, rowMapper, groupId);
+        Set<String> set = getChildren(groupId,id);
+        for(String m : set){
+            System.out.println(m);
+        }
+        for (int i = 0; i < list.size(); i++){
+            String subid = list.get(i).getId();
+            if (set.contains(subid)) {
+                list.remove(i);
+                i--;
             }
-        }, groupId);
-        return jsonArray;
+        }
+        return list;
     }
 
     @Override
@@ -101,8 +104,29 @@ public class TaskDependencyDaoImpl implements TaskDependencyDao {
                 return -1;
             }
         }
-
         return 1;
+    }
+
+    private Set<String> getChildren(String groupId, String id){
+        Set<String> set = new HashSet<>();
+        RowMapper<TaskDependencyModel> rowMapper = new BeanPropertyRowMapper<>(TaskDependencyModel.class);
+        List<TaskDependencyModel> list = jdbcTemplate.query(SqlDefine.sys_rdbms_075,rowMapper,groupId);
+        children(list,id,set);
+        set.add(id);
+        return set;
+    }
+
+    private void children(List<TaskDependencyModel> all,String id,Set<String> set){
+        for ( TaskDependencyModel m:all ) {
+            String upId = m.getUpId();
+            if (upId == null || set.contains(m.getId())){
+                continue;
+            }
+            if (upId.equals(id)){
+                set.add(m.getId());
+                children(all,m.getId(),set);
+            }
+        }
     }
 
     @Override

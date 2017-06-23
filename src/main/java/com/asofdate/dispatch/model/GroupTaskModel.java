@@ -8,6 +8,24 @@ public class GroupTaskModel {
     public String group_id;
     public String task_id;
     public String domain_id;
+    public String task_desc;
+    public String id;
+
+    public String getTaskDesc() {
+        return task_desc;
+    }
+
+    public void setTaskDesc(String task_desc) {
+        this.task_desc = task_desc;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getUuid() {
         return uuid;
